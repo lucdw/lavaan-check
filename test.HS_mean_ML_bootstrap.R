@@ -14,7 +14,8 @@ lavaan.args <- list(
   meanstructure = TRUE)
 reports <- list(
   parm.est = list(rep.call = "parameterEstimates", rep.args = list(ci = FALSE), rep.ignore = NULL),
-  checkcovs = list(rep.call = "val_cov_lv", rep.args = list(), rep.tol.abs = NA_real_, rep.tol.rel = 0.01) 
+  checkcovs = list(rep.call = "val_cov_lv", rep.args = list(), rep.tol.abs = NA_real_, rep.tol.rel = 0.01), 
+  checkse = list(rep.call = "val_se", rep.args = list(), rep.tol.abs = NA_real_, rep.tol.rel = 0.05) 
 )
 test.comment <- 'bootstrap fitted parameters will allways differ !!!'
 if (!exists("group.environment") || is.null(group.environment)) {

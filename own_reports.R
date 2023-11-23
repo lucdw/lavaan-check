@@ -11,3 +11,9 @@ val_cov_lv <- function(object) {
   names(x) <- vapply(ind, function(i) {paste0(pe$lhs[i],"~~", pe$rhs[i])}, "")
   x
 }
+val_se <- function(object) {
+  pe <- parameterestimates(object)
+  x <- vapply(seq_len(nrow(pe)), function(i) {pe$se[i]}, 0.0)
+  names(x) <- vapply(seq_len(nrow(pe)), function(i) {paste0(pe$lhs[i],"~~", pe$rhs[i])}, "")
+  x
+}

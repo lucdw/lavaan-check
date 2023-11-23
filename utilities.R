@@ -309,6 +309,17 @@ compare_values <- function(rptvalold, rptval, rep.tol.abs = NULL, rep.tol.rel = 
   } else {
     for (i in seq_along(rptvalold)) {
       elem.name <- names(rptvalold)[i]
+      if (is.na(rptvalold[elem.name]) && is.na(rptval[elem.name])) next
+      if (is.na(rptvalold[elem.name])) {
+        differences <- differences + 1L
+        cat(" element", elem.name, "old value: NA, new value:", rptval[elem.name], "\n", file = logfile)
+        next
+      }
+      if (is.na(rptval[elem.name])) {
+        differences <- differences + 1L
+        cat(" element", elem.name, "old value:", rptvalold[elem.name], ", new value: NA\n", file = logfile)
+        next
+      }
       elem.diff <- abs(rptvalold[elem.name] - rptval[elem.name])
       if (is.null(rep.tol.abs) || is.na(rep.tol.abs)) {
         max.diff <- rep.tol.rel * abs(rptvalold[elem.name] + rptval[elem.name]) / 2
