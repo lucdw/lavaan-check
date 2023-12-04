@@ -1,9 +1,10 @@
 library(lavaan)
 TheCalls <- as.character(sys.calls())
-if (!grepl("run.all.tests", TheCalls[[1]], fixed = TRUE) && !grepl("utilities", TheCalls[[1]], fixed = TRUE) &&
-      !grepl(paste0(".", test.id, "."), TheCalls[[1]], fixed = TRUE)) stop("Source file and test.id do not match!")
-ownrep <- "own_reports.R"
-if (file.exists(ownrep)) source(ownrep) # global own reports
+if (!grepl("run.all.tests", TheCalls[[1]], fixed = TRUE) && 
+    !grepl("create.snapshots", TheCalls[[1]], fixed = TRUE) &&
+    !grepl("utilities", TheCalls[[1]], fixed = TRUE) &&
+    !grepl(paste0(".", test.id, "."), TheCalls[[1]], fixed = TRUE)
+    ) stop("Source file and test.id do not match!")
 # function to execute test with parameters set in .R files in subdirectories
 # group.environment is NULL when function is called from this R-file
 # the logging of differences is stored in the group.environment or displayed immediately
@@ -13,23 +14,36 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
   stopifnot(is.character(lavaan.call), length(lavaan.call) == 1L)
   stopifnot(is.character(lavaan.model))
   stopifnot(is.list(lavaan.args))
-  stopifnot(is.list(reports))
+  stopifnot(is.character(reports))
   if (!file.exists("utilities.R")) stop(paste("The working directory", getwd(), "is not the right one!"))
   if (!dir.exists("snapshots")) dir.create("snapshots")
   if (!dir.exists("reports")) dir.create("reports")
-  if (exists("group.environment") && !is.null(group.environment)) cat("  handling ", sprintf("%-50s", test.id), " ...: ")
-  logfile <- file() # anonymous file connection, see R-help for file, examples
+  save.only <- FALSE
+  if (exists("group.environment") && !is.null(group.environment)) {
+    cat("  handling ", sprintf("%-50s", test.id), " ...: ")
+    if (is.numeric(group.environment)) save.only <- TRUE  
+  }
+  # create logfile
+  if (save.only) {
+    logfile <- file()
+  } else {
+    logfile <- file(paste0("reports/", test.id, ".log"), "wt") 
+  }
   on.exit({if (isOpen(logfile)) close(logfile)})
-  cat("\nTest.id :", test.id, "\n", file = logfile)
-  cat(strrep("=", 12 + nchar(test.id)), "\n", file = logfile)
+  # header in logfile
+  cat("Test.id :", test.id, "\n", file = logfile)
+  cat(strrep("=", 10 + nchar(test.id)), "\n", file = logfile)
   if (comment != "") {
     cat("test comment:\n# ", 
         gsub("\n","\n# ",gsub("^ *\n", "", gsub("\n *$", "", comment))),
         "\n", sep="", file = logfile)
   }
+  # call lavaan main function
   lavaan.args$model <- lavaan.model
   if (!is.null(lavaan.args$data) && is.character(lavaan.args$data)) lavaan.args$data <- readRDS(lavaan.args$data)
-  snapshotfile <- paste0("snapshots/", test.id, ".rds")
+  snapshotsmap <- paste0("snapshots/", test.id, "/")
+  if (!dir.exists(snapshotsmap)) dir.create(snapshotsmap)
+  snapshotfile <- paste0(snapshotsmap, "main.rds")
   testnow <- tryCatch.W.E(do.call(lavaan.call, lavaan.args))
   noerrors <- TRUE
   totdiff <- 0L
@@ -40,74 +54,87 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
   } else {
     saveRDS(testnow, snapshotfile)
   }
+  # handle reports
   if (noerrors && length(reports) > 0) {
-    for (rpt.i in seq_along(reports)) {
-      rptname <- names(reports)[rpt.i]
-      report <- reports[[rpt.i]]
-      value.report <- !is.null(report$rep.tol.abs) || !is.null(report$rep.tol.rel)
-      if (value.report) {
-        rptsnapshotfile <- paste0("snapshots/", test.id, ".", rptname, ".rds")
-        reports[[rpt.i]]$rep.args$object <- testnow$value
-        rptval <- do.call(reports[[rpt.i]]$rep.call, reports[[rpt.i]]$rep.args)
-        if (!is.numeric(rptval)) stop("error in ", rptname , ": output is not a numeric vector")
-        if (is.null(names(rptval))) stop("error in ", rptname , ": output is not a named vector")
-        if (length(names(rptval)) != length(unique(names(rptval)))) 
-          stop("error in ", rptname , ": names output vector are not unique")
-        if (file.exists(rptsnapshotfile)) {
-          cat("Comparing reports", rptname, "\n", file = logfile)
-          rptvalold <- readRDS(rptsnapshotfile)
-          diffs <- compare_values(rptvalold, rptval, report$rep.tol.abs, report$rep.tol.rel, logfile)
-          if (diffs == 0L) {
-            cat("   all report value differences within tolerance level\n", file = logfile)
-          } else {
-            totdiff <- diffs + totdiff
-          }
+    txt.reps <- unlist(lapply(reports, function(rrr) {ls(text.reports, pattern = paste0("^", rrr, "_"))}))
+    val.reps <- unlist(lapply(reports, function(rrr) {ls(val.reports, pattern = paste0("^", rrr, "_"))}))
+    for (rpt.i in seq_along(val.reps)) {
+      rptname <- val.reps[rpt.i]
+      rpt <- get(rptname, val.reports)
+      rptsnapshotfile <- paste0(snapshotsmap, rptname, ".rds")
+      rptval <- simplify_to_numeric_output(rpt$fun(testnow$value)) 
+      if (!is.numeric(rptval)) stop("error in ", rptname , ": output is not a numeric vector")
+      if (is.null(names(rptval))) stop("error in ", rptname , ": output is not a named vector")
+      if (length(names(rptval)) != length(unique(names(rptval)))) 
+        stop("error in ", rptname , ": names output vector are not unique")
+      if (file.exists(rptsnapshotfile)) {
+        cat("Comparing reports", rptname, "\n", file = logfile)
+        rptvalold <- readRDS(rptsnapshotfile)
+        diffs <- compare_values(rptvalold, rptval, rpt$tol, logfile)
+        if (diffs == 0L) {
+          cat("   all report value differences within tolerance level\n", file = logfile)
         } else {
-          saveRDS(rptval, rptsnapshotfile)
+          totdiff <- diffs + totdiff
         }
       } else {
-        rptsnapshotfile <- paste0("snapshots/", test.id, ".", rptname, ".txt")
-        rptdifffile <- paste0("reports/", test.id, ".", rptname, ".diff")
-        removelines <- reports[[rpt.i]]$rep.ignore
-        reports[[rpt.i]]$rep.args$object <- testnow$value
-        rptcon <- file() # anonymous file
-        sink(rptcon)
-        print(do.call(reports[[rpt.i]]$rep.call, reports[[rpt.i]]$rep.args))
-        sink()
-        rptnow <- readLines(rptcon)
-        close(rptcon)
-        if (file.exists(rptsnapshotfile)) {
-          cat("Comparing reports", rptname, "\n", file = logfile)
-          rptnowcon <- textConnection(rptnow)
-          diffs <- compare_files(rptsnapshotfile, rptnowcon, rptdifffile, removelines)
-          if (diffs == 0L) {
-            cat("   reports are identical\n", file = logfile)
-            file.remove(rptdifffile)
-          } else {
-            cat("  ", diffs, " differences in reports, see", rptdifffile, "\n", file = logfile)
-          }
-          totdiff <- diffs + totdiff  
-        } else {
-          writeLines(rptnow, rptsnapshotfile)
-        }
+        saveRDS(rptval, rptsnapshotfile)
       }
     }
+    for (rpt.i in seq_along(txt.reps)) {
+      rptname <- txt.reps[rpt.i]
+      rpt <- get(rptname, text.reports)
+      rptsnapshotfile <- paste0(snapshotsmap, rptname, ".txt")
+      rptdifffile <- paste0("reports/", test.id, ".", rptname, ".diff")
+      removelines <- rpt$ignore
+      rptcon <- file() # anonymous file
+      sink(rptcon)
+      print(rpt$fun(testnow$value))
+      sink()
+      rptnow <- readLines(rptcon)
+      close(rptcon)
+      if (file.exists(rptsnapshotfile)) {
+        cat("Comparing reports", rptname, "\n", file = logfile)
+        rptnowcon <- textConnection(rptnow)
+        diffs <- compare_files(rptsnapshotfile, rptnowcon, rptdifffile, removelines)
+        if (diffs == 0L) {
+          cat("   reports are identical\n", file = logfile)
+          file.remove(rptdifffile)
+        } else {
+          cat("  ", diffs, " differences in reports, see", rptdifffile, "\n", file = logfile)
+        }
+        totdiff <- diffs + totdiff  
+      } else {
+        writeLines(rptnow, rptsnapshotfile)
+      }
+    }
+  }
+  if (!save.only) {
+    close(logfile)
+    logfile <- file(paste0("reports/", test.id, ".log"), "rt") 
   }
   if (!exists("group.environment") || is.null(group.environment)) {
     cat(paste(readLines(logfile), collapse="\n"))
   } else {
-    i <- get("i", group.environment)
-    i <- i + 1L
-    assign("i", i, group.environment)
-    ich <- formatC(i, width=4, flag="0")
-    df1 <- data.frame(
-      test = test.id,
-      diffs = totdiff
-    )
-    assign(paste0("res", ich), df1, group.environment)
-    assign(paste0("log", ich), paste(readLines(logfile), collapse="\n"), group.environment)
+    if (!save.only) {
+      i <- get("i", group.environment)
+      i <- i + 1L
+      assign("i", i, group.environment)
+      ich <- formatC(i, width=4, flag="0")
+      df1 <- data.frame(
+        test = test.id,
+        diffs = totdiff
+      )
+      assign(paste0("res", ich), df1, group.environment)
+      assign(paste0("log", ich), paste(readLines(logfile), collapse="\n"), group.environment)
+    }
+    if (totdiff == 0) {
+      cat(" OK\n")
+    } else if (totdiff == 1) {
+      cat ("1 difference!\n")
+    } else {
+      cat (totdiff, "differences!\n")
+    }
   }
-  if (!is.null(group.environment)) cat("done\n")
   invisible()
 }
 tryCatch.W.E <- function(expr)   # see demo(error.catching)
@@ -298,7 +325,17 @@ compare_files <- function(infile1, infile2,
   if (is.character(outfile)) close(oc)
   return(aantal)
 }
-compare_values <- function(rptvalold, rptval, rep.tol.abs = NULL, rep.tol.rel = NULL, logfile) {
+tolerance <- function(type = c("ABS","REL","AND","OR"), abs.val = 1e-6, rel.val = 0.01) {
+  stopifnot(abs.val > 0, rel.val > 0)
+  type <- match.arg(type)
+  switch(type,
+         ABS = function(old, new) {abs(old - new) > abs.val},
+         REL = function(old, new) {abs(old - new) > 0.5 * rel.val * (abs(old) + abs(new))},
+         AND = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
+         REL = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
+         )
+}
+compare_values <- function(rptvalold, rptval, tolfunc, logfile) {
   differences <- 0L
   if (!setequal(names(rptvalold), names(rptval))) {
     cat(" report elements aren't the same : \n",
@@ -320,13 +357,7 @@ compare_values <- function(rptvalold, rptval, rep.tol.abs = NULL, rep.tol.rel = 
         cat(" element", elem.name, "old value:", rptvalold[elem.name], ", new value: NA\n", file = logfile)
         next
       }
-      elem.diff <- abs(rptvalold[elem.name] - rptval[elem.name])
-      if (is.null(rep.tol.abs) || is.na(rep.tol.abs)) {
-        max.diff <- rep.tol.rel * abs(rptvalold[elem.name] + rptval[elem.name]) / 2
-      } else {
-        max.diff <- rep.tol.abs
-      }
-      if (elem.diff > max.diff) {
+      if (tolfunc(rptvalold[elem.name], rptval[elem.name])) {
         differences <- differences + 1L
         cat(" element", elem.name, "old value:",  rptvalold[elem.name], ", new value:", rptval[elem.name], "\n",
             file = logfile)
@@ -335,3 +366,48 @@ compare_values <- function(rptvalold, rptval, rep.tol.abs = NULL, rep.tol.rel = 
   }
   return(differences)
 }
+simplify_to_numeric_output <- function(x, prefix = "") {
+  if (is.numeric(x) && (is.null(dim(x)) || is.vector(x))) {
+    if (is.null(names(x)) || length(x) != length(unique(names(x)))) names(x) <- paste("e", seq.int(length(x)), sep = "")
+    if (prefix != "") names(x) <- paste(prefix, names(x), sep = ".")
+    return(x)
+  }
+  if (is.numeric(x) && is.matrix(x)) {
+    r.names <- rownames(x, do.NULL = FALSE, prefix = "r")
+    c.names <- colnames(x, do.NULL = FALSE, prefix = "c")
+    nr <- nrow(x)
+    nc <- ncol(x)
+    dim(x) <- nr * nc
+    dimnames(x) <- list(paste(rep(r.names, times = nc), rep(c.names, each = nr), sep = ""))
+    if (prefix != "") names(x) <- paste(prefix, names(x), sep = ".")
+    return(x)
+  }
+  if (is.list(x)) {
+    if (is.null(names(x)) || length(x) != length(unique(names(x)))) names(x) <- paste("l", seq.int(length(x)), sep = "")
+    pref <- ifelse(prefix == "", "", paste0(prefix, "."))
+    lll <- lapply(seq_along(x), function(x.i) simplify_to_numeric_output(x[[x.i]], paste(pref, names(x)[x.i], sep = "")))
+    names(lll) <- names(x)
+    lll2 <- list()
+    for(j in seq_along(lll)) {
+      returned <- lll[[j]]
+      returnedname <- names(lll)[j]
+      if (!identical(returned, FALSE)) {
+        for (jj in seq_along(returned)) lll2[[names(returned)[jj]]] <- returned[jj]
+      }
+    }
+    lll2 <- simplify2array(lll2, higher = FALSE, except = NULL)
+    if (is.matrix(lll2) && nrow(lll2) == 1L) {
+      cn <- colnames(lll2)
+      dim(lll2) <- ncol(lll2)
+      names(lll2) <- cn
+    }
+    if (is.matrix(lll2) && ncol(lll2) == 1L) {
+      rn <- rownames(lll2)
+      dim(lll2) <- nrow(lll2)
+      names(lll2) <- rn
+    }
+    return(lll2)
+  }
+  return(FALSE)  
+}
+source("reports.R") # reports

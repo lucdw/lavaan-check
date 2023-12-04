@@ -2,35 +2,29 @@
 
 this project is intended to compare the results of fitting models in lavaan with the results of previous runs
 
-There is one main procedure, run.all.tests.R which performs all tests defined in the R-files test.\*.R.
+There are two main procedures:
 
-The test files are as indicated in the example:
+- create_snapshots, which generates all reports defined in the R-files test.\*.R and stores snapshots.
+
+- run.all.tests.R which performs all tests defined in the R-files test.\*.R and reports the differences.
+
+
+The test files are as indicated in the example below:
 
 ```         
-test.id <- "HS_cov_multiple"
+test.id <- "HS_mean_GLS"
 lavaan.model <- '
   visual  =~ x1 + x2 + x3
   textual =~ x4 + x5 + x6
   speed   =~ x7 + x8 + x9
 '
-lavaan.call <-  "cfa" 
-D1 <- subset(HolzingerSwineford1939, school=="Pasteur")[,7:15]
-D2 <- subset(HolzingerSwineford1939, school=="Grant-White")[,7:15]
-S.Pasteur <- cov(D1)
-S.GrantWhite <- cov(D2)
-M.Pasteur <- apply(D1, 2, mean)
-M.GrantWhite <- apply(D2, 2, mean)
+lavaan.call <-  "sem" 
 lavaan.args <- list(
-  sample.cov=list(Pasteur=S.Pasteur, `Grant-White`=S.GrantWhite),
-  sample.mean=list(M.Pasteur, M.GrantWhite),
-  sample.nobs=c(156, 145), 
-  meanstructure=TRUE
-  )
-reports <- list(
-  fitmeasures = list(rep.call = "fitMeasures", rep.args = list(), rep.tol.abs = 0.001),
-  parm.est = list(rep.call = "parameterEstimates", rep.args = list(ci = FALSE), rep.ignore = NULL)
-)
-test.comment <- '# 2b of TESTSUITE / Misc'
+  estimator = "GLS",
+  data = "HS.rds",
+  meanstructure = TRUE)
+reports <- c("all", "con", "data")
+test.comment <- ''
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")
   execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
@@ -47,30 +41,85 @@ The following values are set:
 
 -   lavaan.args : the parameters to specify for the call (except model), data is given as a data.frame or the name of an RDS-file containing the data.frame
 
--   reports : a list of reports based on the fitted model, whose output will be compared to the output of previous runs:
-
-    -   rep.call : name of the function to call to create the report, this can be an self-written function present in "own_reports.R"
-
-    -   rep.args : arguments for the call (the argument 'object' is automatically set to the result of the lavaan call)
-
-    -   rep.ignore : character, lines with these strings will be ignored for comparison (overwritten in the report)
-
-    -   rep.tol.abs : numeric, absolute value of tolerance
-
-    -   rep.tol.rel : numeric, relative tolerance level
+-   reports : a character vector with prefixes of reports (see below) to produce for this test
 
 -   test.comment : optional comment on the test, which will also be copied in the logging
 
 The following lines execute the test if the file is sourced directly (not as a result of sourcing run.all.tests.r, where this is done in the 'calling' script).
 
-When rep.tol.abs or rep.tol.rel is specified the report must produce a named numeric output, which will be compared numerically with the output of a previous run. If the value rep.tol.rel is given the tolerance used is $rep.tol.rel \times abs(oldvalue + newvalue) / 2$. When none of these tolerances are specified the output of the report is printed to a file and the resulting report is compared textually to the old text, possibly ignoring lines containing one of the strings in $rep.ignore$.
+The reports are defined in reports.R. An extraction of this file is shown below:
 
-When executing:
+```
+# Names of reports should start with :
+# nodata_ if applicable to cases without data
+# all_ if applicable to all cases with data or covariance given
+# data_ if applicable to all cases with data given
+# cat_ if applicable to all cases with categorical data
+# con_ if applicable to all cases with continuous data
 
-The lavaan function is called and the result, incorporated in a list to support errored executions, is compared to the result of a previous execution as stored in subdirectory snapshots. If there is no result of a previous execution the current result is stored in subdirectory snapshots.
+# Reports for text output, stored in text.reports, list(function to execute, text for lines to ignore)
+if (exists("text.reports")) rm(text.reports)
+text.reports <- new.env(parent = emptyenv())
+assign("nodata_sum_fitted", 
+       list(
+          fun = function(object) {sapply(fitted(object), function(x) sum(unlist(x)))},
+          ignore = character(0)
+       ),
+       envir = text.reports
+       )
+assign("all_lavnames", 
+       list(
+         fun = function(object) {lavNames(object, "all")},
+         ignore = character(0)
+       ),
+       envir = text.reports
+)
+# Reports for value output, stored in val.reports, list(function to execute, tolerance function)
+# The tolerance function takes two values (old and new) as input and returns a boolean, TRUE if 
+# difference between old and new greater then tolerance. 
+if (exists("val.reports")) rm(val.reports)
+val.reports <- new.env(parent = emptyenv())
+assign("all_coef", 
+       list(
+         fun = function(object) {coef(object)},
+         tol = tolerance("REL", rel.val = 0.05)
+       ),
+       envir = val.reports
+)
+etc...
+```
 
-If the current call of the lavaan function is without errors the same procedure is applied to the reports mentioned.
+Text reports are reports for which the output is printed to a file and the test exists of comparing this output with the output produced earlier (and stored in a file in the snapshots directory).
+The definition of these reports are stored in environment text.reports and consist of a list with two elements:
 
-A logging of the differences in behavior of the lavaan calls (warnings and/or errors) and the results of comparing the reports is created.
+- fun : the function to call with as only parameter the object resulting from the lavaan call.
 
-To recreate the snapshots of a test, remove the corresponding snapshots in the snapshots map before executing the test.
+- ignore : a - possibly empty - vector with character strings which identify lines in the report which should not be compared.
+
+Value reports are reports for which the output is transformed to a named numeric vector and the elements of this vector are compared to those from a previous run (stored in snapshots).
+The definition of these reports are stored in environment val.reports and consist of a list with two elements:
+
+- fun : the function to call with as only parameter the object resulting from the lavaan call.
+
+- tol : a function which takes two numeric values as input (old and new), and returns a logical indicating if the difference between those values is greater then the tolerance.
+
+The tol functions can easily be made with the tolerance function (which is in file 'utilities.R'):
+
+```
+tolerance <- function(type = c("ABS","REL","AND","OR"), abs.val = 1e-6, rel.val = 0.01) {
+  stopifnot(abs.val > 0, rel.val > 0)
+  type <- match.arg(type)
+  switch(type,
+         ABS = function(old, new) {abs(old - new) > abs.val},
+         REL = function(old, new) {abs(old - new) > 0.5 * rel.val * (abs(old) + abs(new))},
+         AND = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
+         REL = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
+         )
+}
+```
+
+Notes:
+
+1. If a snapshot for a test does not exist it is created and there is no comparison. This makes it easyer to define new tests and source the corresponding R file twice to see if it behaves as expected.
+
+2. When new reports are defined and after adding new tests, it is advisable to recreate the entire snapshot structure via create.snapshots.R.

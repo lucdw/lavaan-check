@@ -1,11 +1,10 @@
 if (!file.exists("utilities.R")) stop("working directory isn't the main test directory")
-ownrep <- "own_reports.R"
 source("utilities.R")
-if (file.exists(ownrep)) source(ownrep) # global own reports
 group.environment <- new.env()
 assign("i", 0L, group.environment)
 cat("STARTING TIME:", format(Sys.time()), "\n")
-if (!dir.exists("snapshots")) dir.create("snapshots")
+cat("lavaan version of snapshots :", readLines("snapshots/version.txt"), "\n")
+cat("current lavaan version :", packageDescription("lavaan", fields = "Version"), "\n")
 testfiles <- list.files(pattern = "^test\\.[^.]*\\.R$")
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
@@ -19,15 +18,16 @@ for (i in seq_len(max.i)) {
   df1 <- get(paste0("res", ich), group.environment)
   res1 <- get(paste0("log", ich), group.environment)
   cat(paste(res1, collapse="\n"), file=reportcon)
+  cat("\n", file = reportcon)
   if (i == 1) {
-    df <- df1
+    resultdf <- df1
   } else {
-    df <- rbind(df, df1)
+    resultdf <- rbind(resultdf, df1)
   }
 }
 close(reportcon)
 rm(group.environment)
-saveRDS(df, file = "result.rds")
-cat("Logging of tests are in result.txt\n")
-cat("Data.frame with overview (variable df) is saved in result.rds\n")
+saveRDS(resultdf, file = "result.rds")
 cat("ENDING TIME:", format(Sys.time()), "\n")
+cat("Logging of individual tests are in the map 'reports'.\n")
+cat("Results are in data.frame resultdf, which is saved in file 'result.rds'.\n")
