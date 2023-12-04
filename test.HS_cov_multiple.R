@@ -5,8 +5,8 @@ lavaan.model <- '
   speed   =~ x7 + x8 + x9
 '
 lavaan.call <-  "cfa" 
-D1 <- subset(HolzingerSwineford1939, school=="Pasteur")[,7:15]
-D2 <- subset(HolzingerSwineford1939, school=="Grant-White")[,7:15]
+D1 <- subset(lavaan::HolzingerSwineford1939, school=="Pasteur")[,7:15]
+D2 <- subset(lavaan::HolzingerSwineford1939, school=="Grant-White")[,7:15]
 S.Pasteur <- cov(D1)
 S.GrantWhite <- cov(D2)
 M.Pasteur <- apply(D1, 2, mean)
@@ -17,10 +17,7 @@ lavaan.args <- list(
   sample.nobs=c(156, 145), 
   meanstructure=TRUE
   )
-reports <- list(
-  fitmeasures = list(rep.call = "fitMeasures", rep.args = list(), rep.tol.abs = 0.001),
-  parm.est = list(rep.call = "parameterEstimates", rep.args = list(ci = FALSE), rep.ignore = NULL)
-)
+reports <- c("all", "con")
 test.comment <- '# 2b of TESTSUITE / Misc'
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")

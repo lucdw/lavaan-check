@@ -9,10 +9,7 @@ lavaan.args <- list(
   estimator = "GLS",
   data = "HS.rds",
   meanstructure = TRUE)
-reports <- list(
-  summary = list(rep.call = "summary", rep.args = list(), rep.ignore = "ended normally after"),
-  parm.est = list(rep.call = "parameterEstimates", rep.args = list(ci = FALSE), rep.ignore = NULL)
-)
+reports <- c("all", "con", "data")
 test.comment <- ''
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")

@@ -8,9 +8,7 @@ lavaan.call <-  "sem"
 lavaan.args <- list(
   sample.nobs =  c(100, 200)
 )
-reports <- list(
-  sumfitted = list(rep.call = "txt_sum_fitted", rep.args = list())
-)
+reports <- c("nodata")
 test.comment <- 'a run without data'
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")

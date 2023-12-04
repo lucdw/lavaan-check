@@ -9,10 +9,7 @@ lavaan.args <- list(
   sample.cov = cov(HolzingerSwineford1939[,7:15]),
   sample.nobs = 301
   )
-reports <- list(
-  fitmeasures = list(rep.call = "fitMeasures", rep.args = list(), rep.tol.abs = 0.001),
-  parm.est = list(rep.call = "parameterEstimates", rep.args = list(ci = FALSE), rep.ignore = NULL)
-)
+reports <- c("all", "con")
 test.comment <- '# 2 of TESTSUITE / Misc'
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")
