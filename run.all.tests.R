@@ -5,7 +5,7 @@ assign("i", 0L, group.environment)
 cat("STARTING TIME:", format(Sys.time()), "\n")
 cat("lavaan version of snapshots :", readLines("snapshots/version.txt"), "\n")
 cat("current lavaan version :", packageDescription("lavaan", fields = "Version"), "\n")
-testfiles <- list.files(pattern = "^test\\.[^.]*\\.R$")
+testfiles <- list.files(pattern = "^test\\..*\\.[rR]$")
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
   source(testfile)

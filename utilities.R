@@ -62,7 +62,13 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
       rptname <- val.reps[rpt.i]
       rpt <- get(rptname, val.reports)
       rptsnapshotfile <- paste0(snapshotsmap, rptname, ".rds")
-      rptval <- simplify_to_numeric_output(rpt$fun(testnow$value)) 
+      rpttmp <- tryCatch.W.E(rpt$fun(testnow$value))
+      if (inherits(rpttmp$value, "error")) {
+        rptval <- c(Error = -99999)
+        warning("Error generating report ", rptname, " for ", test.id, ": ", rpttmp$value)
+      } else {
+        rptval <- simplify_to_numeric_output(rpttmp$value) 
+      }
       if (!is.numeric(rptval)) stop("error in ", rptname , ": output is not a numeric vector")
       if (is.null(names(rptval))) stop("error in ", rptname , ": output is not a named vector")
       if (length(names(rptval)) != length(unique(names(rptval)))) 
@@ -86,9 +92,13 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
       rptsnapshotfile <- paste0(snapshotsmap, rptname, ".txt")
       rptdifffile <- paste0("reports/", test.id, ".", rptname, ".diff")
       removelines <- rpt$ignore
+      rpttmp <- tryCatch.W.E(rpt$fun(testnow$value))
+      if (inherits(rpttmp$value, "error")) {
+        warning("Error generating report ", rptname, " for ", test.id, ": ", rpttmp$value)
+      }
       rptcon <- file() # anonymous file
       sink(rptcon)
-      print(rpt$fun(testnow$value))
+      print(rpttmp$value)
       sink()
       rptnow <- readLines(rptcon)
       close(rptcon)
@@ -325,16 +335,6 @@ compare_files <- function(infile1, infile2,
   if (is.character(outfile)) close(oc)
   return(aantal)
 }
-tolerance <- function(type = c("ABS","REL","AND","OR"), abs.val = 1e-6, rel.val = 0.01) {
-  stopifnot(abs.val > 0, rel.val > 0)
-  type <- match.arg(type)
-  switch(type,
-         ABS = function(old, new) {abs(old - new) > abs.val},
-         REL = function(old, new) {abs(old - new) > 0.5 * rel.val * (abs(old) + abs(new))},
-         AND = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
-         REL = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
-         )
-}
 compare_values <- function(rptvalold, rptval, tolfunc, logfile) {
   differences <- 0L
   if (!setequal(names(rptvalold), names(rptval))) {
@@ -367,18 +367,40 @@ compare_values <- function(rptvalold, rptval, tolfunc, logfile) {
   return(differences)
 }
 simplify_to_numeric_output <- function(x, prefix = "") {
+  if (length(x) == 0) return(c(x = 0))
   if (is.numeric(x) && (is.null(dim(x)) || is.vector(x))) {
-    if (is.null(names(x)) || length(x) != length(unique(names(x)))) names(x) <- paste("e", seq.int(length(x)), sep = "")
-    if (prefix != "") names(x) <- paste(prefix, names(x), sep = ".")
+    if (is.null(names(x))) names(x) <- paste("e", seq.int(length(x)), sep = "")
+    e.names <- names(x)
+    while(any(duplicated(e.names))) {
+      welke <- which(duplicated(e.names))
+      e.names[welke] <- paste0(e.names[welke], ".")
+    }
+    if (prefix != "") {
+      names(x) <- paste(prefix, e.names, sep = ".")
+    } else {
+      names(x) <- e.names
+    }
     return(x)
+  }
+  if (is.data.frame(x)) {
+    if (nrow(x) == 0) return(c(x = 0))
+    x <- data.matrix(x, rownames.force = TRUE) 
   }
   if (is.numeric(x) && is.matrix(x)) {
     r.names <- rownames(x, do.NULL = FALSE, prefix = "r")
+    while(any(duplicated(r.names))) {
+      welke <- which(duplicated(r.names))
+      r.names[welke] <- paste0(r.names[welke], ".")
+    }
     c.names <- colnames(x, do.NULL = FALSE, prefix = "c")
+    while(any(duplicated(c.names))) {
+      welke <- which(duplicated(c.names))
+      c.names[welke] <- paste0(c.names[welke], ".")
+    }
     nr <- nrow(x)
     nc <- ncol(x)
     dim(x) <- nr * nc
-    dimnames(x) <- list(paste(rep(r.names, times = nc), rep(c.names, each = nr), sep = ""))
+    dimnames(x) <- list(paste(rep(r.names, times = nc), "|", rep(c.names, each = nr), sep = ""))
     if (prefix != "") names(x) <- paste(prefix, names(x), sep = ".")
     return(x)
   }

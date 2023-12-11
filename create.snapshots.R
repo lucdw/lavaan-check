@@ -7,10 +7,12 @@ if (dir.exists("reports")) unlink("reports", recursive = TRUE)
 dir.create("snapshots")
 dir.create("reports")
 writeLines(packageDescription("lavaan", fields = "Version"), "snapshots/version.txt")
-testfiles <- list.files(pattern = "^test\\.[^.]*\\.R$")
+testfiles <- list.files(pattern = "^test\\..*\\.[rR]$")
+options(warn = 1)
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
   source(testfile)
   execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment, group.environment)
 }
+options(warn = 0)
 rm(group.environment)
