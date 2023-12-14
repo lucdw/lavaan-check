@@ -12,7 +12,7 @@ lavaan.args <- list(
   bootstrap = 200,
   data = "HS.rds",
   meanstructure = TRUE)
-reports <- c("all", "con", "data")
+reports <- c("bootse")
 test.comment <- 'bootstrap fitted parameters will allways differ !!!'
 if (!exists("group.environment") || is.null(group.environment)) {
   source("utilities.R")

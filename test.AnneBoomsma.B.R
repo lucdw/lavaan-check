@@ -9,6 +9,7 @@ sds <- ' 2.0027  .6247  .5798  7.5342  6.4352 '
 COV <- lavaan::getCov(COR, sds=sds, names=c("ADVICE", "IQ_A", "IQ_L", "SP_A", "SP_L"))
 lavaan.model <- ' Schop  =~ 6.409 * SP_A + SP_L
            Intel  =~ NA * IQ_A + IQ_L
+           Intel ~~ 1*Intel
 
            ADVICE ~ Schop
            Schop  ~ Intel '

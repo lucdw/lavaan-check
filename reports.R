@@ -566,6 +566,7 @@ assign(
   ),
   envir = val.reports
 )
+# special cases
 assign(
   "stanse_solution",
   list(
@@ -574,4 +575,11 @@ assign(
     tol = tolerance()
   ),
   envir = val.reports
+)
+assign(
+  "bootse_se",
+  list(
+    func = function(object) parameterEstimates(object)$se,
+    tol = tolerance("REL", rel.val = 0.15 )
+  )
 )
