@@ -57,17 +57,18 @@ assign("all_summary",
        envir = text.reports)
 
 # create tol function for tolerance handling
-# default is very severe: difference detected when > 1e-4 or > 0.001 * mean(old, new) !!!
-tolerance <- function(type = c("OR", "ABS", "REL", "AND"), abs.val = 1e-4, rel.val = 0.001) {
+# default is severe: difference detected when > max(1e-4, 0.001 * mean(old, new))
+tolerance <- function(type = c("MAX", "ABS", "REL", "MIN"), abs.val = 1e-4, rel.val = 0.001) {
   stopifnot(abs.val > 0, rel.val > 0)
   type <- match.arg(type)
   switch(type,
          ABS = function(old, new) {abs(old - new) > abs.val},
          REL = function(old, new) {abs(old - new) > 0.5 * rel.val * (abs(old) + abs(new))},
-         AND = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
-         OR = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
+         MAX = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
+         MIN = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
   )
-}# Reports for value output, stored in val.reports, list(function to execute, tol function)
+}
+# Reports for value output, stored in val.reports, list(function to execute, tol function)
 # The tol function takes two values (old and new) as input and returns a boolean, TRUE if
 # difference between old and new greater then tolerance. The tolerance function above is a helper 
 # to creat tol functions.
@@ -78,7 +79,7 @@ assign("all_coef",
          fun = function(object) {
            coef(object)
          },
-         tol = tolerance("OR", abs.val = 0.001, rel.val = 0.01) # min(0.001, 0.01 * (abs(old) + abs(new)) / 2)
+         tol = tolerance("MAX", abs.val = 0.001, rel.val = 0.01) # min(0.001, 0.01 * (abs(old) + abs(new)) / 2)
        ),
        envir = val.reports)
 assign("con_residuals",
@@ -86,7 +87,7 @@ assign("con_residuals",
          fun = function(object) {
            residuals(object)[[2]]
          },
-         tol = tolerance("AND", abs.val = 0.001, rel.val = 0.01) # max(0.001, 0.01 * (abs(old) + abs(new)) / 2)
+         tol = tolerance("MIN", abs.val = 0.001, rel.val = 0.01) # max(0.001, 0.01 * (abs(old) + abs(new)) / 2)
        ),
        envir = val.reports)
 assign("con_resid",

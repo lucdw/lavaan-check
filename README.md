@@ -106,15 +106,17 @@ The definition of these reports are stored in environment val.reports and consis
 The tol functions can easily be made with the tolerance function (which is in file 'utilities.R'):
 
 ```
-tolerance <- function(type = c("ABS","REL","AND","OR"), abs.val = 1e-6, rel.val = 0.01) {
+# create tol function for tolerance handling
+# default is severe: difference detected when > max(1e-4, 0.001 * mean(old, new))
+tolerance <- function(type = c("MAX", "ABS", "REL", "MIN"), abs.val = 1e-4, rel.val = 0.001) {
   stopifnot(abs.val > 0, rel.val > 0)
   type <- match.arg(type)
   switch(type,
          ABS = function(old, new) {abs(old - new) > abs.val},
          REL = function(old, new) {abs(old - new) > 0.5 * rel.val * (abs(old) + abs(new))},
-         AND = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
-         REL = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
-         )
+         MAX = function(old, new) {abs(old - new) > max(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))},
+         MIN = function(old, new) {abs(old - new) > min(abs.val, 0.5 * rel.val * (abs(old) + abs(new)))}
+  )
 }
 ```
 
