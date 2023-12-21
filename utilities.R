@@ -39,7 +39,7 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
         "\n", sep="", file = logfile)
   }
   # call lavaan main function
-  lavaan.args$model <- lavaan.model
+  if (lavaan.call != "efa") lavaan.args$model <- lavaan.model
   if (!is.null(lavaan.args$data) && is.character(lavaan.args$data)) lavaan.args$data <- readRDS(lavaan.args$data)
   snapshotsmap <- paste0("snapshots/", test.id, "/")
   if (!dir.exists(snapshotsmap)) dir.create(snapshotsmap)

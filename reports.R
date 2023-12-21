@@ -52,7 +52,14 @@ assign("all_summary",
        list(
          func = function(object)
            summary(object),
-         ignore = " ended "
+         ignore = c(" ended ", "This is lavaan ")
+       ),
+       envir = text.reports)
+assign("efa_summary",
+       list(
+         func = function(object)
+           summary(object),
+         ignore = "This is lavaan "
        ),
        envir = text.reports)
 
