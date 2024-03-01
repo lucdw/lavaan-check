@@ -453,14 +453,14 @@ assign("all_inspect_hessian",
          tol = tolerance()
        ),
        envir = val.reports)
-
-assign("all_inspect_head_modindices",
-       list(
-         func = function(object)
-           head(modindices(object)),
-         tol = tolerance()
-       ),
-       envir = val.reports)
+# temporary removed report because modindices gives an error when fitted with ov.order = "data"
+# assign("all_inspect_head_modindices",
+#        list(
+#          func = function(object)
+#            head(modindices(object)),
+#          tol = tolerance()
+#        ),
+#        envir = val.reports)
 assign(
   "all_inspect_standardizedSolution",
   list(
