@@ -8,11 +8,11 @@ dir.create("snapshots")
 dir.create("reports")
 writeLines(packageDescription("lavaan", fields = "Version"), "snapshots/version.txt")
 testfiles <- list.files(pattern = "^test\\..*\\.[rR]$")
-options(warn = 1)
+options(warn = 1, width = 255L)
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
   source(testfile)
   execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment, group.environment)
 }
-options(warn = 0)
+options(warn = 0, width = 100L)
 rm(group.environment)

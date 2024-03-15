@@ -1,4 +1,5 @@
 if (!file.exists("utilities.R")) stop("working directory isn't the main test directory")
+options(width = 255L)
 source("utilities.R")
 group.environment <- new.env()
 assign("i", 0L, group.environment)
@@ -27,6 +28,7 @@ for (i in seq_len(max.i)) {
 }
 close(reportcon)
 rm(group.environment)
+options(width = 100L)
 saveRDS(resultdf, file = "result.rds")
 cat("ENDING TIME:", format(Sys.time()), "\n")
 cat("Logging of individual tests are in the map 'reports'.\n")
