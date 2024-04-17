@@ -15,10 +15,10 @@ for (test.i in seq_along(testfiles)) {
 max.i <- get("i", group.environment)
 reportcon <- file("result.txt", "wt")
 for (i in seq_len(max.i)) {
-  ich <- formatC(i, width=4, flag="0")
+  ich <- formatC(i, width = 4, flag = "0")
   df1 <- get(paste0("res", ich), group.environment)
   res1 <- get(paste0("log", ich), group.environment)
-  cat(paste(res1, collapse="\n"), file=reportcon)
+  cat(paste(res1, collapse = "\n"), file = reportcon)
   cat("\n", file = reportcon)
   if (i == 1) {
     resultdf <- df1
