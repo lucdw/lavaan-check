@@ -36,7 +36,7 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
   if (comment != "") {
     cat("test comment:\n# ", 
         gsub("\n","\n# ",gsub("^ *\n", "", gsub("\n *$", "", comment))),
-        "\n", sep="", file = logfile)
+        "\n", sep = "", file = logfile)
   }
   # call lavaan main function
   if (lavaan.call != "efa") lavaan.args$model <- lavaan.model
@@ -44,6 +44,7 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
   snapshotsmap <- paste0("snapshots/", test.id, "/")
   if (!dir.exists(snapshotsmap)) dir.create(snapshotsmap)
   snapshotfile <- paste0(snapshotsmap, "main.rds")
+  lavaan.args$parser = "new"
   testnow <- tryCatch.W.E(do.call(lavaan.call, lavaan.args))
   noerrors <- TRUE
   totdiff <- 0L
@@ -140,9 +141,9 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
     if (totdiff == 0) {
       cat(" OK\n")
     } else if (totdiff == 1) {
-      cat ("1 difference!\n")
+      cat("1 difference!\n")
     } else {
-      cat (totdiff, "differences!\n")
+      cat(totdiff, "differences!\n")
     }
   }
   invisible()

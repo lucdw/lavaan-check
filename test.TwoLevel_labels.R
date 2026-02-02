@@ -8,7 +8,7 @@ lavaan.model <- '
     level: between
       fac =~ y1 + L2*y2 + L3*y3
      
-  group: type2w
+  group: type2
     level: within
       fac =~ y1 + L2*y2 + L3*y3
     level: between

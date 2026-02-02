@@ -7,9 +7,8 @@ lavaan.model <- '
 lavaan.call <-  "sem" 
 lavaan.args <- list(
   estimator = "ML",
-  information = "observed",
   se = "bootstrap",
-  bootstrap = 200,
+  bootstrap = 250,
   data = "HS.rds",
   meanstructure = TRUE)
 reports <- c("bootse")
