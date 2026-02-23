@@ -4,10 +4,9 @@ this project is intended to compare the results of fitting models in lavaan with
 
 There are two main procedures:
 
-- create_snapshots, which generates all reports defined in the R-files test.\*.R and stores snapshots.
+- create_snapshots.R, which generates all reports defined in the R-files tests/*.R and stores snapshots.
 
-- run.all.tests.R which performs all tests defined in the R-files test.\*.R and reports the differences.
-
+- run.all.tests.R which performs all tests defined in the R-files tests/*.R and reports the differences.
 
 The test files are as indicated in the example below:
 
@@ -33,11 +32,11 @@ if (!exists("group.environment") || is.null(group.environment)) {
 
 The following values are set:
 
--   test.id : the identifying name of the test, this must be exactly the same as in the filename between "test." and ".R"
+-   test.id : the identifying name of the test, this must be exactly the same as in the filename before ".R"
 
 -   lavaan.model : the model to use in lavaan
 
--   lavaan.call : the model type to use in lavaan (sem, cfa, growth, ...)
+-   lavaan.call : the function to call in lavaan (sem, cfa, growth, lavParseModelString, ...)
 
 -   lavaan.args : the parameters to specify for the call (except model), data is given as a data.frame or the name of an RDS-file containing the data.frame
 
@@ -56,6 +55,7 @@ The reports are defined in reports.R. An extraction of this file is shown below:
 # data_ if applicable to all cases with data given
 # cat_ if applicable to all cases with categorical data
 # con_ if applicable to all cases with continuous data
+# parse_ for tests which call lavParseModelString
 
 # Reports for text output, stored in text.reports, list(function to execute, text for lines to ignore)
 if (exists("text.reports")) rm(text.reports)
@@ -124,4 +124,6 @@ Notes:
 
 1. If a snapshot for a test does not exist it is created and there is no comparison. This makes it easyer to define new tests and source the corresponding R file twice to see if it behaves as expected.
 
-2. When new reports are defined and after adding new tests, it is advisable to recreate the entire snapshot structure via create.snapshots.R.
+2. When reports are added or modified, one should source reports.R to immediately use the new or modified reports
+
+3. When new reports are defined and after adding new tests, it is advisable to recreate the entire snapshot structure via create.snapshots.R.

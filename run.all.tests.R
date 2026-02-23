@@ -6,11 +6,13 @@ assign("i", 0L, group.environment)
 cat("STARTING TIME:", format(Sys.time()), "\n")
 cat("lavaan version of snapshots :", readLines("snapshots/version.txt"), "\n")
 cat("current lavaan version :", packageDescription("lavaan", fields = "Version"), "\n")
-testfiles <- list.files(pattern = "^test\\..*\\.[rR]$")
+testfiles <- list.files("tests", pattern = "\\.[rR]$")
+options(warn = 1, width = 255L)
 for (test.i in seq_along(testfiles)) {
-  testfile <- testfiles[test.i]
+  testfile <- paste0("tests/", testfiles[test.i])
   source(testfile)
-  execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment, group.environment)
+  execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, 
+    test.comment, group.environment, exec.mode = 2L)
 }
 max.i <- get("i", group.environment)
 reportcon <- file("result.txt", "wt")
@@ -28,7 +30,7 @@ for (i in seq_len(max.i)) {
 }
 close(reportcon)
 rm(group.environment)
-options(width = 100L)
+options(warn = 0, width = 100L)
 saveRDS(resultdf, file = "result.rds")
 cat("ENDING TIME:", format(Sys.time()), "\n")
 cat("Logging of individual tests are in the map 'reports'.\n")

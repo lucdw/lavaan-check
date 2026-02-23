@@ -3,13 +3,16 @@ TheCalls <- as.character(sys.calls())
 if (!grepl("run.all.tests", TheCalls[[1]], fixed = TRUE) && 
     !grepl("create.snapshots", TheCalls[[1]], fixed = TRUE) &&
     !grepl("utilities", TheCalls[[1]], fixed = TRUE) &&
-    !grepl(paste0(".", test.id, "."), TheCalls[[1]], fixed = TRUE)
+    !grepl(paste0(test.id, "."), TheCalls[[1]], fixed = TRUE)
     ) stop("Source file and test.id do not match!")
+if (!exists("text.reports")) source("reports.R") # reports
 # function to execute test with parameters set in .R files in subdirectories
 # group.environment is NULL when function is called from this R-file
 # the logging of differences is stored in the group.environment or displayed immediately
 execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, reports,
-                         comment = "", group.environment = NULL) {
+                         comment = "", group.environment = NULL, 
+                         exec.mode = 0L # 0L = only 1 test, 1L = create snapshot, 2L = normal
+                        ) {
   stopifnot(is.character(test.id), length(test.id) == 1L)
   stopifnot(is.character(lavaan.call), length(lavaan.call) == 1L)
   stopifnot(is.character(lavaan.model))
@@ -18,45 +21,40 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
   if (!file.exists("utilities.R")) stop(paste("The working directory", getwd(), "is not the right one!"))
   if (!dir.exists("snapshots")) dir.create("snapshots")
   if (!dir.exists("reports")) dir.create("reports")
-  save.only <- FALSE
-  if (exists("group.environment") && !is.null(group.environment)) {
-    cat("  handling ", sprintf("%-50s", test.id), " ...: ")
-    if (is.numeric(group.environment)) save.only <- TRUE  
-  }
   # create logfile
-  if (save.only) {
-    logfile <- file()
+  if (exec.mode == 0L) {
+    logfile <- file() # temporary file opened for writing and reading!
   } else {
+    cat("  handling ", sprintf("%-50s", test.id), " ...: ")
     logfile <- file(paste0("reports/", test.id, ".log"), "wt") 
   }
   on.exit({if (isOpen(logfile)) close(logfile)})
   # header in logfile
   cat("Test.id :", test.id, "\n", file = logfile)
   cat(strrep("=", 10 + nchar(test.id)), "\n", file = logfile)
-  if (comment != "") {
-    cat("test comment:\n# ", 
-        gsub("\n","\n# ",gsub("^ *\n", "", gsub("\n *$", "", comment))),
-        "\n", sep = "", file = logfile)
-  }
-  # call lavaan main function
+  if (comment != "") cat("Comment: ", comment, "\n", file = logfile) 
+  # call lavaan function
   if (lavaan.call != "efa") lavaan.args$model <- lavaan.model
-  if (!is.null(lavaan.args$data) && is.character(lavaan.args$data)) lavaan.args$data <- readRDS(lavaan.args$data)
+  if (!is.null(lavaan.args$data) && is.character(lavaan.args$data)) 
+    lavaan.args$data <- readRDS(paste0("tests/", lavaan.args$data))
   snapshotsmap <- paste0("snapshots/", test.id, "/")
   if (!dir.exists(snapshotsmap)) dir.create(snapshotsmap)
   snapshotfile <- paste0(snapshotsmap, "main.rds")
   lavaan.args$parser = "new"
   testnow <- tryCatch.W.E(do.call(lavaan.call, lavaan.args))
-  noerrors <- TRUE
+  errornow <- inherits(testnow$value, "error")
+  noerrors <- !errornow
   totdiff <- 0L
+  testold <- NULL
   if (file.exists(snapshotfile)) {
     testold <- readRDS(snapshotfile)
-    noerrors <- compare_messages(testold, testnow, logfile)
-    if (!noerrors) totdiff <- 1L
-  } else {
-    saveRDS(testnow, snapshotfile)
-  }
+    cmpmsg <- compare_messages(testold, testnow, logfile)
+    totdiff <- cmpmsg$diff
+    noerrors <- cmpmsg$noerrors 
+  } 
+  saveRDS(testnow, snapshotfile)
   # handle reports
-  if (noerrors && length(reports) > 0) {
+  if (noerrors && length(reports) > 0 && !is.null(testold)) {
     txt.reps <- unlist(lapply(reports, function(rrr) {ls(text.reports, pattern = paste0("^", rrr, "_"))}))
     val.reps <- unlist(lapply(reports, function(rrr) {ls(val.reports, pattern = paste0("^", rrr, "_"))}))
     for (rpt.i in seq_along(val.reps)) {
@@ -119,14 +117,12 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
       }
     }
   }
-  if (!save.only) {
-    close(logfile)
-    logfile <- file(paste0("reports/", test.id, ".log"), "rt") 
-  }
-  if (!exists("group.environment") || is.null(group.environment)) {
+  if (exec.mode == 0L) {
     cat(paste(readLines(logfile), collapse="\n"))
   } else {
-    if (!save.only) {
+    close(logfile)
+    logfile <- file(paste0("reports/", test.id, ".log"), "rt") 
+    if (exec.mode == 2L) {
       i <- get("i", group.environment)
       i <- i + 1L
       assign("i", i, group.environment)
@@ -139,21 +135,24 @@ execute_test <- function(test.id, lavaan.model, lavaan.call, lavaan.args, report
       assign(paste0("log", ich), paste(readLines(logfile), collapse="\n"), group.environment)
     }
     if (totdiff == 0) {
-      cat(" OK\n")
+      cat(" OK")
     } else if (totdiff == 1) {
-      cat("1 difference!\n")
+      cat("1 difference!")
     } else {
-      cat(totdiff, "differences!\n")
+      cat(totdiff, "differences!")
     }
+    if (errornow) cat(" (an error occurred executing ", lavaan.call, ")", sep = "")
+    cat('\n', sep = "")
   }
-  invisible()
+  # close(logfile)
+  invisible(NULL)
 }
 tryCatch.W.E <- function(expr)   # see demo(error.catching)
 {
   W <- NULL
   w.handler <- function(w) {
     # warning handler
-    W <<- w
+    W <<- unique(c(W, w$message))
     invokeRestart("muffleWarning")
   }
   list(value = withCallingHandlers(tryCatch(
@@ -181,45 +180,58 @@ handle_dcf <- function(dcf) {
   return(dcf)
 }
 compare_messages <- function(testold, testnow, logcon) {
+  retval <- list(diff = 0L, noerrors = TRUE)
+  if (!is.null(testnow$warning)) {
+    cat("Warnings occurred:", testnow$warning, strrep(".", 30), sep = "\n", file = logcon)
+  }
+  if (inherits(testnow$value, "error")) { 
+    retval$noerrors <- FALSE
+    cat("An error occurred:", testnow$value$message, strrep("-", 30), "\n", file = logcon)
+  }
   if (!is.null(testold$warning)) {
     if (is.null(testnow$warning)) {
-      cat("Warning(s) in old snapshot while not in new:\n", file = logcon)
-      cat(testold$warning$message, sep = "\n", file = logcon)
+      cat("Warning(s) in old snapshot while not in new:",
+           testold$warning, sep = "\n", file = logcon)
+      retval$diff <- 1L
     } else {
-      if (!identical(testold$warning$message, testnow$warning$message)) {
-        oldtxt <- textConnection(testold$warning$message)
-        newtxt <- textConnection(testnow$warning$message)
+      if (!identical(testold$warning, testnow$warning)) {
+        retval$diff <- 1L
+        oldtxt <- textConnection(testold$warning)
+        newtxt <- textConnection(testnow$warning)
         cat("Warning differences:\n", file = logcon)
         compare_files(oldtxt, newtxt, logcon)
       }
     }
   } else {
     if (!is.null(testnow$warning)) {
-      cat("Warning(s) in new snapshot while not in old:\n", file = logcon)
-      cat(testnow$warning$message, sep = "\n", file = logcon)
+      retval$diff <- 1L
+      cat("Warning(s) in new snapshot while not in old:",
+           testnow$warning, sep = "\n", file = logcon)
     }
   }
   if (inherits(testold$value, "error")) {
+    retval$noerrors <- FALSE
     if (!inherits(testnow$value, "error")) {
-      cat("Error in old snapshot while not in new:\n", file = logcon)
-      cat(testold$value$message, sep = "\n", file = logcon)
+      cat("Error in old snapshot while not in new:",
+          testold$value$message, sep = "\n", file = logcon)
     } else {
       if (!identical(testold$value$message, testnow$value$message)) {
         oldtxt <- textConnection(testold$value$message)
         newtxt <- textConnection(testnow$value$message)
         cat("Error message differences:\n", file = logcon)
         compare_files(oldtxt, newtxt, logcon)
+      } else {
+        cat("Error messages are identical:", testnow$value$message,
+          sep = "\n", file = logcon)
       }
     }
   } else {
     if (inherits(testnow$value, "error")) {
-      cat("Error in new snapshot while not in old:\n", file = logcon)
-      cat(testnow$value$message, sep = "\n", file = logcon)
-    } else {
-      return(TRUE) # no errors occured
+      cat("Error in new snapshot while not in old:", testnow$value$message, 
+        sep = "\n", file = logcon)
     }
   }
-  return(FALSE) # at least one of both has errors (and so no 'normal' value)
+  retval
 }
 .ldw_lines_to_text <- function(welke) {
   if (welke[1] < welke[2]) {
@@ -433,4 +445,3 @@ simplify_to_numeric_output <- function(x, prefix = "") {
   }
   return(FALSE)  
 }
-source("reports.R") # reports

@@ -4,6 +4,7 @@
 # data_ if applicable to all cases with data given
 # cat_ if applicable to all cases with categorical data
 # con_ if applicable to all cases with continuous data
+# parser_ if applicable to tests for the parser only
 # <special_string>_ for reports only applicable in very special cases
 
 # Reports for text output, stored in text.reports, list(function to execute, text for lines to ignore)
@@ -62,6 +63,14 @@ assign("efa_summary",
          ignore = "This is lavaan "
        ),
        envir = text.reports)
+assign("parser_result",
+       list(
+         func = function(object)
+           format(as.data.frame(object)),
+         ignore = "This is lavaan "
+       ),
+       envir = text.reports)
+
 
 # create tol function for tolerance handling
 # default is severe: difference detected when > max(1e-4, 0.001 * mean(old, new))
