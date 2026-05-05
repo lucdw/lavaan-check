@@ -1,5 +1,13 @@
-test.id <- 'parse_YR_OKT20_5'
-lavaan.model <- '
+# Test_id : parse_YR_OKT20_5
+# ==========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 x =~ x1 + x2 + x3
          y =~ y1 + y2 + y3
          m ~ x
@@ -10,11 +18,10 @@ x =~ x1 + x2 + x3
          phantom =~ 0 # added for mean of zero
          phantom ~~ 1*phantom # added for unit variance
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

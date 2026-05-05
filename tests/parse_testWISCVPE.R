@@ -1,5 +1,13 @@
-test.id <- 'parse_testWISCVPE'
-lavaan.model <- '
+# Test_id : parse_testWISCVPE
+# ===========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 # No labels are required!
 #setup invariant measurement model first
 # Factor Loadings Invariant
@@ -44,11 +52,10 @@ G1~M1*1;
 # Uniquenesses of factor all equal
 V6~~U_v2*V6; V7~~U_v2*V7; V9~~U_v2*V9; V11~~U_v2*V11;
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

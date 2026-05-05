@@ -1,0 +1,14 @@
+38,42d
+< Error : lavaan->lav_parse_modifier():  
+<    invalid modifier specification at line 1, pos 33
+<  aa =~ c(0.8, 0.7) * bbbb * b + sqrt(c(0.5, 0.4)) * cccc * c 
+<                                 ^
+< 
+45a41,47
+> > print(as.data.frame(object))
+>   lhs op rhs mod.idx block                               fixed start lower
+> 1  aa =~   b       1     1                             0.8;0.7            
+> 2  aa =~   c       2     1 0.707106781186548;0.632455532033676            
+>   upper label prior efa rv
+> 1        bbbb             
+> 2        cccc             

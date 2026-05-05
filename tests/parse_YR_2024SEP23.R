@@ -1,5 +1,13 @@
-test.id <- 'parse_YR_2024SEP23'
-lavaan.model <- '
+# Test_id : parse_YR_2024SEP23
+# ============================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 ! regressions
 T =~ 1*T1
 T =~ 1*T2
@@ -84,11 +92,10 @@ day > 0.0001
 session > 0.0001 
 e > 0.0001 
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

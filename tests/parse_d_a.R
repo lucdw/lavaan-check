@@ -1,5 +1,13 @@
-test.id <- 'parse_d_a'
-lavaan.model <- '
+# Test_id : parse_d_a
+# ===================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
      # efa
      efa("efa1")*f1 + efa("efa1")*f2 =~ y1 + y2 + y3 + y4 + y5 + y6 + y7
 + y8
@@ -8,11 +16,10 @@ lavaan.model <- '
      y1 ~ x1
      y8 ~ x2
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

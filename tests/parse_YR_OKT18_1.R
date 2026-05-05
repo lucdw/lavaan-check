@@ -1,5 +1,13 @@
-test.id <- 'parse_YR_OKT18_1'
-lavaan.model <- "
+# Test_id : parse_YR_OKT18_1
+# ==========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 
     O1 ~~ 0 * O2                          #The manifest variables are uncorrelated.
     O1 + O2 ~ rep('int', 4 ) * 1           #The manifest variables are fed the same intercept (for all groups).
@@ -28,12 +36,11 @@ lavaan.model <- "
     C2 ~~ 1 * C2
     c2 := c * c                           #Declare c^2 for easy point and variance estimation.
   
-"
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+'
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

@@ -1,7 +1,13 @@
-#WISCVPE_LAV_MLSC-V: Longitudinal Multivariate WISC Data with Dynamic Models
-#(C) 2012_01 by Jack McArdle, Longitudinal Research Institute
-test.id <- "WISCVPE"
-lavaan.model <- '
+# Test_id : WISCVPE
+# =================
+# 6a. example JMcA
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 # No labels are required!
 #setup invariant measurement model first
 # Factor Loadings Invariant
@@ -46,13 +52,70 @@ G1~M1*1;
 # Uniquenesses of factor all equal
 V6~~U_v2*V6; V7~~U_v2*V7; V9~~U_v2*V9; V11~~U_v2*V11;
 '
-lavaan.call <-  "sem" 
-lavaan.args <- list(
-  data = "wisc.rds"
 )
-reports <- c("all", "data", "con")
-test.comment <- '6a. example JMcA'
-if (!exists("group.environment") || is.null(group.environment)) {
-  source("utilities.R")
-  execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+object <- try(sem(
+data = readRDS("wisc.rds"), model = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+AIC(object)
+anova(object)
+BIC(object)
+coef(object)
+fitted(object)
+fitted.values(object)
+as.numeric(lavInspect(object,  what = 'converged'))
+lavInspect(object,  what = 'cov.lv')
+lavInspect(object,  what = 'cov.ov')
+lavInspect(object,  what = 'coverage')
+lavInspect(object,  what = 'dx.free')
+lavInspect(object,  what = 'est')
+fitMeasures(object)
+fitMeasures(object, 'chisq')
+fitMeasures(object, c('chisq', 'df', 'pvalue', 'rmsea', 'cfi'))
+lavInspect(object,  what = 'hessian')
+lavCor(object)
+lavTables(object, dimension = 0L)
+lavTables(object, dimension = 1L)
+lavTables(object, dimension = 2L)
+lavTestLRT(object)
+lavInspect(object,  what = 'mean.lv')
+lavInspect(object,  what = 'mean.ov')
+parameterEstimates(object)
+parameterTable(object)
+lavInspect(object,  what = 'partable')
+lavInspect(object,  what = 'patterns')
+lavInspect(object,  what = 'rsquare')
+lavInspect(object,  what = 'sampstat')
+lavInspect(object,  what = 'se')
+standardizedSolution(object)
+lavInspect(object,  what = 'start')
+lavInspect(object,  what = 'std.all')
+lavInspect(object,  what = 'std.lv')
+lavInspect(object,  what = 'std.nox')
+lavInspect(object,  what = 'th')
+lavInspect(object,  what = 'theta')
+lavInspect(object,  what = 'theta.cor')
+varTable(object)
+lavInspect(object,  what = 'wls.est')
+lavInspect(object,  what = 'wls.obs')
+lavInspect(object,  what = 'wls.v')
+lavInspect(object)
+lavNames(object, 'all')
+logLik(object)
+coef(update(object, orthogonal = TRUE))
+summary(object)
+vcov(object)
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'acov')
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'fsm')
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'se')
+lavInspect(object,  what = 'gamma')
+head(lavScores(object))
+nobs(object)
+head(resid(object, 'obs'))
+head(predict(object))
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'acov')
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'fsm')
+attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'se')
+resid(object)
+residuals(object)[[2]]
+})}

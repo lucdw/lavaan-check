@@ -1,16 +1,21 @@
-test.id <- "HS_ML_nodata2"
-lavaan.model <- '
+# Test_id : HS_ML_nodata2
+# =======================
+# a run without data
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
   visual  =~ x1 + x2 + x3
   textual =~ x4 + x5 + x6
   speed   =~ x7 + x8 + x9
 '
-lavaan.call <-  "sem" 
-lavaan.args <- list(
-  sample.nobs =  c(100, 200)
 )
-reports <- c("nodata")
-test.comment <- 'a run without data'
-if (!exists("group.environment") || is.null(group.environment)) {
-  source("utilities.R")
-  execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+object <- try(sem(
+sample.nobs = c(100, 200), model = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+fitted(object)
+})}

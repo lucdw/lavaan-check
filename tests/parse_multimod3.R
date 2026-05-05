@@ -1,5 +1,13 @@
-test.id <- 'parse_multimod3'
-lavaan.model <- '
+# Test_id : parse_multimod3
+# =========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
     因子 =~ 变量1 + x2 + x3
     F1 =~ x1 + x2 + a * x3 +
           x4 + 0.4 ? 0.5 ? b * x 5 + x6 +
@@ -8,11 +16,10 @@ lavaan.model <- '
     ccc := a - 2b
     aa < 0.8
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

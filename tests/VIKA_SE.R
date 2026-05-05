@@ -1,0 +1,174 @@
+ library(lavaan)
+
+## The famous Holzinger and Swineford (1939) example
+HS.model <- ' visual  =~ x1 + x2 + x3
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 '
+
+
+# default if se = "standard"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.100 0.109 0.065 0.055 0.165 0.151 0.114 0.102 0.091 0.048 0.058 0.043
+# [13] 0.081 0.074 0.071 0.145 0.112 0.086 0.074 0.056 0.049
+
+# fit@Options$information
+# [1] "expected" "expected"
+
+# fit@Options$h1.information
+# [1] "structured" "structured"
+
+# fit@Options$observed.information
+# [1] "hessian" "hessian"
+
+# 1. information = "expected", h1.information = "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "expected", h1.information = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.100 0.109 0.065 0.055 0.165 0.151 0.114 0.102 0.091 0.048 0.058 0.043
+# [13] 0.081 0.074 0.071 0.145 0.112 0.086 0.074 0.056 0.049
+
+# 2. information = "expected", h1.information = "unstructured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "expected", h1.information = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.097 0.107 0.064 0.054 0.157 0.150 0.112 0.097 0.085 0.046 0.057 0.042
+# [13] 0.075 0.070 0.063 0.140 0.109 0.085 0.073 0.051 0.049
+
+# 3. information = "observed", observed.information = "hessian"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "observed")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.109 0.117 0.065 0.056 0.150 0.195 0.119 0.104 0.095 0.048 0.058 0.043
+# [13] 0.088 0.092 0.091 0.150 0.112 0.092 0.080 0.055 0.049
+
+
+# 4. information = "observed", observed.information = "h1", "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "observed", observed.information = "h1",
+           h1.information = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.100 0.111 0.066 0.055 0.173 0.159 0.114 0.103 0.092 0.048 0.058 0.043
+# [13] 0.082 0.079 0.077 0.148 0.113 0.089 0.074 0.063 0.050
+
+# 5. information = "observed", observed.information = "h1", "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "observed", observed.information = "h1",
+           h1.information = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.097 0.107 0.064 0.054 0.157 0.150 0.112 0.097 0.085 0.046 0.057 0.042
+# [13] 0.075 0.070 0.063 0.140 0.109 0.085 0.073 0.051 0.049
+
+
+# 6. information = "first.order", h1.information = "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "first.order", h1.information = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.104 0.120 0.073 0.057 0.192 0.194 0.096 0.103 0.104 0.047 0.064 0.044
+# [13] 0.090 0.082 0.080 0.133 0.114 0.099 0.077 0.065 0.048
+
+# 7. information = "first.order", h1.information = "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "standard",
+           information = "first.order", h1.information = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.102 0.111 0.070 0.055 0.172 0.187 0.092 0.102 0.096 0.045 0.065 0.042
+# [13] 0.081 0.076 0.067 0.126 0.109 0.095 0.073 0.051 0.047
+
+
+
+
+# MLR
+
+# 1. information = "expected", h1.information = "structured"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "expected", h1.information = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.103 0.115 0.066 0.060 0.152 0.132 0.138 0.107 0.085 0.050 0.058 0.046
+# [13] 0.079 0.074 0.068 0.167 0.121 0.083 0.082 0.055 0.055
+
+# 2. information = "expected", h1.information = "unstructured" (both)
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "expected", h1.information = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.099 0.114 0.065 0.058 0.148 0.128 0.140 0.101 0.081 0.047 0.053 0.045
+# [13] 0.071 0.070 0.063 0.162 0.119 0.080 0.080 0.054 0.055
+
+# 3. information = "expected", h1.information = "unstructured" (both)
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "expected", h1.information = "unstructured",
+           h1.information.meat = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.103 0.119 0.065 0.058 0.146 0.162 0.139 0.098 0.077 0.046 0.055 0.045
+# [13] 0.070 0.071 0.057 0.162 0.118 0.090 0.088 0.052 0.056
+
+# 4. information = "expected", h1.information = "unstructured" (both)
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "expected", h1.information = "structured",
+           h1.information.meat = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.105 0.119 0.070 0.060 0.169 0.136 0.146 0.112 0.092 0.052 0.056 0.047
+# [13] 0.085 0.079 0.081 0.179 0.126 0.085 0.082 0.066 0.056
+
+
+
+# 5. information = "observed", observed.information = "h1"
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "h1")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.102 0.116 0.068 0.058 0.163 0.137 0.139 0.110 0.088 0.050 0.057 0.047
+# [13] 0.077 0.081 0.077 0.171 0.122 0.083 0.079 0.064 0.055
+
+# 6. information = "observed", observed.information = "h1", "unstructured" both
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "h1",
+           h1.information = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.099 0.114 0.065 0.058 0.148 0.128 0.140 0.101 0.081 0.047 0.053 0.045
+# [13] 0.071 0.070 0.063 0.162 0.119 0.080 0.080 0.054 0.055
+
+
+# 7. information = "observed", observed.information = "hessian", B = unstruct
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "hessian",
+           h1.information.meat = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.136 0.145 0.068 0.061 0.148 0.282 0.174 0.120 0.113 0.053 0.055 0.048
+# [13] 0.122 0.151 0.157 0.195 0.126 0.110 0.101 0.070 0.056
+
+# 8. information = "observed", observed.information = "h1", A=struc, B=unstruc
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "h1",
+           h1.information = "structured",
+           h1.information.meat = "unstructured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.112 0.131 0.077 0.059 0.204 0.181 0.154 0.117 0.099 0.052 0.055 0.048
+# [13] 0.091 0.097 0.101 0.195 0.133 0.100 0.087 0.088 0.057
+
+# 9. information = "observed", observed.information = "h1", A=unstruc, B=struc
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "h1",
+           h1.information = "unstructured",
+           h1.information.meat = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.103 0.119 0.065 0.058 0.146 0.162 0.139 0.098 0.077 0.046 0.055 0.045
+# [13] 0.070 0.071 0.057 0.162 0.118 0.090 0.088 0.052 0.056
+
+
+# 10. information = "observed", observed.information = "hessian", B = struc
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white",
+           information = "observed", observed.information = "hessian",
+           h1.information.meat = "structured")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.132 0.141 0.066 0.061 0.130 0.266 0.156 0.112 0.100 0.050 0.057 0.047
+# [13] 0.097 0.120 0.119 0.180 0.121 0.107 0.099 0.060 0.056
+
+# = default
+fit <- cfa(HS.model, data = HolzingerSwineford1939, se = "robust.huber.white")
+PT <- parTable(fit); round(PT$se[PT$free > 0], 3)
+#  [1] 0.132 0.141 0.066 0.061 0.130 0.266 0.156 0.112 0.100 0.050 0.057 0.047
+# [13] 0.097 0.120 0.119 0.180 0.121 0.107 0.099 0.060 0.056
+
+
+
+
+

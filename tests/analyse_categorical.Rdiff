@@ -1,0 +1,4 @@
+54c54
+< Error in qr.resid(QR, Y[, -x.idx, drop = FALSE]) : 
+---
+> Error in qr.resid(m_qr, m_y[, -x_idx, drop = FALSE]) : 

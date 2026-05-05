@@ -1,0 +1,111 @@
+# default extractor functions
+# we do not include the summary(); this shows the version number
+# and this changes all the time
+
+# stats
+coef(fit)
+residuals(fit)
+resid(fit)
+if(!fit@Model@categorical && fit@Data@nlevels == 1L) {
+    head(resid(fit, "obs"))
+}
+fitted.values(fit)
+fitted(fit)
+if(!(fit@Data@nlevels > 1L && fit@Data@missing == "ml") &&
+     length(lavNames(fit, "lv.regular")) > 0L) { # fixme
+    print(head(predict(fit)))
+    out <- lavPredict(fit, fsm = TRUE, se = TRUE, acov = TRUE)
+    print(attr(out, "fsm"))
+    print(attr(out, "se"))
+    print(attr(out, "acov"))
+    out <- lavPredict(fit, fsm = TRUE, se = TRUE, acov = TRUE,
+                      method = "Bartlett")
+    print(attr(out, "fsm"))
+    print(attr(out, "se"))
+    print(attr(out, "acov"))
+}
+if(fit@Data@nlevels > 1L) {
+    if(!fit@Data@missing == "ml") { # fixme
+        print(head(lavPredict(fit, level = 2L)))
+    }
+}
+anova(fit)
+vcov(fit)
+fit.ortho <- update(fit, orthogonal=TRUE)
+coef(fit.ortho)
+
+# graphics
+# skip plot
+
+# methods
+# show(fit) - skip, shows version number
+
+# stats4
+AIC(fit)
+BIC(fit)
+logLik(fit)
+nobs(fit)
+
+# lavaan fitting functions
+lavNames(fit, "all")
+lavInspect(fit)
+lavInspect(fit, what="partable")
+lavInspect(fit, what="se")
+lavInspect(fit, what="start")
+lavInspect(fit, what="est")
+lavInspect(fit, what="dx.free")
+#lavInspect(fit, what="dx")
+lavInspect(fit, what="std.all")
+lavInspect(fit, what="std.lv")
+lavInspect(fit, what="std.nox")
+lavInspect(fit, what="sampstat")
+lavInspect(fit, what="rsquare")
+lavInspect(fit, what="cov.lv")
+lavInspect(fit, what="cor.lv")
+lavInspect(fit, what="mean.lv")
+lavInspect(fit, what="cov.ov")
+lavInspect(fit, what="cor.ov")
+lavInspect(fit, what="mean.ov")
+if(fit@Model@categorical) {
+    lavInspect(fit, what="th")
+}
+lavInspect(fit, what="theta")
+if(fit@Data@nlevels == 1L) { # fixme
+    lavInspect(fit, what="coverage")
+    lavInspect(fit, what="patterns")
+    lavInspect(fit, what="wls.obs")
+    lavInspect(fit, what="gamma")
+    lavInspect(fit, what="theta.cor")
+}
+lavInspect(fit, what="converged")
+lavInspect(fit, what="wls.est")
+lavInspect(fit, what="wls.v")
+lavInspect(fit, what="hessian")
+#lavInspect(fit, what="first.order")
+
+head(modindices(fit))
+standardizedSolution(fit)
+parameterEstimates(fit)
+parameterTable(fit)
+varTable(fit)
+
+# all fit measures -- this will change all the time?
+fitMeasures(fit)
+
+# just one
+fitMeasures(fit, "chisq")
+
+# a few
+fitMeasures(fit, c("chisq","df","pvalue","rmsea","cfi"))
+
+if(fit@Data@nlevels == 1L) { # fixme
+    head(lavScores(fit))
+    lavCor(fit)
+}
+if(fit@Model@categorical) {
+    lavTables(fit, dimension = 0L)
+    lavTables(fit, dimension = 1L)
+    lavTables(fit, dimension = 2L)
+}
+lavTestLRT(fit)
+

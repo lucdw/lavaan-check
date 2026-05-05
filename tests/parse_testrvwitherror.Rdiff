@@ -1,0 +1,13 @@
+43,47d
+< Error : lavaan->lav_parse_modifier():  
+<    invalid value (should be string) at line 2, pos 25
+<      y ~ b*m + c*x + rv(0.5) * 1
+<                         ^
+< 
+50a46,51
+> > print(as.data.frame(object))
+>   lhs op rhs mod.idx block fixed start lower upper label prior efa  rv
+> 1   m  ~   x       1     1                             a              
+> 2   y  ~   m       2     1                             b              
+> 3   y  ~   x       3     1                             c              
+> 4   y ~1           4     1                                         0.5

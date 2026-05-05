@@ -1,5 +1,13 @@
-test.id <- 'parse_YR_OKT18_7'
-lavaan.model <- '
+# Test_id : parse_YR_OKT18_7
+# ==========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
  visual  =~ x1 + 0.5*x2 + c(0.6, 0.8)*x3
            textual =~ x4 + start(c(1.2, 0.6))*x5 + c(a,b)*x6
            speed   =~ x7 + equal(c("textual=~x5","textual=~x5.g2"))*x8
@@ -8,11 +16,10 @@ lavaan.model <- '
            visual ~~ label(c("V1","V2"))*visual
          
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

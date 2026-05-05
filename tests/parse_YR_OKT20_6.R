@@ -1,5 +1,13 @@
-test.id <- 'parse_YR_OKT20_6'
-lavaan.model <- '
+# Test_id : parse_YR_OKT20_6
+# ==========================
+# 
+
+library(lavaan)
+
+set.seed(1234)
+
+Model <- c(
+'
 
  factor 1  =~ NA*V1 + V2 + V6 + V9 
  factor 2  =~ NA*V3 + V4 + V5 + V7 + V8 + V10 
@@ -10,11 +18,10 @@ lavaan.model <- '
  factor 1 ~~0*ACfactor 
  factor 2 ~~0*ACfactor
 '
-lavaan.call <- 'lavParseModelString'
-lavaan.args <- list(as.data.frame. = TRUE)
-reports <- 'parser'
-test.comment <- 'imported from ldwParse project'
-if (!exists('group.environment') || is.null(group.environment)) {
-    source('utilities.R')
-    execute_test(test.id, lavaan.model, lavaan.call, lavaan.args, reports, test.comment)
-}
+)
+object <- try(lavParseModelString(
+as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+), outFile = stdout())
+if (!inherits(object, 'try-error')) {withAutoprint({
+print(as.data.frame(object))
+})}

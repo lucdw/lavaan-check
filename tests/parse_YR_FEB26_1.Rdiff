@@ -1,0 +1,12 @@
+39,43d
+< Error : lavaan->lav_parse_tokens_formulas():  
+<    formula without valid operator at line 2, pos 4
+<    Sepal.Length
+<    ^
+< 
+46a42,46
+> > print(as.data.frame(object))
+>           lhs op          rhs mod.idx block fixed start lower upper label prior
+> 1 Sepal.Width ~~ Sepal.Length       0     1                                    
+>   efa rv
+> 1       
