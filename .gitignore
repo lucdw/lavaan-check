@@ -7,3 +7,5 @@ snapshots/*
 reports/*
 lib/*
 result.*
+tests/*.Rout
+tests/*.Rout.save
