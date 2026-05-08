@@ -2,10 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.vscode
 _*
-snapshots/*
-reports/*
-lib/*
-result.*
 tests/*.Rout
 tests/*.Rout.save

@@ -125,7 +125,8 @@ compare_files <- function(infile1, infile2, outfile,
   return(aantal)
 }
 if (file.exists("README.md")) setwd("tests")
-testfiles <- list.files(".", pattern = "\\.[rR]$")
+source("../select_tests.R")
+testfiles <- select_tests()
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
   file1 <- paste0(testfile, "out.save")

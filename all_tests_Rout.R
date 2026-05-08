@@ -1,5 +1,6 @@
 if (file.exists("README.md")) setwd("tests")
-testfiles <- list.files(".", pattern = "\\.[rR]$")
+source("../select_tests.R")
+testfiles <- select_tests()
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
   cat("Processing", testfile, "\n")

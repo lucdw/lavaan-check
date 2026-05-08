@@ -1,4 +1,4 @@
- library(lavaan)
+library(lavaan)
 options(warn = 1L)
 
 # 3-variable model: simple path analysis
