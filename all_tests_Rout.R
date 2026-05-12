@@ -10,3 +10,5 @@ for (test.i in seq_along(testfiles)) {
     stderr=paste0(testfile, "out"),
     args = "--no-save")
 }
+testfiles_cache <- testfiles
+source("../all_tests_compare.R", echo = FALSE)

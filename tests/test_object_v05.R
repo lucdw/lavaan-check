@@ -21,7 +21,7 @@ FULL <- lavaan:::lav_partable_full(fit@ParTable, free = TRUE, start = TRUE,
                           strict_exo = FALSE)
 FULL$free <- rep(1L, nrow(FULL))
 FULL$user <- rep(10L, nrow(FULL))
-FIT <- lavaan:::lav_object_extended(fit, add = FULL, all.free = TRUE)
+FIT <- lavaan:::lav_object_extended(fit, add = FULL, all_free = TRUE)
 information <- lavTech(FIT, "information.expected")
 
 # stats

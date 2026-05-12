@@ -6,3 +6,4 @@
 _*
 tests/*.Rout
 tests/*.Rout.save
+tests/*.diff
