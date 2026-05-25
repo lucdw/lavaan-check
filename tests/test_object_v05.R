@@ -17,7 +17,7 @@ lavInspect(fit, "information")
 lavInspect(fit, "information.expected")
 lavInspect(fit, "information.first.order")
 
-FULL <- lavaan:::lav_partable_full(fit@ParTable, free = TRUE, start = TRUE,
+FULL <- lavaan:::lav_pt_full(fit@ParTable, free = TRUE, start = TRUE,
                           strict_exo = FALSE)
 FULL$free <- rep(1L, nrow(FULL))
 FULL$user <- rep(10L, nrow(FULL))

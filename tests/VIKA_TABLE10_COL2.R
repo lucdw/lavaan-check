@@ -30,7 +30,7 @@ U.options$information    <- "expected"
 U.options$h1.information <- "structured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Delta <- lavTech(fit, "delta")[[1]]
@@ -40,10 +40,10 @@ U <- A1 - A1 %*% Delta %*% solve(t(Delta) %*% A1 %*% Delta) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)
@@ -75,7 +75,7 @@ U.options$information    <- "expected"
 U.options$h1.information <- "unstructured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Delta <- lavTech(fit, "delta")[[1]]
@@ -85,10 +85,10 @@ U <- A1 - A1 %*% Delta %*% solve(t(Delta) %*% A1 %*% Delta) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)
@@ -123,7 +123,7 @@ U.options$observed.information <- "h1"
 U.options$h1.information       <- "unstructured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Delta <- lavTech(fit, "delta")[[1]]
@@ -133,10 +133,10 @@ U <- A1 - A1 %*% Delta %*% solve(t(Delta) %*% A1 %*% Delta) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)
@@ -171,7 +171,7 @@ U.options$observed.information <- "h1"
 U.options$h1.information       <- "structured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Delta <- lavTech(fit, "delta")[[1]]
@@ -181,10 +181,10 @@ U <- A1 - A1 %*% Delta %*% solve(t(Delta) %*% A1 %*% Delta) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)
@@ -218,10 +218,10 @@ U.options$observed.information <- "hessian"
 U.options$h1.information       <- "structured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 Delta <- lavTech(fit, "delta")[[1]]
@@ -231,10 +231,10 @@ U <- A1 - A1 %*% Delta %*% solve(A0) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)
@@ -268,10 +268,10 @@ U.options$observed.information <- "hessian"
 U.options$h1.information       <- "unstructured"
 
 # U
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info(lavmodel = fit@Model,
           lavoptions = U.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 Delta <- lavTech(fit, "delta")[[1]]
@@ -281,10 +281,10 @@ U <- A1 - A1 %*% Delta %*% solve(A0) %*% t(Delta) %*% A1
 O.options <- fit@Options
 O.options$information    <- "expected"
 O.options$h1.information <- "unstructured"
-A1 <- lavaan:::lav_model_h1_information(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = O.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
 Omega <- solve(A1) %*% B1 %*% solve(A1)

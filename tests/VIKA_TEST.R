@@ -51,16 +51,16 @@ h0.options$information          <- "observed"
 h0.options$observed.information <- "hessian"
 h0.options$h1.information       <- "structured" # not used
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -91,16 +91,16 @@ h0.options$observed.information <- "h1"
 h0.options$h1.information       <- "structured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -132,16 +132,16 @@ h0.options$observed.information <- "h1"
 h0.options$h1.information       <- "unstructured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -178,16 +178,16 @@ h0.options$observed.information <- "h1"
 h0.options$h1.information       <- "unstructured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -225,16 +225,16 @@ h0.options$observed.information <- "hessian"
 h0.options$h1.information       <- "unstructured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -272,16 +272,16 @@ h0.options$observed.information <- "hessian"
 h0.options$h1.information       <- "unstructured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -318,16 +318,16 @@ h0.options$observed.information <- "h1"
 h0.options$h1.information       <- "structured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
@@ -365,16 +365,16 @@ h0.options$observed.information <- "hessian"
 h0.options$h1.information       <- "structured"
 
 
-A1 <- lavaan:::lav_model_h1_information_observed(lavmodel = fit@Model,
+A1 <- lavaan:::lav_model_h1_info_observed(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-B1 <- lavaan:::lav_model_h1_information_firstorder(lavmodel = fit@Model,
+B1 <- lavaan:::lav_model_h1_info_firstorder(lavmodel = fit@Model,
           lavoptions = h1.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)[[1]]
-A0 <- lavaan:::lav_model_information_observed(lavmodel = fit@Model,
+A0 <- lavaan:::lav_model_info_observed(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
-B0 <- lavaan:::lav_model_information_firstorder(lavmodel = fit@Model,
+B0 <- lavaan:::lav_model_info_firstorder(lavmodel = fit@Model,
           lavoptions = h0.options, lavdata = fit@Data,
           lavsamplestats = fit@SampleStats)
 TR(B1 %*% solve(A1)) - TR(B0 %*% solve(A0))
