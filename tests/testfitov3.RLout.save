@@ -1,0 +1,6522 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> options(warn = 1L)
+> 
+> # 3-variable model: simple path analysis
+> # set.seed(1234)
+> # x1 = rnorm(100)
+> # y1 = 0.5 + 2*x1 + rnorm(100)
+> # y2 = 0.8 + 0.4*y1 + rnorm(100)
+> # Data <- data.frame(y1 = y1, y2 = y2, x1 = x1)
+> Data <- read.csv("testfitov3_dat01.csv")
+> 
+> model <- ' y2 ~ y1; y1 ~ x1 '
+> fit <- sem(model, data=Data, fixed.x=TRUE)
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 
+ 0.450  1.974  0.900  1.054 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+     y2 y1 x1
+[1,]  0  0  0
+[2,]  0  0  0
+[3,]  0  0  0
+[4,]  0  0  0
+[5,]  0  0  0
+[6,]  0  0  0
+
+> fitted.values(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> fitted(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df    AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0               0.0000                              
+Model      1 570.34 580.76 0.2187    0.21871       1       0.64
+
+> vcov(fit)
+       y2~y1 y1~x1 y2~~y2 y1~~y1
+y2~y1  0.002                    
+y1~x1  0.000 0.011              
+y2~~y2 0.000 0.000  0.016       
+y1~~y1 0.000 0.000  0.000  0.022
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+
+> coef(fit.ortho)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 
+ 0.450  1.974  0.900  1.054 
+
+> AIC(fit)
+[1] 570.3407
+
+> BIC(fit)
+[1] 580.7614
+
+> logLik(fit)
+'log Lik.' -281.1703 (df=4)
+
+> nobs(fit)
+[1] 100
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "x1"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2" "y1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  0
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  5
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.127            
+y1 0.000 0.149      
+x1 0.000 0.000 0.000
+
+$beta
+   y2    y1    x1
+y2  0 0.043 0.000
+y1  0 0.000 0.103
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$beta
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 1.000
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.887
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 0.999
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.888
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "sampstat")
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.867 1.971 0.999
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.527 0.787 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.644 0.887 1.000
+
+> lavInspect(fit, what = "mean.ov")
+numeric(0)
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+
+> lavInspect(fit, what = "theta")
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1 x1
+y2  1      
+y1  0  1   
+x1  0  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1 
+ 1.902  2.225  0.887  4.946  1.971  0.999 
+
+> lavInspect(fit, what = "wls.v")
+       y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1
+y2~~y2  0.617 -0.555  0.000  0.125  0.000      0
+y2~~y1 -0.555  1.553 -2.080 -0.587  0.936      0
+y2~~x1  0.000 -2.080  5.218  0.936 -2.348      0
+y1~~y1  0.125 -0.587  0.936  0.689 -2.198      0
+y1~~x1  0.000  0.936 -2.348 -2.198  9.020      0
+x1~~x1  0.000  0.000  0.000  0.000  0.000      0
+
+> lavInspect(fit, what = "hessian")
+       y2~y1 y1~x1 y2~~y2 y1~~y1
+y2~y1  5.493                    
+y1~x1  0.000 0.948              
+y2~~y2 0.000 0.000  0.617       
+y1~~y1 0.000 0.000  0.000  0.450
+
+> head(modindices(fit))
+  lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+6  y2 ~~  y1 0.218  0.051   0.051    0.053    0.053
+7  y2  ~  x1 0.218 -0.096  -0.096   -0.070   -0.070
+8  y1  ~  y2 0.218  0.057   0.057    0.035    0.035
+9  x1  ~  y2 0.218 -0.107  -0.107   -0.147   -0.147
+
+> standardizedSolution(fit)
+  lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1   0.726 0.043 16.755      0    0.641    0.811
+2  y1  ~  x1   0.887 0.017 53.438      0    0.855    0.920
+3  y2 ~~  y2   0.473 0.063  7.531      0    0.350    0.597
+4  y1 ~~  y1   0.213 0.029  7.237      0    0.155    0.271
+5  x1 ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+
+> parameterEstimates(fit)
+  lhs op rhs   est    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1 0.450 0.043 10.547      0    0.366    0.534
+2  y1  ~  x1 1.974 0.103 19.214      0    1.773    2.175
+3  y2 ~~  y2 0.900 0.127  7.071      0    0.651    1.150
+4  y1 ~~  y1 1.054 0.149  7.071      0    0.762    1.346
+5  x1 ~~  x1 0.999 0.000     NA     NA    0.999    0.999
+
+> parameterTable(fit)
+  id lhs op rhs user block group free ustart exo label plabel start   est    se
+1  1  y2  ~  y1    1     1     1    1     NA   0         .p1. 0.450 0.450 0.043
+2  2  y1  ~  x1    1     1     1    2     NA   0         .p2. 1.974 1.974 0.103
+3  3  y2 ~~  y2    0     1     1    3     NA   0         .p3. 0.900 0.900 0.127
+4  4  y1 ~~  y1    0     1     1    4     NA   0         .p4. 1.054 1.054 0.149
+5  5  x1 ~~  x1    0     1     1    0     NA   1         .p5. 0.999 0.999 0.000
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2  100 numeric   0    0  1.046 1.921    0     
+2   y1   1  100 numeric   0    0  0.228 4.995    0     
+3   x1   3  100 numeric   1    0 -0.157 1.009    0     
+
+> fitMeasures(fit)
+                 npar                  fmin                 chisq 
+                4.000                 0.001                 0.219 
+                   df                pvalue        baseline.chisq 
+                1.000                 0.640               229.581 
+          baseline.df       baseline.pvalue                   cfi 
+                3.000                 0.000                 1.000 
+                  tli                  nnfi                   rfi 
+                1.010                 1.010                 0.997 
+                  nfi                  pnfi                   ifi 
+                0.999                 0.333                 1.003 
+                  rni                  logl     unrestricted.logl 
+                1.003              -281.170              -281.061 
+                  aic                   bic                ntotal 
+              570.341               580.761               100.000 
+                 bic2                 rmsea        rmsea.ci.lower 
+              568.128                 0.000                 0.000 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.206                 0.900                 0.680 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                 0.267                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.008                 0.008                 0.006 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.006                 0.006                 0.009 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.009                 0.006                 0.006 
+                cn_05                 cn_01                   gfi 
+             1757.446              3034.700                 1.000 
+                 agfi                  pgfi                   mfi 
+                0.998                 0.167                 1.004 
+                 ecvi 
+                0.082 
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.219 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.219  1.000  0.640  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.629 0.887 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df    AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0               0.0000                              
+Model      1 570.34 580.76 0.2187    0.21871       1       0.64
+> 
+> fit <- sem(model, data=Data, fixed.x=FALSE)
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 x1~~x1 
+ 0.450  1.974  0.900  1.054  0.999 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+     y2 y1 x1
+[1,]  0  0  0
+[2,]  0  0  0
+[3,]  0  0  0
+[4,]  0  0  0
+[5,]  0  0  0
+[6,]  0  0  0
+
+> fitted.values(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> fitted(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0            0.0000                              
+Model      1 856 869.03 0.2187    0.21871       1       0.64
+
+> vcov(fit)
+       y2~y1 y1~x1 y2~~y2 y1~~y1 x1~~x1
+y2~y1  0.002                           
+y1~x1  0.000 0.011                     
+y2~~y2 0.000 0.000  0.016              
+y1~~y1 0.000 0.000  0.000  0.022       
+x1~~x1 0.000 0.000  0.000  0.000  0.020
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+
+> coef(fit.ortho)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 x1~~x1 
+ 0.450  1.974  0.900  1.054  0.999 
+
+> AIC(fit)
+[1] 856.0025
+
+> BIC(fit)
+[1] 869.0283
+
+> logLik(fit)
+'log Lik.' -423.0012 (df=5)
+
+> nobs(fit)
+[1] 100
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+character(0)
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2" "y1" "x1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  5
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  5
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.127            
+y1 0.000 0.149      
+x1 0.000 0.000 0.141
+
+$beta
+   y2    y1    x1
+y2  0 0.043 0.000
+y1  0 0.000 0.103
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$beta
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 1.000
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.887
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 0.999
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.888
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "sampstat")
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.867 1.971 0.999
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.527 0.787 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.644 0.887 1.000
+
+> lavInspect(fit, what = "mean.ov")
+numeric(0)
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+
+> lavInspect(fit, what = "theta")
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1 x1
+y2  1      
+y1  0  1   
+x1  0  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1 
+ 1.902  2.225  0.887  4.946  1.971  0.999 
+
+> lavInspect(fit, what = "wls.v")
+       y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1
+y2~~y2  0.617 -0.555  0.000  0.125  0.000  0.000
+y2~~y1 -0.555  1.553 -2.080 -0.587  0.936  0.000
+y2~~x1  0.000 -2.080  5.218  0.936 -2.348  0.000
+y1~~y1  0.125 -0.587  0.936  0.689 -2.198  1.753
+y1~~x1  0.000  0.936 -2.348 -2.198  9.020 -8.797
+x1~~x1  0.000  0.000  0.000  1.753 -8.797 11.034
+
+> lavInspect(fit, what = "hessian")
+       y2~y1 y1~x1 y2~~y2 y1~~y1 x1~~x1
+y2~y1  5.493                           
+y1~x1  0.000 0.948                     
+y2~~y2 0.000 0.000  0.617              
+y1~~y1 0.000 0.000  0.000  0.450       
+x1~~x1 0.000 0.000  0.000  0.000  0.501
+
+> head(modindices(fit))
+  lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+6  y2 ~~  y1 0.218  0.051   0.051    0.053    0.053
+7  y2  ~  x1 0.218 -0.096  -0.096   -0.070   -0.070
+8  y1  ~  y2 0.218  0.057   0.057    0.035    0.035
+9  x1  ~  y2 0.218 -0.107  -0.107   -0.147   -0.147
+
+> standardizedSolution(fit)
+  lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1   0.726 0.047 15.329      0    0.633    0.818
+2  y1  ~  x1   0.887 0.021 41.619      0    0.845    0.929
+3  y2 ~~  y2   0.473 0.069  6.890      0    0.339    0.608
+4  y1 ~~  y1   0.213 0.038  5.637      0    0.139    0.287
+5  x1 ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+
+> parameterEstimates(fit)
+  lhs op rhs   est    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1 0.450 0.043 10.547      0    0.366    0.534
+2  y1  ~  x1 1.974 0.103 19.214      0    1.773    2.175
+3  y2 ~~  y2 0.900 0.127  7.071      0    0.651    1.150
+4  y1 ~~  y1 1.054 0.149  7.071      0    0.762    1.346
+5  x1 ~~  x1 0.999 0.141  7.071      0    0.722    1.276
+
+> parameterTable(fit)
+  id lhs op rhs user block group free ustart exo label plabel start   est    se
+1  1  y2  ~  y1    1     1     1    1     NA   0         .p1. 0.450 0.450 0.043
+2  2  y1  ~  x1    1     1     1    2     NA   0         .p2. 1.974 1.974 0.103
+3  3  y2 ~~  y2    0     1     1    3     NA   0         .p3. 0.900 0.900 0.127
+4  4  y1 ~~  y1    0     1     1    4     NA   0         .p4. 1.054 1.054 0.149
+5  5  x1 ~~  x1    0     1     1    5     NA   0         .p5. 0.999 0.999 0.141
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2  100 numeric   0    0  1.046 1.921    0     
+2   y1   1  100 numeric   0    0  0.228 4.995    0     
+3   x1   3  100 numeric   0    0 -0.157 1.009    0     
+
+> fitMeasures(fit)
+                 npar                  fmin                 chisq 
+                5.000                 0.001                 0.219 
+                   df                pvalue        baseline.chisq 
+                1.000                 0.640               229.581 
+          baseline.df       baseline.pvalue                   cfi 
+                3.000                 0.000                 1.000 
+                  tli                  nnfi                   rfi 
+                1.010                 1.010                 0.997 
+                  nfi                  pnfi                   ifi 
+                0.999                 0.333                 1.003 
+                  rni                  logl     unrestricted.logl 
+                1.003              -423.001              -422.892 
+                  aic                   bic                ntotal 
+              856.002               869.028               100.000 
+                 bic2                 rmsea        rmsea.ci.lower 
+              853.237                 0.000                 0.000 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.206                 0.900                 0.680 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                 0.267                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.008                 0.008                 0.006 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.006                 0.006                 0.009 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.009                 0.006                 0.006 
+                cn_05                 cn_01                   gfi 
+             1757.446              3034.700                 0.999 
+                 agfi                  pgfi                   mfi 
+                0.991                 0.166                 1.004 
+                 ecvi 
+                0.102 
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.219 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.219  1.000  0.640  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.629 0.887 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0            0.0000                              
+Model      1 856 869.03 0.2187    0.21871       1       0.64
+> 
+> # create missing values
+> # set.seed(4567)
+> # missing.per.var <- floor(nrow(Data) / 10)
+> # Data.missing <- as.data.frame(lapply(Data, function(x) {
+> #     idx <- sample(1:length(x), missing.per.var); x[idx] <- NA; x}))
+> Data.missing <- read.csv("testfitov3_dat02.csv")
+> 
+> # listwise deletion
+> fit1 <- sem(model, data=Data.missing, fixed.x=FALSE, missing="listwise")
+> # FIML
+> fit2 <- sem(model, data=Data.missing, fixed.x=FALSE, missing="ml")
+> #fit <- fit2
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 x1~~x1 
+ 0.450  1.974  0.900  1.054  0.999 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$cov
+      y2    y1    x1
+y2  0.00            
+y1  0.00  0.00      
+x1 -0.02  0.00  0.00
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+     y2 y1 x1
+[1,]  0  0  0
+[2,]  0  0  0
+[3,]  0  0  0
+[4,]  0  0  0
+[5,]  0  0  0
+[6,]  0  0  0
+
+> fitted.values(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> fitted(fit)
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0            0.0000                              
+Model      1 856 869.03 0.2187    0.21871       1       0.64
+
+> vcov(fit)
+       y2~y1 y1~x1 y2~~y2 y1~~y1 x1~~x1
+y2~y1  0.002                           
+y1~x1  0.000 0.011                     
+y2~~y2 0.000 0.000  0.016              
+y1~~y1 0.000 0.000  0.000  0.022       
+x1~~x1 0.000 0.000  0.000  0.000  0.020
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+
+> coef(fit.ortho)
+ y2~y1  y1~x1 y2~~y2 y1~~y1 x1~~x1 
+ 0.450  1.974  0.900  1.054  0.999 
+
+> AIC(fit)
+[1] 856.0025
+
+> BIC(fit)
+[1] 869.0283
+
+> logLik(fit)
+'log Lik.' -423.0012 (df=5)
+
+> nobs(fit)
+[1] 100
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+character(0)
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2" "y1" "x1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  5
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  3      
+y1  0  4   
+x1  0  0  5
+
+$beta
+   y2 y1 x1
+y2  0  1  0
+y1  0  0  2
+x1  0  0  0
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.127            
+y1 0.000 0.149      
+x1 0.000 0.000 0.141
+
+$beta
+   y2    y1    x1
+y2  0 0.043 0.000
+y1  0 0.000 0.103
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$beta
+   y2 y1 x1
+y2  0  0  0
+y1  0  0  0
+x1  0  0  0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 1.000
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.887
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+$beta
+   y2   y1    x1
+y2  0 0.45 0.000
+y1  0 0.00 1.974
+x1  0 0.00 0.000
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1 x1
+y2  1  0  0
+y1  0  1  0
+x1  0  0  1
+
+$theta
+   y2 y1 x1
+y2  0      
+y1  0  0   
+x1  0  0  0
+
+$psi
+      y2    y1    x1
+y2 0.473            
+y1 0.000 0.213      
+x1 0.000 0.000 0.999
+
+$beta
+   y2    y1    x1
+y2  0 0.726 0.000
+y1  0 0.000 0.888
+x1  0 0.000 0.000
+
+
+> lavInspect(fit, what = "sampstat")
+$cov
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.867 1.971 0.999
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.527 0.787 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1    x1
+y2 1.902            
+y1 2.225 4.946      
+x1 0.887 1.971 0.999
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.644 0.887 1.000
+
+> lavInspect(fit, what = "mean.ov")
+numeric(0)
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+
+> lavInspect(fit, what = "theta")
+      y2    y1    x1
+y2 0.900            
+y1 0.000 1.054      
+x1 0.000 0.000 0.999
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1 x1
+y2  1      
+y1  0  1   
+x1  0  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1 
+ 1.902  2.225  0.887  4.946  1.971  0.999 
+
+> lavInspect(fit, what = "wls.v")
+       y2~~y2 y2~~y1 y2~~x1 y1~~y1 y1~~x1 x1~~x1
+y2~~y2  0.617 -0.555  0.000  0.125  0.000  0.000
+y2~~y1 -0.555  1.553 -2.080 -0.587  0.936  0.000
+y2~~x1  0.000 -2.080  5.218  0.936 -2.348  0.000
+y1~~y1  0.125 -0.587  0.936  0.689 -2.198  1.753
+y1~~x1  0.000  0.936 -2.348 -2.198  9.020 -8.797
+x1~~x1  0.000  0.000  0.000  1.753 -8.797 11.034
+
+> lavInspect(fit, what = "hessian")
+       y2~y1 y1~x1 y2~~y2 y1~~y1 x1~~x1
+y2~y1  5.493                           
+y1~x1  0.000 0.948                     
+y2~~y2 0.000 0.000  0.617              
+y1~~y1 0.000 0.000  0.000  0.450       
+x1~~x1 0.000 0.000  0.000  0.000  0.501
+
+> head(modindices(fit))
+  lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+6  y2 ~~  y1 0.218  0.051   0.051    0.053    0.053
+7  y2  ~  x1 0.218 -0.096  -0.096   -0.070   -0.070
+8  y1  ~  y2 0.218  0.057   0.057    0.035    0.035
+9  x1  ~  y2 0.218 -0.107  -0.107   -0.147   -0.147
+
+> standardizedSolution(fit)
+  lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1   0.726 0.047 15.329      0    0.633    0.818
+2  y1  ~  x1   0.887 0.021 41.619      0    0.845    0.929
+3  y2 ~~  y2   0.473 0.069  6.890      0    0.339    0.608
+4  y1 ~~  y1   0.213 0.038  5.637      0    0.139    0.287
+5  x1 ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+
+> parameterEstimates(fit)
+  lhs op rhs   est    se      z pvalue ci.lower ci.upper
+1  y2  ~  y1 0.450 0.043 10.547      0    0.366    0.534
+2  y1  ~  x1 1.974 0.103 19.214      0    1.773    2.175
+3  y2 ~~  y2 0.900 0.127  7.071      0    0.651    1.150
+4  y1 ~~  y1 1.054 0.149  7.071      0    0.762    1.346
+5  x1 ~~  x1 0.999 0.141  7.071      0    0.722    1.276
+
+> parameterTable(fit)
+  id lhs op rhs user block group free ustart exo label plabel start   est    se
+1  1  y2  ~  y1    1     1     1    1     NA   0         .p1. 0.450 0.450 0.043
+2  2  y1  ~  x1    1     1     1    2     NA   0         .p2. 1.974 1.974 0.103
+3  3  y2 ~~  y2    0     1     1    3     NA   0         .p3. 0.900 0.900 0.127
+4  4  y1 ~~  y1    0     1     1    4     NA   0         .p4. 1.054 1.054 0.149
+5  5  x1 ~~  x1    0     1     1    5     NA   0         .p5. 0.999 0.999 0.141
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2  100 numeric   0    0  1.046 1.921    0     
+2   y1   1  100 numeric   0    0  0.228 4.995    0     
+3   x1   3  100 numeric   0    0 -0.157 1.009    0     
+
+> fitMeasures(fit)
+                 npar                  fmin                 chisq 
+                5.000                 0.001                 0.219 
+                   df                pvalue        baseline.chisq 
+                1.000                 0.640               229.581 
+          baseline.df       baseline.pvalue                   cfi 
+                3.000                 0.000                 1.000 
+                  tli                  nnfi                   rfi 
+                1.010                 1.010                 0.997 
+                  nfi                  pnfi                   ifi 
+                0.999                 0.333                 1.003 
+                  rni                  logl     unrestricted.logl 
+                1.003              -423.001              -422.892 
+                  aic                   bic                ntotal 
+              856.002               869.028               100.000 
+                 bic2                 rmsea        rmsea.ci.lower 
+              853.237                 0.000                 0.000 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.206                 0.900                 0.680 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                 0.267                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.008                 0.008                 0.006 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.006                 0.006                 0.009 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.009                 0.006                 0.006 
+                cn_05                 cn_01                   gfi 
+             1757.446              3034.700                 0.999 
+                 agfi                  pgfi                   mfi 
+                0.991                 0.166                 1.004 
+                 ecvi 
+                0.102 
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.219 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.219  1.000  0.640  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+      y2    y1    x1
+y2 1.000            
+y1 0.726 1.000      
+x1 0.629 0.887 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0            0.0000                              
+Model      1 856 869.03 0.2187    0.21871       1       0.64
+> 
+> 
+> # create binary version - one categorical, one numeric
+> # Data.binary <- Data
+> # Data.binary$y1 <- cut(Data$y1, 2L, labels=FALSE)
+> Data.binary <- read.csv("testfitov3_dat03.csv")
+> 
+> model <- ' y2 ~ y1; y1 ~ x1 '
+> fit <- sem(model, data=Data.binary, estimator="WLSMV", ordered=c("y1"))
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1  y1|t1 y2~~y2   y2~1 
+ 0.503  1.748  0.121  0.897  1.182 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$res.cov
+      y2    y1
+y2 0.000      
+y1 0.047 0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y1|t1 
+    0 
+
+$res.slopes
+       x1
+y2 -0.011
+y1  0.089
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$res.cov
+      y2    y1
+y2 0.000      
+y1 0.047 0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y1|t1 
+    0 
+
+$res.slopes
+       x1
+y2 -0.011
+y1  0.089
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+
+> fitted.values(fit)
+$res.cov
+      y2    y1
+y2 1.150      
+y1 0.503 1.000
+
+$res.int
+   y2    y1 
+1.182 0.000 
+
+$res.th
+y1|t1 
+0.121 
+
+$res.slopes
+      x1
+y2 0.879
+y1 1.748
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> fitted(fit)
+$res.cov
+      y2    y1
+y2 1.150      
+y1 0.503 1.000
+
+$res.int
+   y2    y1 
+1.182 0.000 
+
+$res.th
+y1|t1 
+0.121 
+
+$res.slopes
+      x1
+y2 0.879
+y1 1.748
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1605    0.16049       1     0.6887
+
+> vcov(fit)
+        y2~y1  y1~x1  y1|t1 y2~~y2   y2~1
+y2~y1   0.009                            
+y1~x1  -0.029  0.126                     
+y1|t1   0.003 -0.013  0.037              
+y2~~y2 -0.006  0.009 -0.010  0.024       
+y2~1    0.001 -0.001 -0.004 -0.002  0.012
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+
+> coef(fit.ortho)
+ y2~y1  y1~x1  y1|t1 y2~~y2   y2~1 
+ 0.503  1.748  0.121  0.897  1.182 
+
+> AIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> BIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> logLik(fit)
+Warning: lavaan->logLik():  
+   logLik only available if estimator is ML
+'log Lik.' NA (df=5)
+
+> nobs(fit)
+[1] 100
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "y2" "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+[1] "y1"
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "x1"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+[1] "y1|t1"
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2"    "y1|t1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  4   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      5
+y1      0
+
+$tau
+      thrshl
+y1|t1      3
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  4   
+y1  0  5
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      8
+y1      9
+
+$tau
+      thrshl
+y1|t1      3
+
+$delta
+   scales
+y2      0
+y1      7
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  6
+
+$mean.x
+   intrcp
+x1     10
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.154      
+y1 0.000 0.000
+
+$beta
+   y2    y1
+y2  0 0.097
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2   0.11
+y1   0.00
+
+$tau
+      thrshl
+y1|t1  0.193
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+      x1
+y2 0.000
+y1 0.356
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.575      
+y1 0.000 1.000
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2  1.182
+y1  0.000
+
+$tau
+      thrshl
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.897      
+y1 0.000 1.000
+
+$beta
+   y2    y1
+y2  0 0.503
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2  1.182
+y1  0.000
+
+$tau
+      thrshl
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 1.748
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y1|t1      0
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.465      
+y1 0.000 0.245
+
+$beta
+   y2    y1
+y2  0 0.732
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2  0.851
+y1  0.000
+
+$tau
+      thrshl
+y1|t1   0.06
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.869
+
+$cov.x
+   x1
+x1  1
+
+$mean.x
+   intrcp
+x1 -0.156
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.897      
+y1 0.000 1.000
+
+$beta
+   y2    y1
+y2  0 0.503
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2  1.182
+y1  0.000
+
+$tau
+      thrshl
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 1.748
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.465      
+y1 0.000 0.245
+
+$beta
+   y2    y1
+y2  0 0.732
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2  0.851
+y1  0.000
+
+$tau
+      thrshl
+y1|t1   0.06
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.865
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "sampstat")
+$res.cov
+      y2    y1
+y2 1.150      
+y1 0.549 1.000
+
+$res.int
+   y2    y1 
+1.182 0.000 
+
+$res.th
+y1|t1 
+0.121 
+
+$res.slopes
+      x1
+y2 0.868
+y1 1.838
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.535 0.755 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1
+y2 1.150      
+y1 0.503 1.000
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1
+y2 1.000      
+y1 0.469 1.000
+
+> lavInspect(fit, what = "mean.ov")
+   y2    y1 
+1.182 0.000 
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+y1|t1 
+0.121 
+
+> lavInspect(fit, what = "theta")
+      y2    y1
+y2 0.897      
+y1 0.000 1.000
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1
+y2  1   
+y1  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+  y2~1  y1|t1  y2~x1  y1~x1 y2~~y2 y2~~y1 
+-1.182  0.121  0.879  1.748  1.150  0.503 
+
+> lavInspect(fit, what = "wls.v")
+        y2~1 y1|t1 y2~x1 y1~x1 y2~~y2 y2~~y1
+y2~1   0.831 0.000 0.000 0.000  0.000  0.000
+y1|t1  0.000 0.271 0.000 0.000  0.000  0.000
+y2~x1  0.000 0.000 0.976 0.000  0.000  0.000
+y1~x1  0.000 0.000 0.000 0.062  0.000  0.000
+y2~~y2 0.000 0.000 0.000 0.000  0.461  0.000
+y2~~y1 0.000 0.000 0.000 0.000  0.000  0.413
+
+> lavInspect(fit, what = "hessian")
+       y2~y1 y1~x1 y1|t1 y2~~y2  y2~1
+y2~y1  3.825                         
+y1~x1  0.860 0.306                   
+y1|t1  0.000 0.000 0.268             
+y2~~y2 0.459 0.000 0.000  0.457      
+y2~1   0.000 0.000 0.000  0.000 0.822
+
+> head(modindices(fit))
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+5   y1 ~~  y1 0.148  0.155   1.000    0.245    0.245
+11  y2 ~~  y1 0.148  0.078   0.078    0.082    0.082
+12  y2  ~  x1 0.148 -0.136  -0.136   -0.098   -0.098
+13  y1  ~  y2 0.148  0.056   0.056    0.038    0.038
+
+> standardizedSolution(fit)
+   lhs  op rhs est.std    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1   0.732 0.055 13.266  0.000    0.623    0.840
+2   y1   ~  x1   0.869 0.043 20.081  0.000    0.784    0.954
+3   y1   |  t1   0.060 0.098  0.612  0.540   -0.132    0.251
+4   y2  ~~  y2   0.465 0.081  5.763  0.000    0.307    0.623
+5   y1  ~~  y1   0.245 0.075  3.256  0.001    0.097    0.392
+6   x1  ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+7   y1 ~*~  y1   1.000 0.000     NA     NA    1.000    1.000
+8   y2  ~1       0.851 0.086  9.906  0.000    0.682    1.019
+9   y1  ~1       0.000 0.000     NA     NA    0.000    0.000
+10  x1  ~1      -0.156 0.000     NA     NA   -0.156   -0.156
+
+> parameterEstimates(fit)
+   lhs  op rhs    est    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1  0.503 0.097  5.180  0.000    0.313    0.693
+2   y1   ~  x1  1.748 0.356  4.917  0.000    1.051    2.445
+3   y1   |  t1  0.121 0.193  0.626  0.531   -0.258    0.500
+4   y2  ~~  y2  0.897 0.154  5.822  0.000    0.595    1.199
+5   y1  ~~  y1  1.000 0.000     NA     NA    1.000    1.000
+6   x1  ~~  x1  1.009 0.000     NA     NA    1.009    1.009
+7   y1 ~*~  y1  1.000 0.000     NA     NA    1.000    1.000
+8   y2  ~1      1.182 0.110 10.717  0.000    0.966    1.398
+9   y1  ~1      0.000 0.000     NA     NA    0.000    0.000
+10  x1  ~1     -0.157 0.000     NA     NA   -0.157   -0.157
+
+> parameterTable(fit)
+   id lhs  op rhs user block group free ustart exo label plabel  start    est
+1   1  y2   ~  y1    1     1     1    1     NA   0         .p1.  0.000  0.503
+2   2  y1   ~  x1    1     1     1    2     NA   1         .p2.  0.000  1.748
+3   3  y1   |  t1    0     1     1    3     NA   0         .p3.  0.121  0.121
+4   4  y2  ~~  y2    0     1     1    4     NA   0         .p4.  0.575  0.897
+5   5  y1  ~~  y1    0     1     1    0      1   0         .p5.  1.000  1.000
+6   6  x1  ~~  x1    0     1     1    0     NA   1         .p6.  1.009  1.009
+7   7  y1 ~*~  y1    0     1     1    0      1   0         .p7.  1.000  1.000
+8   8  y2  ~1        0     1     1    5     NA   0         .p8.  1.182  1.182
+9   9  y1  ~1        0     1     1    0      0   0         .p9.  0.000  0.000
+10 10  x1  ~1        0     1     1    0     NA   1        .p10. -0.157 -0.157
+      se
+1  0.097
+2  0.356
+3  0.193
+4  0.154
+5  0.000
+6  0.000
+7  0.000
+8  0.110
+9  0.000
+10 0.000
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2  100 numeric   0    0  1.046 1.921    0     
+2   y1   1  100 ordered   0    1     NA    NA    2  1|2
+3   x1   3  100 numeric   1    0 -0.157 1.009    0     
+
+> fitMeasures(fit)
+                         npar                          fmin 
+                        5.000                         0.001 
+                        chisq                            df 
+                        0.150                         1.000 
+                       pvalue                  chisq.scaled 
+                           NA                         0.160 
+                    df.scaled                 pvalue.scaled 
+                        1.000                         0.689 
+         chisq.scaling.factor                baseline.chisq 
+                        0.933                        12.345 
+                  baseline.df               baseline.pvalue 
+                        1.000                            NA 
+        baseline.chisq.scaled            baseline.df.scaled 
+                       12.345                         1.000 
+       baseline.pvalue.scaled baseline.chisq.scaling.factor 
+                        0.000                         1.000 
+                          cfi                           tli 
+                        1.000                         1.075 
+                   cfi.scaled                    tli.scaled 
+                        1.000                         1.074 
+                   cfi.robust                    tli.robust 
+                           NA                            NA 
+                         nnfi                           rfi 
+                        1.075                         0.988 
+                          nfi                          pnfi 
+                        0.988                         0.988 
+                          ifi                           rni 
+                        1.075                         1.075 
+                  nnfi.scaled                    rfi.scaled 
+                        1.074                         0.987 
+                   nfi.scaled                   pnfi.scaled 
+                        0.987                         0.987 
+                   ifi.scaled                    rni.scaled 
+                        1.074                         1.074 
+                  nnfi.robust                    rni.robust 
+                           NA                            NA 
+                        rmsea                rmsea.ci.lower 
+                        0.000                         0.000 
+               rmsea.ci.upper                rmsea.ci.level 
+                        0.195                         0.900 
+                 rmsea.pvalue                rmsea.close.h0 
+                        0.732                         0.050 
+        rmsea.notclose.pvalue             rmsea.notclose.h0 
+                        0.223                         0.080 
+                 rmsea.scaled         rmsea.ci.lower.scaled 
+                        0.000                         0.000 
+        rmsea.ci.upper.scaled           rmsea.pvalue.scaled 
+                        0.197                         0.723 
+ rmsea.notclose.pvalue.scaled                  rmsea.robust 
+                        0.231                            NA 
+        rmsea.ci.lower.robust         rmsea.ci.upper.robust 
+                           NA                            NA 
+          rmsea.pvalue.robust  rmsea.notclose.pvalue.robust 
+                           NA                            NA 
+                          rmr                    rmr_nomean 
+                        0.021                         0.023 
+                         srmr                  srmr_bentler 
+                        0.022                         0.019 
+          srmr_bentler_nomean                          crmr 
+                        0.022                         0.031 
+                  crmr_nomean                    srmr_mplus 
+                        0.043                            NA 
+            srmr_mplus_nomean                         cn_05 
+                           NA                      2540.488 
+                        cn_01                           gfi 
+                     4387.156                         0.999 
+                         agfi                          pgfi 
+                        0.997                         0.167 
+                          mfi                          wrmr 
+                        1.004                         0.158 
+attr(,"scaled.test")
+[1] "scaled.shifted"
+
+> fitMeasures(fit, "chisq")
+chisq 
+ 0.15 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+  0.15   1.00     NA   0.00   1.00 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+Warning: lavaan->lav_sc():  
+   scores only available if estimator is ML
+      y2    y1
+y2 1.000      
+y1 0.512 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+Warning: lavaan->lav_tables_pattern():  
+   some endogenous variables are not categorical
+Warning: lavaan->lav_tables_pairwise_cells():  
+   at least two categorical variables are needed
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1605    0.16049       1     0.6887
+> 
+> 
+> # create binary version - two categorical
+> # Data.binary$y2 <- cut(Data$y2, 2L, labels=FALSE)
+> Data.binary <- read.csv("testfitov3_dat04.csv")
+> 
+> model <- ' y2 ~ y1; y1 ~ x1 '
+> fit <- sem(model, data=Data.binary, estimator="WLSMV", ordered=c("y1","y2"))
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.498  1.904 -0.681  0.121 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.089  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.067
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.089  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.067
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+
+> fitted.values(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.498 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.681  0.121 
+
+$res.slopes
+      x1
+y2 0.949
+y1 1.904
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> fitted(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.498 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.681  0.121 
+
+$res.slopes
+      x1
+y2 0.949
+y1 1.904
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1908    0.19084       1     0.6622
+
+> vcov(fit)
+       y2~y1  y1~x1  y2|t1  y1|t1
+y2~y1  0.013                     
+y1~x1 -0.031  0.143              
+y2|t1 -0.002  0.001  0.022       
+y1|t1  0.005 -0.023  0.003  0.037
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+
+> coef(fit.ortho)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.498  1.904 -0.681  0.121 
+
+> AIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> BIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> logLik(fit)
+Warning: lavaan->logLik():  
+   logLik only available if estimator is ML
+'log Lik.' NA (df=4)
+
+> nobs(fit)
+[1] 100
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+[1] "y2" "y1"
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "x1"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  5   
+y1  0  6
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2     10
+y1     11
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      8
+y1      9
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  7
+
+$mean.x
+   intrcp
+x1     12
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2    y1
+y2  0 0.114
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1  0.150
+y1|t1  0.193
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+      x1
+y2 0.000
+y1 0.378
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  1   
+y1  0  1
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.681
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.752      
+y1 0.000 1.000
+
+$beta
+   y2    y1
+y2  0 0.498
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.681
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 1.904
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      0
+y1|t1      0
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.394      
+y1 0.000 0.215
+
+$beta
+   y2    y1
+y2  0 0.779
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.493
+y1|t1  0.056
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.886
+
+$cov.x
+   x1
+x1  1
+
+$mean.x
+   intrcp
+x1 -0.156
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.752      
+y1 0.000 1.000
+
+$beta
+   y2    y1
+y2  0 0.498
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.681
+y1|t1  0.121
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 1.904
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.394      
+y1 0.000 0.215
+
+$beta
+   y2    y1
+y2  0 0.779
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.493
+y1|t1  0.056
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.882
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+   intrcp
+x1 -0.157
+
+
+> lavInspect(fit, what = "sampstat")
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.409 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.681  0.121 
+
+$res.slopes
+      x1
+y2 0.971
+y1 1.838
+
+$cov.x
+      x1
+x1 1.009
+
+$mean.x
+    x1 
+-0.157 
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.606 0.785 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1
+y2 1.000      
+y1 0.498 1.000
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1
+y2 1.000      
+y1 0.498 1.000
+
+> lavInspect(fit, what = "mean.ov")
+y2 y1 
+ 0  0 
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+ y2|t1  y1|t1 
+-0.681  0.121 
+
+> lavInspect(fit, what = "theta")
+      y2    y1
+y2 0.752      
+y1 0.000 1.000
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1
+y2  1   
+y1  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+ y2|t1  y1|t1  y2~x1  y1~x1 y2~~y1 
+-0.681  0.121  0.949  1.904  0.498 
+
+> lavInspect(fit, what = "wls.v")
+       y2|t1 y1|t1 y2~x1 y1~x1 y2~~y1
+y2|t1  0.451 0.000 0.000 0.000  0.000
+y1|t1  0.000 0.271 0.000 0.000  0.000
+y2~x1  0.000 0.000 0.392 0.000  0.000
+y1~x1  0.000 0.000 0.000 0.062  0.000
+y2~~y1 0.000 0.000 0.000 0.000  0.178
+
+> lavInspect(fit, what = "hessian")
+      y2~y1 y1~x1 y2|t1 y1|t1
+y2~y1 1.583                  
+y1~x1 0.360 0.158            
+y2|t1 0.000 0.000 0.446      
+y1|t1 0.000 0.000 0.000 0.268
+
+> head(modindices(fit))
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+6   y1 ~~  y1 0.184 -0.235  -1.000   -0.215   -0.215
+13  y2 ~~  y1 0.184 -0.117  -0.117   -0.135   -0.135
+14  y2  ~  x1 0.184  0.223   0.223    0.162    0.161
+15  y1  ~  y2 0.184 -0.094  -0.094   -0.060   -0.060
+
+> standardizedSolution(fit)
+   lhs  op rhs est.std    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1   0.779 0.068 11.504  0.000    0.646    0.911
+2   y1   ~  x1   0.886 0.038 23.474  0.000    0.812    0.960
+3   y2   |  t1  -0.493 0.108 -4.546  0.000   -0.705   -0.280
+4   y1   |  t1   0.056 0.093  0.605  0.545   -0.125    0.237
+5   y2  ~~  y2   0.394 0.105  3.735  0.000    0.187    0.600
+6   y1  ~~  y1   0.215 0.067  3.208  0.001    0.083    0.346
+7   x1  ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+8   y2 ~*~  y2   1.000 0.000     NA     NA    1.000    1.000
+9   y1 ~*~  y1   1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1       0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1       0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1      -0.156 0.000     NA     NA   -0.156   -0.156
+
+> parameterEstimates(fit)
+   lhs  op rhs    est    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1  0.498 0.114  4.363  0.000    0.275    0.722
+2   y1   ~  x1  1.904 0.378  5.038  0.000    1.164    2.645
+3   y2   |  t1 -0.681 0.150 -4.549  0.000   -0.974   -0.387
+4   y1   |  t1  0.121 0.193  0.626  0.531   -0.258    0.500
+5   y2  ~~  y2  0.752 0.000     NA     NA    0.752    0.752
+6   y1  ~~  y1  1.000 0.000     NA     NA    1.000    1.000
+7   x1  ~~  x1  1.009 0.000     NA     NA    1.009    1.009
+8   y2 ~*~  y2  1.000 0.000     NA     NA    1.000    1.000
+9   y1 ~*~  y1  1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1      0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1      0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1     -0.157 0.000     NA     NA   -0.157   -0.157
+
+> parameterTable(fit)
+   id lhs  op rhs user block group free ustart exo label plabel  start    est
+1   1  y2   ~  y1    1     1     1    1     NA   0         .p1.  0.000  0.498
+2   2  y1   ~  x1    1     1     1    2     NA   1         .p2.  0.000  1.904
+3   3  y2   |  t1    0     1     1    3     NA   0         .p3. -0.681 -0.681
+4   4  y1   |  t1    0     1     1    4     NA   0         .p4.  0.121  0.121
+5   5  y2  ~~  y2    0     1     1    0      1   0         .p5.  1.000  0.752
+6   6  y1  ~~  y1    0     1     1    0      1   0         .p6.  1.000  1.000
+7   7  x1  ~~  x1    0     1     1    0     NA   1         .p7.  1.009  1.009
+8   8  y2 ~*~  y2    0     1     1    0      1   0         .p8.  1.000  1.000
+9   9  y1 ~*~  y1    0     1     1    0      1   0         .p9.  1.000  1.000
+10 10  y2  ~1        0     1     1    0      0   0        .p10.  0.000  0.000
+11 11  y1  ~1        0     1     1    0      0   0        .p11.  0.000  0.000
+12 12  x1  ~1        0     1     1    0     NA   1        .p12. -0.157 -0.157
+      se
+1  0.114
+2  0.378
+3  0.150
+4  0.193
+5  0.000
+6  0.000
+7  0.000
+8  0.000
+9  0.000
+10 0.000
+11 0.000
+12 0.000
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2  100 ordered   0    1     NA    NA    2  1|2
+2   y1   1  100 ordered   0    1     NA    NA    2  1|2
+3   x1   3  100 numeric   1    0 -0.157 1.009    0     
+
+> fitMeasures(fit)
+                         npar                          fmin 
+                        4.000                         0.001 
+                        chisq                            df 
+                        0.186                         1.000 
+                       pvalue                  chisq.scaled 
+                           NA                         0.191 
+                    df.scaled                 pvalue.scaled 
+                        1.000                         0.662 
+         chisq.scaling.factor                baseline.chisq 
+                        0.972                         2.942 
+                  baseline.df               baseline.pvalue 
+                        1.000                            NA 
+        baseline.chisq.scaled            baseline.df.scaled 
+                        2.942                         1.000 
+       baseline.pvalue.scaled baseline.chisq.scaling.factor 
+                        0.086                         1.000 
+                          cfi                           tli 
+                        1.000                         1.419 
+                   cfi.scaled                    tli.scaled 
+                        1.000                         1.417 
+                   cfi.robust                    tli.robust 
+                           NA                            NA 
+                         nnfi                           rfi 
+                        1.419                         0.937 
+                          nfi                          pnfi 
+                        0.937                         0.937 
+                          ifi                           rni 
+                        1.419                         1.419 
+                  nnfi.scaled                    rfi.scaled 
+                        1.417                         0.935 
+                   nfi.scaled                   pnfi.scaled 
+                        0.935                         0.935 
+                   ifi.scaled                    rni.scaled 
+                        1.417                         1.417 
+                  nnfi.robust                    rni.robust 
+                           NA                            NA 
+                        rmsea                rmsea.ci.lower 
+                        0.000                         0.000 
+               rmsea.ci.upper                rmsea.ci.level 
+                        0.202                         0.900 
+                 rmsea.pvalue                rmsea.close.h0 
+                        0.703                         0.050 
+        rmsea.notclose.pvalue             rmsea.notclose.h0 
+                        0.248                         0.080 
+                 rmsea.scaled         rmsea.ci.lower.scaled 
+                        0.000                         0.000 
+        rmsea.ci.upper.scaled           rmsea.pvalue.scaled 
+                        0.203                         0.699 
+ rmsea.notclose.pvalue.scaled                  rmsea.robust 
+                        0.251                            NA 
+        rmsea.ci.lower.robust         rmsea.ci.upper.robust 
+                           NA                            NA 
+          rmsea.pvalue.robust  rmsea.notclose.pvalue.robust 
+                           NA                            NA 
+                          rmr                    rmr_nomean 
+                        0.036                         0.045 
+                         srmr                  srmr_bentler 
+                        0.045                         0.036 
+          srmr_bentler_nomean                          crmr 
+                        0.045                         0.052 
+                  crmr_nomean                    srmr_mplus 
+                        0.089                            NA 
+            srmr_mplus_nomean                         cn_05 
+                           NA                      2050.283 
+                        cn_01                           gfi 
+                     3540.484                         0.998 
+                         agfi                          pgfi 
+                        0.989                         0.200 
+                          mfi                          wrmr 
+                        1.004                         0.193 
+attr(,"scaled.test")
+[1] "scaled.shifted"
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.186 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.186  1.000     NA  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+Warning: lavaan->lav_sc():  
+   scores only available if estimator is ML
+      y2    y1
+y2 1.000      
+y1 0.409 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+Warning: lavaan->lav_tables_pattern():  
+   estimator DWLS is not using full information while est.prop is using full 
+   information
+  id lhs rhs nobs row col obs.freq obs.prop est.prop    X2
+1  1  y2  y1  100   1   1       33     0.33    0.198 8.750
+2  1  y2  y1  100   2   1       29     0.29    0.350 1.024
+3  1  y2  y1  100   1   2        3     0.03    0.050 0.783
+4  1  y2  y1  100   2   2       35     0.35    0.402 0.676
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1908    0.19084       1     0.6622
+> 
+> 
+> 
+> # create missing values
+> # set.seed(4567)
+> # missing.per.var <- floor(nrow(Data) / 10)
+> # Data.missing <- as.data.frame(lapply(Data.binary, function(x) {
+> #     idx <- sample(1:length(x), missing.per.var); x[idx] <- NA; x}))
+> Data.missing <- read.csv("testfitov3_dat05.csv")
+> 
+> # listwise deletion
+> fit1 <- sem(model, data=Data.missing, missing="listwise", ordered=c("y1","y2"))
+> # FIML
+> fit2 <- sem(model, data=Data.missing, missing="pairwise", ordered=c("y1","y2"))
+Warning: lavaan->lav_data_full():  
+   10 cases were deleted due to missing values in exogenous variable(s), 
+   while fixed.x = TRUE.
+> fit <- fit2
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.447  1.800 -0.588  0.099 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.092  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.051
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.092  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.051
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+
+> fitted.values(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.805
+y1 1.800
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> fitted(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.805
+y1 1.800
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1438    0.14378       1     0.7046
+
+> vcov(fit)
+       y2~y1  y1~x1  y2|t1  y1|t1
+y2~y1  0.015                     
+y1~x1 -0.033  0.157              
+y2|t1 -0.003  0.000  0.027       
+y1|t1  0.005 -0.024  0.004  0.043
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+Warning: lavaan->lav_data_full():  
+   10 cases were deleted due to missing values in exogenous variable(s), 
+   while fixed.x = TRUE.
+
+> coef(fit.ortho)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.447  1.800 -0.588  0.099 
+
+> AIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> BIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> logLik(fit)
+Warning: lavaan->logLik():  
+   logLik only available if estimator is ML
+'log Lik.' NA (df=4)
+
+> nobs(fit)
+[1] 90
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+[1] "y2" "y1"
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "x1"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  5   
+y1  0  6
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2     10
+y1     11
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      8
+y1      9
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  7
+
+$mean.x
+   intrcp
+x1     12
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2    y1
+y2  0 0.123
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1  0.165
+y1|t1  0.208
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+      x1
+y2 0.000
+y1 0.396
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  1   
+y1  0  1
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.588
+y1|t1  0.099
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+    y2  y1
+y2 0.8    
+y1 0.0 1.0
+
+$beta
+   y2    y1
+y2  0 0.447
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.588
+y1|t1  0.099
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+    x1
+y2 0.0
+y1 1.8
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      0
+y1|t1      0
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.477      
+y1 0.000 0.228
+
+$beta
+   y2    y1
+y2  0 0.723
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.454
+y1|t1  0.047
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.879
+
+$cov.x
+   x1
+x1  1
+
+$mean.x
+   intrcp
+x1  -0.11
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+    y2  y1
+y2 0.8    
+y1 0.0 1.0
+
+$beta
+   y2    y1
+y2  0 0.447
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.588
+y1|t1  0.099
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+    x1
+y2 0.0
+y1 1.8
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.477      
+y1 0.000 0.228
+
+$beta
+   y2    y1
+y2  0 0.723
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.454
+y1|t1  0.047
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+     x1
+y2 0.00
+y1 0.86
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "sampstat")
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.355 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.825
+y1 1.748
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.523 0.772 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+> lavInspect(fit, what = "mean.ov")
+y2 y1 
+ 0  0 
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+> lavInspect(fit, what = "theta")
+    y2  y1
+y2 0.8    
+y1 0.0 1.0
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1
+y2  1   
+y1  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+ y2|t1  y1|t1  y2~x1  y1~x1 y2~~y1 
+-0.588  0.099  0.805  1.800  0.447 
+
+> lavInspect(fit, what = "wls.v")
+       y2|t1 y1|t1 y2~x1 y1~x1 y2~~y1
+y2|t1  0.413 0.000 0.000 0.000  0.000
+y1|t1  0.000 0.259 0.000 0.000  0.000
+y2~x1  0.000 0.000 0.362 0.000  0.000
+y1~x1  0.000 0.000 0.000 0.065  0.000
+y2~~y1 0.000 0.000 0.000 0.000  0.146
+
+> lavInspect(fit, what = "hessian")
+      y2~y1 y1~x1 y2|t1 y1|t1
+y2~y1 1.304                  
+y1~x1 0.281 0.136            
+y2|t1 0.000 0.000 0.408      
+y1|t1 0.000 0.000 0.000 0.256
+
+> head(modindices(fit))
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+6   y1 ~~  y1 0.139 -0.258  -1.000   -0.228   -0.228
+13  y2 ~~  y1 0.139 -0.115  -0.115   -0.129   -0.129
+14  y2  ~  x1 0.139  0.208   0.208    0.164    0.161
+15  y1  ~  y2 0.139 -0.096  -0.096   -0.060   -0.060
+
+> standardizedSolution(fit)
+   lhs  op rhs est.std    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1   0.723 0.091  7.938  0.000    0.544    0.901
+2   y1   ~  x1   0.879 0.044 19.902  0.000    0.792    0.965
+3   y2   |  t1  -0.454 0.126 -3.618  0.000   -0.700   -0.208
+4   y1   |  t1   0.047 0.102  0.461  0.645   -0.153    0.247
+5   y2  ~~  y2   0.477 0.132  3.625  0.000    0.219    0.735
+6   y1  ~~  y1   0.228 0.078  2.943  0.003    0.076    0.380
+7   x1  ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+8   y2 ~*~  y2   1.000 0.000     NA     NA    1.000    1.000
+9   y1 ~*~  y1   1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1       0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1       0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1      -0.110 0.000     NA     NA   -0.110   -0.110
+
+> parameterEstimates(fit)
+   lhs  op rhs    est    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1  0.447 0.123  3.622  0.000    0.205    0.689
+2   y1   ~  x1  1.800 0.396  4.542  0.000    1.023    2.576
+3   y2   |  t1 -0.588 0.165 -3.563  0.000   -0.911   -0.265
+4   y1   |  t1  0.099 0.208  0.473  0.636   -0.310    0.507
+5   y2  ~~  y2  0.800 0.000     NA     NA    0.800    0.800
+6   y1  ~~  y1  1.000 0.000     NA     NA    1.000    1.000
+7   x1  ~~  x1  1.044 0.000     NA     NA    1.044    1.044
+8   y2 ~*~  y2  1.000 0.000     NA     NA    1.000    1.000
+9   y1 ~*~  y1  1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1      0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1      0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1     -0.112 0.000     NA     NA   -0.112   -0.112
+
+> parameterTable(fit)
+   id lhs  op rhs user block group free ustart exo label plabel  start    est
+1   1  y2   ~  y1    1     1     1    1     NA   0         .p1.  0.000  0.447
+2   2  y1   ~  x1    1     1     1    2     NA   1         .p2.  0.000  1.800
+3   3  y2   |  t1    0     1     1    3     NA   0         .p3. -0.588 -0.588
+4   4  y1   |  t1    0     1     1    4     NA   0         .p4.  0.099  0.099
+5   5  y2  ~~  y2    0     1     1    0      1   0         .p5.  1.000  0.800
+6   6  y1  ~~  y1    0     1     1    0      1   0         .p6.  1.000  1.000
+7   7  x1  ~~  x1    0     1     1    0     NA   1         .p7.  1.044  1.044
+8   8  y2 ~*~  y2    0     1     1    0      1   0         .p8.  1.000  1.000
+9   9  y1 ~*~  y1    0     1     1    0      1   0         .p9.  1.000  1.000
+10 10  y2  ~1        0     1     1    0      0   0        .p10.  0.000  0.000
+11 11  y1  ~1        0     1     1    0      0   0        .p11.  0.000  0.000
+12 12  x1  ~1        0     1     1    0     NA   1        .p12. -0.112 -0.112
+      se
+1  0.123
+2  0.396
+3  0.165
+4  0.208
+5  0.000
+6  0.000
+7  0.000
+8  0.000
+9  0.000
+10 0.000
+11 0.000
+12 0.000
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2   90 ordered   0    1     NA    NA    2  1|2
+2   y1   1   90 ordered   0    1     NA    NA    2  1|2
+3   x1   3   90 numeric   1    0 -0.112 1.044    0     
+
+> fitMeasures(fit)
+                         npar                          fmin 
+                        4.000                         0.001 
+                        chisq                            df 
+                        0.141                         1.000 
+                       pvalue                  chisq.scaled 
+                           NA                         0.144 
+                    df.scaled                 pvalue.scaled 
+                        1.000                         0.705 
+         chisq.scaling.factor                baseline.chisq 
+                        0.978                         1.640 
+                  baseline.df               baseline.pvalue 
+                        1.000                            NA 
+        baseline.chisq.scaled            baseline.df.scaled 
+                        1.640                         1.000 
+       baseline.pvalue.scaled baseline.chisq.scaling.factor 
+                        0.200                         1.000 
+                          cfi                           tli 
+                        1.000                         2.343 
+                   cfi.scaled                    tli.scaled 
+                        1.000                         2.338 
+                   cfi.robust                    tli.robust 
+                           NA                            NA 
+                         nnfi                           rfi 
+                        2.343                         0.914 
+                          nfi                          pnfi 
+                        0.914                         0.914 
+                          ifi                           rni 
+                        2.343                         2.343 
+                  nnfi.scaled                    rfi.scaled 
+                        2.338                         0.912 
+                   nfi.scaled                   pnfi.scaled 
+                        0.912                         0.912 
+                   ifi.scaled                    rni.scaled 
+                        2.338                         2.338 
+                  nnfi.robust                    rni.robust 
+                           NA                            NA 
+                        rmsea                rmsea.ci.lower 
+                        0.000                         0.000 
+               rmsea.ci.upper                rmsea.ci.level 
+                        0.204                         0.900 
+                 rmsea.pvalue                rmsea.close.h0 
+                        0.737                         0.050 
+        rmsea.notclose.pvalue             rmsea.notclose.h0 
+                        0.223                         0.080 
+                 rmsea.scaled         rmsea.ci.lower.scaled 
+                        0.000                         0.000 
+        rmsea.ci.upper.scaled           rmsea.pvalue.scaled 
+                        0.205                         0.734 
+ rmsea.notclose.pvalue.scaled                  rmsea.robust 
+                        0.225                            NA 
+        rmsea.ci.lower.robust         rmsea.ci.upper.robust 
+                           NA                            NA 
+          rmsea.pvalue.robust  rmsea.notclose.pvalue.robust 
+                           NA                            NA 
+                          rmr                    rmr_nomean 
+                        0.038                         0.046 
+                         srmr                  srmr_bentler 
+                        0.046                         0.038 
+          srmr_bentler_nomean                          crmr 
+                        0.046                         0.053 
+                  crmr_nomean                    srmr_mplus 
+                        0.092                            NA 
+            srmr_mplus_nomean                         cn_05 
+                           NA                      2431.161 
+                        cn_01                           gfi 
+                     4198.329                         0.997 
+                         agfi                          pgfi 
+                        0.987                         0.199 
+                          mfi                          wrmr 
+                        1.005                         0.168 
+attr(,"scaled.test")
+[1] "scaled.shifted"
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.141 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.141  1.000     NA  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+Warning: lavaan->lav_sc():  
+   scores only available if estimator is ML
+      y2    y1
+y2 1.000      
+y1 0.355 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+Warning: lavaan->lav_tables_pattern():  
+   estimator DWLS is not using full information while est.prop is using full 
+   information
+  id lhs rhs nobs row col obs.freq obs.prop est.prop    X2
+1  1  y2  y1   70   1   1       21    0.300    0.210 2.692
+2  1  y2  y1   70   2   1       21    0.300    0.329 0.181
+3  1  y2  y1   70   1   2        3    0.043    0.068 0.658
+4  1  y2  y1   70   2   2       25    0.357    0.393 0.223
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1438    0.14378       1     0.7046
+> 
+> fit2 <- sem(model, data=Data.missing, missing="pairwise", ordered=c("y1","y2"),
++             parameterization = "theta")
+Warning: lavaan->lav_data_full():  
+   10 cases were deleted due to missing values in exogenous variable(s), 
+   while fixed.x = TRUE.
+> fit <- fit2
+> 
+> # default extract functions
+> source("common.srcR", echo = TRUE)
+
+> coef(fit)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.500  1.800 -0.657  0.099 
+
+> residuals(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.092  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.051
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> resid(fit)
+$type
+[1] "raw"
+
+$res.cov
+       y2     y1
+y2  0.000       
+y1 -0.092  0.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+y2|t1 y1|t1 
+    0     0 
+
+$res.slopes
+       x1
+y2  0.021
+y1 -0.051
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+x1 
+ 0 
+
+
+> if (!fit@Model@categorical && fit@Data@nlevels == 
++     1) {
++     head(resid(fit, "obs"))
++ }
+
+> fitted.values(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.805
+y1 1.800
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> fitted(fit)
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.805
+y1 1.800
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> if (!(fit@Data@nlevels > 1 && fit@Data@missing == 
++     "ml") && length(lavNames(fit, "lv.regular")) > 0) {
++     print(head(predict(fit)))
++     o .... [TRUNCATED] 
+
+> if (fit@Data@nlevels > 1) {
++     if (!fit@Data@missing == "ml") {
++         print(head(lavPredict(fit, level = 2)))
++     }
++ }
+
+> anova(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1438    0.14378       1     0.7046
+
+> vcov(fit)
+       y2~y1  y1~x1  y2|t1  y1|t1
+y2~y1  0.030                     
+y1~x1 -0.046  0.157              
+y2|t1 -0.013  0.012  0.039       
+y1|t1  0.007 -0.024  0.002  0.043
+
+> fit.ortho <- update(fit, orthogonal = TRUE)
+Warning: lavaan->lav_data_full():  
+   10 cases were deleted due to missing values in exogenous variable(s), 
+   while fixed.x = TRUE.
+
+> coef(fit.ortho)
+ y2~y1  y1~x1  y2|t1  y1|t1 
+ 0.500  1.800 -0.657  0.099 
+
+> AIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> BIC(fit)
+Warning: lavaan->ll():  
+   logLik only available if estimator is ML
+[1] NA
+
+> logLik(fit)
+Warning: lavaan->logLik():  
+   logLik only available if estimator is ML
+'log Lik.' NA (df=4)
+
+> nobs(fit)
+[1] 90
+
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "y2" "y1" "x1"
+
+
+$ov.x
+$ov.x[[1]]
+[1] "x1"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "y2" "y1"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "y2" "y1"
+
+
+$ov.y
+$ov.y[[1]]
+[1] "y2"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "x1"
+
+
+$ov.ord
+$ov.ord[[1]]
+[1] "y2" "y1"
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "x1"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$th.mean
+$th.mean[[1]]
+[1] "y2|t1" "y1|t1"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "y2" "y1"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "y1" "x1"
+
+
+
+> lavInspect(fit)
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "partable")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  5   
+y1  0  6
+
+$beta
+   y2 y1
+y2  0  1
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2     10
+y1     11
+
+$tau
+      thrshl
+y2|t1      3
+y1|t1      4
+
+$delta
+   scales
+y2      8
+y1      9
+
+$gamma
+   x1
+y2  0
+y1  2
+
+$cov.x
+   x1
+x1  7
+
+$mean.x
+   intrcp
+x1     12
+
+
+> lavInspect(fit, what = "se")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2    y1
+y2  0 0.172
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1  0.196
+y1|t1  0.208
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+      x1
+y2 0.000
+y1 0.396
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "start")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  1   
+y1  0  1
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.588
+y1|t1  0.099
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "est")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  1   
+y1  0  1
+
+$beta
+   y2  y1
+y2  0 0.5
+y1  0 0.0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.657
+y1|t1  0.099
+
+$delta
+   scales
+y2  0.894
+y1  1.000
+
+$gamma
+    x1
+y2 0.0
+y1 1.8
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "dx.free")
+$lambda
+   y2 y1
+y2  0  0
+y1  0  0
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  0   
+y1  0  0
+
+$beta
+   y2 y1
+y2  0  0
+y1  0  0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1      0
+y1|t1      0
+
+$delta
+   scales
+y2      0
+y1      0
+
+$gamma
+   x1
+y2  0
+y1  0
+
+$cov.x
+   x1
+x1  0
+
+$mean.x
+   intrcp
+x1      0
+
+
+> lavInspect(fit, what = "std.all")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.477      
+y1 0.000 0.228
+
+$beta
+   y2    y1
+y2  0 0.723
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.454
+y1|t1  0.047
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+      x1
+y2 0.000
+y1 0.879
+
+$cov.x
+   x1
+x1  1
+
+$mean.x
+   intrcp
+x1  -0.11
+
+
+> lavInspect(fit, what = "std.lv")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+   y2 y1
+y2  1   
+y1  0  1
+
+$beta
+   y2  y1
+y2  0 0.5
+y1  0 0.0
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.657
+y1|t1  0.099
+
+$delta
+   scales
+y2  0.894
+y1  1.000
+
+$gamma
+    x1
+y2 0.0
+y1 1.8
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "std.nox")
+$lambda
+   y2 y1
+y2  1  0
+y1  0  1
+
+$theta
+   y2 y1
+y2  0   
+y1  0  0
+
+$psi
+      y2    y1
+y2 0.477      
+y1 0.000 0.228
+
+$beta
+   y2    y1
+y2  0 0.723
+y1  0 0.000
+
+$nu
+   intrcp
+y2      0
+y1      0
+
+$alpha
+   intrcp
+y2      0
+y1      0
+
+$tau
+      thrshl
+y2|t1 -0.454
+y1|t1  0.047
+
+$delta
+   scales
+y2      1
+y1      1
+
+$gamma
+     x1
+y2 0.00
+y1 0.86
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+   intrcp
+x1 -0.112
+
+
+> lavInspect(fit, what = "sampstat")
+$res.cov
+      y2    y1
+y2 1.000      
+y1 0.355 1.000
+
+$res.int
+y2 y1 
+ 0  0 
+
+$res.th
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+$res.slopes
+      x1
+y2 0.825
+y1 1.748
+
+$cov.x
+      x1
+x1 1.044
+
+$mean.x
+    x1 
+-0.112 
+
+
+> lavInspect(fit, what = "rsquare")
+   y2    y1 
+0.523 0.772 
+
+> lavInspect(fit, what = "cov.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "cor.lv")
+<0 x 0 matrix>
+
+> lavInspect(fit, what = "mean.lv")
+numeric(0)
+
+> lavInspect(fit, what = "cov.ov")
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+> lavInspect(fit, what = "cor.ov")
+      y2    y1
+y2 1.000      
+y1 0.447 1.000
+
+> lavInspect(fit, what = "mean.ov")
+y2 y1 
+ 0  0 
+
+> if (fit@Model@categorical) {
++     lavInspect(fit, what = "th")
++ }
+ y2|t1  y1|t1 
+-0.588  0.099 
+
+> lavInspect(fit, what = "theta")
+   y2 y1
+y2  1   
+y1  0  1
+
+> if (fit@Data@nlevels == 1) {
++     lavInspect(fit, what = "coverage")
++     lavInspect(fit, what = "patterns")
++     lavInspect(fit, what = "wls.obs ..." ... [TRUNCATED] 
+   y2 y1
+y2  1   
+y1  0  1
+
+> lavInspect(fit, what = "converged")
+[1] TRUE
+
+> lavInspect(fit, what = "wls.est")
+ y2|t1  y1|t1  y2~x1  y1~x1 y2~~y1 
+-0.588  0.099  0.805  1.800  0.447 
+
+> lavInspect(fit, what = "wls.v")
+       y2|t1 y1|t1 y2~x1 y1~x1 y2~~y1
+y2|t1  0.413 0.000 0.000 0.000  0.000
+y1|t1  0.000 0.259 0.000 0.000  0.000
+y2~x1  0.000 0.000 0.362 0.000  0.000
+y1~x1  0.000 0.000 0.000 0.065  0.000
+y2~~y1 0.000 0.000 0.000 0.000  0.146
+
+> lavInspect(fit, what = "hessian")
+      y2~y1 y1~x1 y2|t1 y1|t1
+y2~y1 0.691                  
+y1~x1 0.201 0.136            
+y2|t1 0.086 0.000 0.326      
+y1|t1 0.000 0.000 0.000 0.256
+
+> head(modindices(fit))
+   lhs  op rhs    mi    epc sepc.lv sepc.all sepc.nox
+9   y1 ~*~  y1 0.139 -0.129  -0.129   -1.000   -1.000
+13  y2  ~~  y1 0.139 -0.129  -0.129   -0.129   -0.129
+14  y2   ~  x1 0.139  0.232   0.232    0.164    0.161
+15  y1   ~  y2 0.139 -0.129  -0.129   -0.089   -0.089
+
+> standardizedSolution(fit)
+   lhs  op rhs est.std    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1   0.723 0.091  7.938  0.000    0.544    0.901
+2   y1   ~  x1   0.879 0.044 19.902  0.000    0.792    0.965
+3   y2   |  t1  -0.454 0.126 -3.618  0.000   -0.700   -0.208
+4   y1   |  t1   0.047 0.102  0.461  0.645   -0.153    0.247
+5   y2  ~~  y2   0.477 0.132  3.625  0.000    0.219    0.735
+6   y1  ~~  y1   0.228 0.078  2.943  0.003    0.076    0.380
+7   x1  ~~  x1   1.000 0.000     NA     NA    1.000    1.000
+8   y2 ~*~  y2   1.000 0.000     NA     NA    1.000    1.000
+9   y1 ~*~  y1   1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1       0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1       0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1      -0.110 0.000     NA     NA   -0.110   -0.110
+
+> parameterEstimates(fit)
+   lhs  op rhs    est    se      z pvalue ci.lower ci.upper
+1   y2   ~  y1  0.500 0.172  2.898  0.004    0.162    0.838
+2   y1   ~  x1  1.800 0.396  4.542  0.000    1.023    2.576
+3   y2   |  t1 -0.657 0.196 -3.347  0.001   -1.042   -0.272
+4   y1   |  t1  0.099 0.208  0.473  0.636   -0.310    0.507
+5   y2  ~~  y2  1.000 0.000     NA     NA    1.000    1.000
+6   y1  ~~  y1  1.000 0.000     NA     NA    1.000    1.000
+7   x1  ~~  x1  1.044 0.000     NA     NA    1.044    1.044
+8   y2 ~*~  y2  0.894 0.000     NA     NA    0.894    0.894
+9   y1 ~*~  y1  1.000 0.000     NA     NA    1.000    1.000
+10  y2  ~1      0.000 0.000     NA     NA    0.000    0.000
+11  y1  ~1      0.000 0.000     NA     NA    0.000    0.000
+12  x1  ~1     -0.112 0.000     NA     NA   -0.112   -0.112
+
+> parameterTable(fit)
+   id lhs  op rhs user block group free ustart exo label plabel  start    est
+1   1  y2   ~  y1    1     1     1    1     NA   0         .p1.  0.000  0.500
+2   2  y1   ~  x1    1     1     1    2     NA   1         .p2.  0.000  1.800
+3   3  y2   |  t1    0     1     1    3     NA   0         .p3. -0.588 -0.657
+4   4  y1   |  t1    0     1     1    4     NA   0         .p4.  0.099  0.099
+5   5  y2  ~~  y2    0     1     1    0      1   0         .p5.  1.000  1.000
+6   6  y1  ~~  y1    0     1     1    0      1   0         .p6.  1.000  1.000
+7   7  x1  ~~  x1    0     1     1    0     NA   1         .p7.  1.044  1.044
+8   8  y2 ~*~  y2    0     1     1    0      1   0         .p8.  1.000  0.894
+9   9  y1 ~*~  y1    0     1     1    0      1   0         .p9.  1.000  1.000
+10 10  y2  ~1        0     1     1    0      0   0        .p10.  0.000  0.000
+11 11  y1  ~1        0     1     1    0      0   0        .p11.  0.000  0.000
+12 12  x1  ~1        0     1     1    0     NA   1        .p12. -0.112 -0.112
+      se
+1  0.172
+2  0.396
+3  0.196
+4  0.208
+5  0.000
+6  0.000
+7  0.000
+8  0.000
+9  0.000
+10 0.000
+11 0.000
+12 0.000
+
+> varTable(fit)
+  name idx nobs    type exo user   mean   var nlev lnam
+1   y2   2   90 ordered   0    1     NA    NA    2  1|2
+2   y1   1   90 ordered   0    1     NA    NA    2  1|2
+3   x1   3   90 numeric   1    0 -0.112 1.044    0     
+
+> fitMeasures(fit)
+                         npar                          fmin 
+                        4.000                         0.001 
+                        chisq                            df 
+                        0.141                         1.000 
+                       pvalue                  chisq.scaled 
+                           NA                         0.144 
+                    df.scaled                 pvalue.scaled 
+                        1.000                         0.705 
+         chisq.scaling.factor                baseline.chisq 
+                        0.978                         1.640 
+                  baseline.df               baseline.pvalue 
+                        1.000                            NA 
+        baseline.chisq.scaled            baseline.df.scaled 
+                        1.640                         1.000 
+       baseline.pvalue.scaled baseline.chisq.scaling.factor 
+                        0.200                         1.000 
+                          cfi                           tli 
+                        1.000                         2.343 
+                   cfi.scaled                    tli.scaled 
+                        1.000                         2.338 
+                   cfi.robust                    tli.robust 
+                           NA                            NA 
+                         nnfi                           rfi 
+                        2.343                         0.914 
+                          nfi                          pnfi 
+                        0.914                         0.914 
+                          ifi                           rni 
+                        2.343                         2.343 
+                  nnfi.scaled                    rfi.scaled 
+                        2.338                         0.912 
+                   nfi.scaled                   pnfi.scaled 
+                        0.912                         0.912 
+                   ifi.scaled                    rni.scaled 
+                        2.338                         2.338 
+                  nnfi.robust                    rni.robust 
+                           NA                            NA 
+                        rmsea                rmsea.ci.lower 
+                        0.000                         0.000 
+               rmsea.ci.upper                rmsea.ci.level 
+                        0.204                         0.900 
+                 rmsea.pvalue                rmsea.close.h0 
+                        0.737                         0.050 
+        rmsea.notclose.pvalue             rmsea.notclose.h0 
+                        0.223                         0.080 
+                 rmsea.scaled         rmsea.ci.lower.scaled 
+                        0.000                         0.000 
+        rmsea.ci.upper.scaled           rmsea.pvalue.scaled 
+                        0.205                         0.734 
+ rmsea.notclose.pvalue.scaled                  rmsea.robust 
+                        0.225                            NA 
+        rmsea.ci.lower.robust         rmsea.ci.upper.robust 
+                           NA                            NA 
+          rmsea.pvalue.robust  rmsea.notclose.pvalue.robust 
+                           NA                            NA 
+                          rmr                    rmr_nomean 
+                        0.038                         0.046 
+                         srmr                  srmr_bentler 
+                        0.046                         0.038 
+          srmr_bentler_nomean                          crmr 
+                        0.046                         0.053 
+                  crmr_nomean                    srmr_mplus 
+                        0.092                            NA 
+            srmr_mplus_nomean                         cn_05 
+                           NA                      2431.161 
+                        cn_01                           gfi 
+                     4198.329                         0.997 
+                         agfi                          pgfi 
+                        0.987                         0.199 
+                          mfi                          wrmr 
+                        1.005                         0.168 
+attr(,"scaled.test")
+[1] "scaled.shifted"
+
+> fitMeasures(fit, "chisq")
+chisq 
+0.141 
+
+> fitMeasures(fit, c("chisq", "df", "pvalue", "rmsea", 
++     "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+ 0.141  1.000     NA  0.000  1.000 
+
+> if (fit@Data@nlevels == 1) {
++     head(lavScores(fit))
++     lavCor(fit)
++ }
+Warning: lavaan->lav_sc():  
+   scores only available if estimator is ML
+      y2    y1
+y2 1.000      
+y1 0.355 1.000
+
+> if (fit@Model@categorical) {
++     lavTables(fit, dimension = 0)
++     lavTables(fit, dimension = 1)
++     lavTables(fit, dimension = 2)
++ }
+Warning: lavaan->lav_tables_pattern():  
+   estimator DWLS is not using full information while est.prop is using full 
+   information
+  id lhs rhs nobs row col obs.freq obs.prop est.prop    X2
+1  1  y2  y1   70   1   1       21    0.300    0.210 2.692
+2  1  y2  y1   70   2   1       21    0.300    0.329 0.181
+3  1  y2  y1   70   1   2        3    0.043    0.068 0.658
+4  1  y2  y1   70   2   2       25    0.357    0.393 0.223
+
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (scaled)
+  simple second-order correction
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0         0.0000                              
+Model      1         0.1438    0.14378       1     0.7046
+> 
+> 
+> 
+> 
+> 

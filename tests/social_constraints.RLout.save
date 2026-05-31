@@ -1,0 +1,795 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : social_constraints
+> # ============================
+> # 3a. simple regression with constraints
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ 'anti ~ b1*pos + b2*neg + b3*dis'
++ )
+> object <- try(sem(
++ data = readRDS("social.rds"), constraints = ' b1 < b3; b2 < b3', model = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ AIC(object)
++ anova(object)
++ BIC(object)
++ coef(object)
++ fitted(object)
++ fitted.values(object)
++ as.numeric(lavInspect(object,  what = 'converged'))
++ lavInspect(object,  what = 'cov.lv')
++ lavInspect(object,  what = 'cov.ov')
++ lavInspect(object,  what = 'coverage')
++ lavInspect(object,  what = 'dx.free')
++ lavInspect(object,  what = 'est')
++ fitMeasures(object)
++ fitMeasures(object, 'chisq')
++ fitMeasures(object, c('chisq', 'df', 'pvalue', 'rmsea', 'cfi'))
++ lavInspect(object,  what = 'hessian')
++ lavCor(object)
++ lavTables(object, dimension = 0L)
++ lavTables(object, dimension = 1L)
++ lavTables(object, dimension = 2L)
++ lavTestLRT(object)
++ lavInspect(object,  what = 'mean.lv')
++ lavInspect(object,  what = 'mean.ov')
++ parameterEstimates(object)
++ parameterTable(object)
++ lavInspect(object,  what = 'partable')
++ lavInspect(object,  what = 'patterns')
++ lavInspect(object,  what = 'rsquare')
++ lavInspect(object,  what = 'sampstat')
++ lavInspect(object,  what = 'se')
++ standardizedSolution(object)
++ lavInspect(object,  what = 'start')
++ lavInspect(object,  what = 'std.all')
++ lavInspect(object,  what = 'std.lv')
++ lavInspect(object,  what = 'std.nox')
++ lavInspect(object,  what = 'th')
++ lavInspect(object,  what = 'theta')
++ lavInspect(object,  what = 'theta.cor')
++ varTable(object)
++ lavInspect(object,  what = 'wls.est')
++ lavInspect(object,  what = 'wls.obs')
++ lavInspect(object,  what = 'wls.v')
++ lavInspect(object)
++ lavNames(object, 'all')
++ logLik(object)
++ coef(update(object, orthogonal = TRUE))
++ summary(object)
++ vcov(object)
++ resid(object)
++ residuals(object)[[2]]
++ })}
+> AIC(object)
+[1] 887.6116
+> anova(object)
+Chi-Squared Test Statistic (unscaled)
+
+          Df    AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0               0.0000                              
+Model      0 887.61 905.17 0.0501   0.050068       0           
+> BIC(object)
+[1] 905.1725
+> coef(object)
+        b1         b2         b3 anti~~anti 
+     0.063      0.235      0.235      0.256 
+> fitted(object)
+$cov
+       anti    pos    neg    dis
+anti  0.309                     
+pos  -0.063  0.845              
+neg   0.133 -0.204  0.496       
+dis   0.107 -0.289  0.123  0.409
+
+> fitted.values(object)
+$cov
+       anti    pos    neg    dis
+anti  0.309                     
+pos  -0.063  0.845              
+neg   0.133 -0.204  0.496       
+dis   0.107 -0.289  0.123  0.409
+
+> as.numeric(lavInspect(object, what = "converged"))
+[1] 1
+> lavInspect(object, what = "cov.lv")
+<0 x 0 matrix>
+> lavInspect(object, what = "cov.ov")
+       anti    pos    neg    dis
+anti  0.309                     
+pos  -0.063  0.845              
+neg   0.133 -0.204  0.496       
+dis   0.107 -0.289  0.123  0.409
+> lavInspect(object, what = "coverage")
+     anti pos neg dis
+anti    1            
+pos     1   1        
+neg     1   1   1    
+dis     1   1   1   1
+> lavInspect(object, what = "dx.free")
+$lambda
+     anti pos neg dis
+anti    0   0   0   0
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$beta
+     anti pos    neg   dis
+anti    0   0 -0.007 0.007
+pos     0   0  0.000 0.000
+neg     0   0  0.000 0.000
+dis     0   0  0.000 0.000
+
+> lavInspect(object, what = "est")
+$lambda
+     anti pos neg dis
+anti    1   0   0   0
+pos     0   1   0   0
+neg     0   0   1   0
+dis     0   0   0   1
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+       anti    pos    neg    dis
+anti  0.256                     
+pos   0.000  0.845              
+neg   0.000 -0.204  0.496       
+dis   0.000 -0.289  0.123  0.409
+
+$beta
+     anti   pos   neg   dis
+anti    0 0.063 0.235 0.235
+pos     0 0.000 0.000 0.000
+neg     0 0.000 0.000 0.000
+dis     0 0.000 0.000 0.000
+
+> fitMeasures(object)
+                 npar                  fmin                 chisq 
+                4.000                 0.000                 0.050 
+                   df                pvalue        baseline.chisq 
+                0.000                    NA               111.133 
+          baseline.df       baseline.pvalue                   cfi 
+                3.000                 0.000                 1.000 
+                  tli                  nnfi                   rfi 
+                1.000                 1.000                 1.000 
+                  nfi                  pnfi                   ifi 
+                1.000                 0.000                 1.000 
+                  rni                  logl     unrestricted.logl 
+                1.000              -439.806              -439.781 
+                  aic                   bic                ntotal 
+              887.612               905.173               596.000 
+                 bic2                 rmsea        rmsea.ci.lower 
+              892.474                 0.000                 0.000 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.000                 0.900                    NA 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                    NA                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.001                 0.001                 0.002 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.002                 0.002                 0.003 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.003                 0.002                 0.002 
+                cn_05                 cn_01                   gfi 
+                1.000                 1.000                 1.000 
+                 agfi                  pgfi                   mfi 
+                1.000                 0.000                 1.000 
+                 ecvi 
+                0.014 
+> fitMeasures(object, "chisq")
+chisq 
+ 0.05 
+> fitMeasures(object, c("chisq", "df", "pvalue", "rmsea", "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+  0.05   0.00     NA   0.00   1.00 
+> lavInspect(object, what = "hessian")
+               b1     b2     b3 ant~~n
+b1          3.298                     
+b2         -0.796  1.936              
+b3         -1.129  0.480  1.596       
+anti~~anti  0.000  0.028 -0.028  7.621
+> lavCor(object)
+       anti    pos    neg    dis
+anti  1.000                     
+pos  -0.123  1.000              
+neg   0.344 -0.315  1.000       
+dis   0.296 -0.492  0.273  1.000
+> lavTables(object, dimension = 0L)
+> lavTables(object, dimension = 1L)
+> lavTables(object, dimension = 2L)
+> lavTestLRT(object)
+Chi-Squared Test Statistic (unscaled)
+
+          Df    AIC    BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0               0.0000                              
+Model      0 887.61 905.17 0.0501   0.050068       0           
+> lavInspect(object, what = "mean.lv")
+numeric(0)
+> lavInspect(object, what = "mean.ov")
+numeric(0)
+> parameterEstimates(object)
+    lhs op  rhs label    est    se      z pvalue ci.lower ci.upper
+1  anti  ~  pos    b1  0.063 0.026  2.416  0.016    0.012    0.114
+2  anti  ~  neg    b2  0.235 0.022 10.546  0.000    0.192    0.279
+3  anti  ~  dis    b3  0.235 0.022 10.546  0.000    0.192    0.279
+4  anti ~~ anti        0.256 0.015 17.263  0.000    0.227    0.285
+5   pos ~~  pos        0.845 0.000     NA     NA    0.845    0.845
+6   pos ~~  neg       -0.204 0.000     NA     NA   -0.204   -0.204
+7   pos ~~  dis       -0.289 0.000     NA     NA   -0.289   -0.289
+8   neg ~~  neg        0.496 0.000     NA     NA    0.496    0.496
+9   neg ~~  dis        0.123 0.000     NA     NA    0.123    0.123
+10  dis ~~  dis        0.409 0.000     NA     NA    0.409    0.409
+> parameterTable(object)
+   id  lhs op  rhs user block group free ustart exo label plabel  start    est
+1   1 anti  ~  pos    1     1     1    1     NA   0    b1   .p1.  0.062  0.063
+2   2 anti  ~  neg    1     1     1    2     NA   0    b2   .p2.  0.240  0.235
+3   3 anti  ~  dis    1     1     1    3     NA   0    b3   .p3.  0.229  0.235
+4   4 anti ~~ anti    0     1     1    4     NA   0         .p4.  0.256  0.256
+5   5  pos ~~  pos    0     1     1    0     NA   1         .p5.  0.845  0.845
+6   6  pos ~~  neg    0     1     1    0     NA   1         .p6. -0.204 -0.204
+7   7  pos ~~  dis    0     1     1    0     NA   1         .p7. -0.289 -0.289
+8   8  neg ~~  neg    0     1     1    0     NA   1         .p8.  0.496  0.496
+9   9  neg ~~  dis    0     1     1    0     NA   1         .p9.  0.123  0.123
+10 10  dis ~~  dis    0     1     1    0     NA   1        .p10.  0.409  0.409
+11 11   b1  <   b3    1     0     0    0     NA   0               0.000  0.172
+12 12   b2  <   b3    1     0     0    0     NA   0               0.000  0.000
+      se
+1  0.026
+2  0.022
+3  0.022
+4  0.015
+5  0.000
+6  0.000
+7  0.000
+8  0.000
+9  0.000
+10 0.000
+11 0.000
+12 0.000
+> lavInspect(object, what = "partable")
+$lambda
+     anti pos neg dis
+anti    0   0   0   0
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+     anti pos neg dis
+anti    4            
+pos     0   5        
+neg     0   6   8    
+dis     0   7   9  10
+
+$beta
+     anti pos neg dis
+anti    0   1   2   3
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+> lavInspect(object, what = "patterns")
+    anti pos neg dis
+596    1   1   1   1
+> lavInspect(object, what = "rsquare")
+anti 
+0.17 
+> lavInspect(object, what = "sampstat")
+$cov
+       anti    pos    neg    dis
+anti  0.309                     
+pos  -0.063  0.845              
+neg   0.135 -0.204  0.496       
+dis   0.105 -0.289  0.123  0.409
+
+> lavInspect(object, what = "se")
+$lambda
+     anti pos neg dis
+anti    0   0   0   0
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+      anti   pos   neg   dis
+anti 0.015                  
+pos  0.000 0.000            
+neg  0.000 0.000 0.000      
+dis  0.000 0.000 0.000 0.000
+
+$beta
+     anti   pos   neg   dis
+anti    0 0.026 0.022 0.022
+pos     0 0.000 0.000 0.000
+neg     0 0.000 0.000 0.000
+dis     0 0.000 0.000 0.000
+
+> standardizedSolution(object)
+    lhs op  rhs label est.std    se      z pvalue ci.lower ci.upper
+1  anti  ~  pos    b1   0.104 0.043  2.430  0.015    0.020    0.188
+2  anti  ~  neg    b2   0.298 0.025 11.934  0.000    0.249    0.347
+3  anti  ~  dis    b3   0.271 0.023 11.934  0.000    0.226    0.315
+4  anti ~~ anti         0.830 0.027 30.946  0.000    0.777    0.883
+5   pos ~~  pos         1.000 0.000     NA     NA    1.000    1.000
+6   pos ~~  neg        -0.315 0.000     NA     NA   -0.315   -0.315
+7   pos ~~  dis        -0.492 0.000     NA     NA   -0.492   -0.492
+8   neg ~~  neg         1.000 0.000     NA     NA    1.000    1.000
+9   neg ~~  dis         0.273 0.000     NA     NA    0.273    0.273
+10  dis ~~  dis         1.000 0.000     NA     NA    1.000    1.000
+> lavInspect(object, what = "start")
+$lambda
+     anti pos neg dis
+anti    1   0   0   0
+pos     0   1   0   0
+neg     0   0   1   0
+dis     0   0   0   1
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+       anti    pos    neg    dis
+anti  0.256                     
+pos   0.000  0.845              
+neg   0.000 -0.204  0.496       
+dis   0.000 -0.289  0.123  0.409
+
+$beta
+     anti   pos  neg   dis
+anti    0 0.062 0.24 0.229
+pos     0 0.000 0.00 0.000
+neg     0 0.000 0.00 0.000
+dis     0 0.000 0.00 0.000
+
+> lavInspect(object, what = "std.all")
+$lambda
+     anti pos neg dis
+anti    1   0   0   0
+pos     0   1   0   0
+neg     0   0   1   0
+dis     0   0   0   1
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+       anti    pos    neg    dis
+anti  0.830                     
+pos   0.000  1.000              
+neg   0.000 -0.315  1.000       
+dis   0.000 -0.492  0.273  1.000
+
+$beta
+     anti   pos   neg   dis
+anti    0 0.104 0.298 0.271
+pos     0 0.000 0.000 0.000
+neg     0 0.000 0.000 0.000
+dis     0 0.000 0.000 0.000
+
+> lavInspect(object, what = "std.lv")
+$lambda
+     anti pos neg dis
+anti    1   0   0   0
+pos     0   1   0   0
+neg     0   0   1   0
+dis     0   0   0   1
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+       anti    pos    neg    dis
+anti  0.256                     
+pos   0.000  0.845              
+neg   0.000 -0.204  0.496       
+dis   0.000 -0.289  0.123  0.409
+
+$beta
+     anti   pos   neg   dis
+anti    0 0.063 0.235 0.235
+pos     0 0.000 0.000 0.000
+neg     0 0.000 0.000 0.000
+dis     0 0.000 0.000 0.000
+
+> lavInspect(object, what = "std.nox")
+$lambda
+     anti pos neg dis
+anti    1   0   0   0
+pos     0   1   0   0
+neg     0   0   1   0
+dis     0   0   0   1
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+       anti    pos    neg    dis
+anti  0.830                     
+pos   0.000  0.845              
+neg   0.000 -0.204  0.496       
+dis   0.000 -0.289  0.123  0.409
+
+$beta
+     anti   pos   neg   dis
+anti    0 0.113 0.424 0.424
+pos     0 0.000 0.000 0.000
+neg     0 0.000 0.000 0.000
+dis     0 0.000 0.000 0.000
+
+> lavInspect(object, what = "th")
+numeric(0)
+> lavInspect(object, what = "theta")
+       anti    pos    neg    dis
+anti  0.256                     
+pos   0.000  0.845              
+neg   0.000 -0.204  0.496       
+dis   0.000 -0.289  0.123  0.409
+> lavInspect(object, what = "theta.cor")
+       anti    pos    neg    dis
+anti  1.000                     
+pos   0.000  1.000              
+neg   0.000 -0.315  1.000       
+dis   0.000 -0.492  0.273  1.000
+> varTable(object)
+  name idx nobs    type exo user   mean   var nlev lnam
+1 anti   5  601 numeric   0    0  1.435 0.314    0     
+2  pos   6  597 numeric   1    0  3.032 0.850    0     
+3  neg   7  597 numeric   1    0  2.004 0.496    0     
+4  dis   8  603 numeric   1    0 -2.758 0.409    0     
+> lavInspect(object, what = "wls.est")
+anti~~anti  anti~~pos  anti~~neg  anti~~dis   pos~~pos   pos~~neg   pos~~dis 
+     0.309     -0.063      0.133      0.107      0.845     -0.204     -0.289 
+  neg~~neg   neg~~dis   dis~~dis 
+     0.496      0.123      0.409 
+> lavInspect(object, what = "wls.obs")
+anti~~anti  anti~~pos  anti~~neg  anti~~dis   pos~~pos   pos~~neg   pos~~dis 
+     0.309     -0.063      0.135      0.105      0.845     -0.204     -0.289 
+  neg~~neg   neg~~dis   dis~~dis 
+     0.496      0.123      0.409 
+> lavInspect(object, what = "wls.v")
+           ant~~nt ant~~p ant~~ng ant~~d ps~~ps ps~~ng ps~~ds ng~~ng ng~~ds
+anti~~anti   7.621 -0.959  -3.587 -3.587      0      0      0      0      0
+anti~~pos   -0.959  6.516   2.080  4.486      0      0      0      0      0
+anti~~neg   -3.587  2.080  10.610  0.159      0      0      0      0      0
+anti~~dis   -3.587  4.486   0.159 14.551      0      0      0      0      0
+pos~~pos     0.000  0.000   0.000  0.000      0      0      0      0      0
+pos~~neg     0.000  0.000   0.000  0.000      0      0      0      0      0
+pos~~dis     0.000  0.000   0.000  0.000      0      0      0      0      0
+neg~~neg     0.000  0.000   0.000  0.000      0      0      0      0      0
+neg~~dis     0.000  0.000   0.000  0.000      0      0      0      0      0
+dis~~dis     0.000  0.000   0.000  0.000      0      0      0      0      0
+           ds~~ds
+anti~~anti      0
+anti~~pos       0
+anti~~neg       0
+anti~~dis       0
+pos~~pos        0
+pos~~neg        0
+pos~~dis        0
+neg~~neg        0
+neg~~dis        0
+dis~~dis        0
+> lavInspect(object)
+$lambda
+     anti pos neg dis
+anti    0   0   0   0
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+$theta
+     anti pos neg dis
+anti    0            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$psi
+     anti pos neg dis
+anti    4            
+pos     0   0        
+neg     0   0   0    
+dis     0   0   0   0
+
+$beta
+     anti pos neg dis
+anti    0   1   2   3
+pos     0   0   0   0
+neg     0   0   0   0
+dis     0   0   0   0
+
+> lavNames(object, "all")
+$ov
+$ov[[1]]
+[1] "anti" "pos"  "neg"  "dis" 
+
+
+$ov.x
+$ov.x[[1]]
+[1] "pos" "neg" "dis"
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "anti"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "anti" "pos"  "neg"  "dis" 
+
+
+$ov.y
+$ov.y[[1]]
+[1] "anti"
+
+
+$ov.num
+$ov.num[[1]]
+[1] "anti" "pos"  "neg"  "dis" 
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+character(0)
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+[1] "pos" "neg" "dis"
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "anti"
+
+
+$lv
+$lv[[1]]
+character(0)
+
+
+$lv.regular
+$lv.regular[[1]]
+character(0)
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+named character(0)
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "anti"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "pos" "neg" "dis"
+
+
+> logLik(object)
+'log Lik.' -439.8058 (df=4)
+> coef(update(object, orthogonal = TRUE))
+        b1         b2         b3 anti~~anti 
+     0.063      0.235      0.235      0.256 
+> summary(object)
+lavaan 0.6-22.2670 ended normally after 51 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                         4
+  Number of inequality constraints                   2
+
+                                                  Used       Total
+  Number of observations                           596         603
+
+Model Test User Model:
+                                                      
+  Test statistic                                 0.050
+  Degrees of freedom                                 0
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  anti ~                                              
+    pos       (b1)    0.063    0.026    2.416    0.016
+    neg       (b2)    0.235    0.022   10.546    0.000
+    dis       (b3)    0.235    0.022   10.546    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .anti              0.256    0.015   17.263    0.000
+
+> vcov(object)
+              b1    b2    b3 ant~~n
+b1         0.001                   
+b2         0.000 0.000             
+b3         0.000 0.000 0.000       
+anti~~anti 0.000 0.000 0.000  0.000
+> resid(object)
+$type
+[1] "raw"
+
+$cov
+       anti    pos    neg    dis
+anti  0.000                     
+pos   0.000  0.000              
+neg   0.002  0.000  0.000       
+dis  -0.002  0.000  0.000  0.000
+
+> residuals(object)[[2]]
+       anti    pos    neg    dis
+anti  0.000                     
+pos   0.000  0.000              
+neg   0.002  0.000  0.000       
+dis  -0.002  0.000  0.000  0.000
+Warning messages:
+1: lavaan->lav_tables_pattern():  
+   no categorical variables are found 
+2: lavaan->lav_tables_oneway():  
+   no categorical variables are found 
+3: lavaan->lav_tables_pairwise_cells():  
+   no categorical variables are found 
+> 

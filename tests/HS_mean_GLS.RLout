@@ -1,0 +1,2243 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : HS_mean_GLS
+> # =====================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++   visual  =~ x1 + x2 + x3
++   textual =~ x4 + x5 + x6
++   speed   =~ x7 + x8 + x9
++ '
++ )
+> object <- try(sem(
++ estimator = 'GLS', data = readRDS("HS.rds"), meanstructure = TRUE, model = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ AIC(object)
++ anova(object)
++ BIC(object)
++ coef(object)
++ fitted(object)
++ fitted.values(object)
++ as.numeric(lavInspect(object,  what = 'converged'))
++ lavInspect(object,  what = 'cov.lv')
++ lavInspect(object,  what = 'cov.ov')
++ lavInspect(object,  what = 'coverage')
++ lavInspect(object,  what = 'dx.free')
++ lavInspect(object,  what = 'est')
++ fitMeasures(object)
++ fitMeasures(object, 'chisq')
++ fitMeasures(object, c('chisq', 'df', 'pvalue', 'rmsea', 'cfi'))
++ lavInspect(object,  what = 'hessian')
++ lavCor(object)
++ lavTables(object, dimension = 0L)
++ lavTables(object, dimension = 1L)
++ lavTables(object, dimension = 2L)
++ lavTestLRT(object)
++ lavInspect(object,  what = 'mean.lv')
++ lavInspect(object,  what = 'mean.ov')
++ parameterEstimates(object)
++ parameterTable(object)
++ lavInspect(object,  what = 'partable')
++ lavInspect(object,  what = 'patterns')
++ lavInspect(object,  what = 'rsquare')
++ lavInspect(object,  what = 'sampstat')
++ lavInspect(object,  what = 'se')
++ standardizedSolution(object)
++ lavInspect(object,  what = 'start')
++ lavInspect(object,  what = 'std.all')
++ lavInspect(object,  what = 'std.lv')
++ lavInspect(object,  what = 'std.nox')
++ lavInspect(object,  what = 'th')
++ lavInspect(object,  what = 'theta')
++ lavInspect(object,  what = 'theta.cor')
++ varTable(object)
++ lavInspect(object,  what = 'wls.est')
++ lavInspect(object,  what = 'wls.obs')
++ lavInspect(object,  what = 'wls.v')
++ lavInspect(object)
++ lavNames(object, 'all')
++ logLik(object)
++ coef(update(object, orthogonal = TRUE))
++ summary(object)
++ vcov(object)
++ resid(object)
++ residuals(object)[[2]]
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'acov')
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'fsm')
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = 'Bartlett'), 'se')
++ lavInspect(object,  what = 'gamma')
++ head(lavScores(object))
++ nobs(object)
++ head(resid(object, 'obs'))
++ head(predict(object))
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'acov')
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'fsm')
++ attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), 'se')
++ })}
+> AIC(object)
+[1] NA
+> anova(object)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)    
+Saturated  0          0.000                                  
+Model     24         77.471     77.471      24  1.531e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> BIC(object)
+[1] NA
+> coef(object)
+      visual=~x2       visual=~x3      textual=~x5      textual=~x6 
+           0.481            0.702            1.110            0.933 
+       speed=~x8        speed=~x9           x1~~x1           x2~~x2 
+           1.112            1.115            0.549            1.047 
+          x3~~x3           x4~~x4           x5~~x5           x6~~x6 
+           0.749            0.334            0.386            0.355 
+          x7~~x7           x8~~x8           x9~~x9   visual~~visual 
+           0.594            0.481            0.455            0.612 
+textual~~textual     speed~~speed  visual~~textual    visual~~speed 
+           0.938            0.410            0.402            0.302 
+  textual~~speed             x1~1             x2~1             x3~1 
+           0.197            4.936            6.088            2.250 
+            x4~1             x5~1             x6~1             x7~1 
+           3.061            4.341            2.186            4.186 
+            x8~1             x9~1 
+           5.527            5.374 
+> fitted(object)
+$cov
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 1.162                                                
+x2 0.295 1.189                                          
+x3 0.430 0.207 1.051                                    
+x4 0.402 0.193 0.282 1.273                              
+x5 0.446 0.215 0.313 1.042 1.542                        
+x6 0.375 0.180 0.263 0.876 0.972 1.173                  
+x7 0.302 0.145 0.212 0.197 0.219 0.184 1.004            
+x8 0.335 0.161 0.236 0.219 0.243 0.204 0.456 0.988      
+x9 0.337 0.162 0.236 0.220 0.244 0.205 0.458 0.509 0.965
+
+$mean
+   x1    x2    x3    x4    x5    x6    x7    x8    x9 
+4.936 6.088 2.250 3.061 4.341 2.186 4.186 5.527 5.374 
+
+> fitted.values(object)
+$cov
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 1.162                                                
+x2 0.295 1.189                                          
+x3 0.430 0.207 1.051                                    
+x4 0.402 0.193 0.282 1.273                              
+x5 0.446 0.215 0.313 1.042 1.542                        
+x6 0.375 0.180 0.263 0.876 0.972 1.173                  
+x7 0.302 0.145 0.212 0.197 0.219 0.184 1.004            
+x8 0.335 0.161 0.236 0.219 0.243 0.204 0.456 0.988      
+x9 0.337 0.162 0.236 0.220 0.244 0.205 0.458 0.509 0.965
+
+$mean
+   x1    x2    x3    x4    x5    x6    x7    x8    x9 
+4.936 6.088 2.250 3.061 4.341 2.186 4.186 5.527 5.374 
+
+> as.numeric(lavInspect(object, what = "converged"))
+[1] 1
+> lavInspect(object, what = "cov.lv")
+        visual textul speed
+visual   0.612             
+textual  0.402  0.938      
+speed    0.302  0.197 0.410
+> lavInspect(object, what = "cov.ov")
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 1.162                                                
+x2 0.295 1.189                                          
+x3 0.430 0.207 1.051                                    
+x4 0.402 0.193 0.282 1.273                              
+x5 0.446 0.215 0.313 1.042 1.542                        
+x6 0.375 0.180 0.263 0.876 0.972 1.173                  
+x7 0.302 0.145 0.212 0.197 0.219 0.184 1.004            
+x8 0.335 0.161 0.236 0.219 0.243 0.204 0.456 0.988      
+x9 0.337 0.162 0.236 0.220 0.244 0.205 0.458 0.509 0.965
+> lavInspect(object, what = "coverage")
+   x1 x2 x3 x4 x5 x6 x7 x8 x9
+x1  1                        
+x2  1  1                     
+x3  1  1  1                  
+x4  1  1  1  1               
+x5  1  1  1  1  1            
+x6  1  1  1  1  1  1         
+x7  1  1  1  1  1  1  1      
+x8  1  1  1  1  1  1  1  1   
+x9  1  1  1  1  1  1  1  1  1
+> lavInspect(object, what = "dx.free")
+$lambda
+   visual textul speed
+x1      0      0     0
+x2      0      0     0
+x3      0      0     0
+x4      0      0     0
+x5      0      0     0
+x6      0      0     0
+x7      0      0     0
+x8      0      0     0
+x9      0      0     0
+
+$theta
+   x1 x2 x3 x4 x5 x6 x7 x8 x9
+x1  0                        
+x2  0  0                     
+x3  0  0  0                  
+x4  0  0  0  0               
+x5  0  0  0  0  0            
+x6  0  0  0  0  0  0         
+x7  0  0  0  0  0  0  0      
+x8  0  0  0  0  0  0  0  0   
+x9  0  0  0  0  0  0  0  0  0
+
+$psi
+        visual textul speed
+visual       0             
+textual      0      0      
+speed        0      0     0
+
+$nu
+   intrcp
+x1      0
+x2      0
+x3      0
+x4      0
+x5      0
+x6      0
+x7      0
+x8      0
+x9      0
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavInspect(object, what = "est")
+$lambda
+   visual textul speed
+x1  1.000  0.000 0.000
+x2  0.481  0.000 0.000
+x3  0.702  0.000 0.000
+x4  0.000  1.000 0.000
+x5  0.000  1.110 0.000
+x6  0.000  0.933 0.000
+x7  0.000  0.000 1.000
+x8  0.000  0.000 1.112
+x9  0.000  0.000 1.115
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.549                                                
+x2 0.000 1.047                                          
+x3 0.000 0.000 0.749                                    
+x4 0.000 0.000 0.000 0.334                              
+x5 0.000 0.000 0.000 0.000 0.386                        
+x6 0.000 0.000 0.000 0.000 0.000 0.355                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.594            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.481      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.455
+
+$psi
+        visual textul speed
+visual   0.612             
+textual  0.402  0.938      
+speed    0.302  0.197 0.410
+
+$nu
+   intrcp
+x1  4.936
+x2  6.088
+x3  2.250
+x4  3.061
+x5  4.341
+x6  2.186
+x7  4.186
+x8  5.527
+x9  5.374
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> fitMeasures(object)
+                 npar                  fmin                 chisq 
+               30.000                 0.129                77.471 
+                   df                pvalue        baseline.chisq 
+               24.000                 0.000               277.991 
+          baseline.df       baseline.pvalue                   cfi 
+               36.000                 0.000                 0.779 
+                  tli                  nnfi                   rfi 
+                0.669                 0.669                 0.582 
+                  nfi                  pnfi                   ifi 
+                0.721                 0.481                 0.789 
+                  rni                 rmsea        rmsea.ci.lower 
+                0.779                 0.086                 0.065 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.108                 0.900                 0.003 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                 0.702                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.103                 0.113                 0.080 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.080                 0.088                 0.075 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.084                 0.127                 0.090 
+                cn_05                 cn_01                   gfi 
+              142.015               167.436                 0.996 
+                 agfi                  pgfi                   mfi 
+                0.992                 0.443                 0.915 
+                 ecvi 
+                0.458 
+> fitMeasures(object, "chisq")
+ chisq 
+77.471 
+> fitMeasures(object, c("chisq", "df", "pvalue", "rmsea", "cfi"))
+ chisq     df pvalue  rmsea    cfi 
+77.471 24.000  0.000  0.086  0.779 
+> lavInspect(object, what = "hessian")
+                 vsl=~2 vsl=~3 txt=~5 txt=~6 spd=~8 spd=~9 x1~~x1 x2~~x2 x3~~x3
+visual=~x2        0.358                                                        
+visual=~x3       -0.150  0.463                                                 
+textual=~x5       0.000  0.172  1.416                                          
+textual=~x6      -0.046 -0.090 -0.624  1.784                                   
+speed=~x8        -0.021 -0.003 -0.034 -0.022  0.513                            
+speed=~x9        -0.035 -0.087 -0.078  0.034 -0.014  0.525                     
+x1~~x1           -0.031 -0.097 -0.001  0.004 -0.007 -0.019  0.652              
+x2~~x2            0.055 -0.014  0.000  0.001 -0.001 -0.003  0.005  0.379       
+x3~~x3           -0.031  0.155  0.023 -0.018  0.000  0.000  0.053  0.024  0.590
+x4~~x4            0.000  0.000 -0.240 -0.193  0.001  0.000  0.037  0.000  0.000
+x5~~x5           -0.001  0.028  0.444 -0.212 -0.003 -0.005  0.001  0.000  0.018
+x6~~x6            0.000  0.000 -0.216  0.574  0.000  0.000  0.007  0.003  0.011
+x7~~x7            0.026  0.001  0.002  0.000 -0.090 -0.043  0.009  0.013  0.000
+x8~~x8           -0.005 -0.004 -0.009 -0.007  0.337 -0.089  0.006  0.001  0.001
+x9~~x9            0.003  0.005  0.013 -0.005 -0.095  0.363  0.041  0.005  0.020
+visual~~visual    0.068  0.088  0.007 -0.011 -0.013 -0.039  0.372  0.013  0.055
+textual~~textual -0.015  0.007  0.120  0.388  0.001 -0.002  0.058  0.004  0.001
+speed~~speed      0.000 -0.068 -0.008 -0.001  0.431  0.823  0.048  0.000  0.034
+visual~~textual  -0.062  0.229  0.439 -0.325 -0.003 -0.021 -0.295 -0.014  0.014
+visual~~speed     0.111 -0.120  0.000 -0.012 -0.100 -0.452 -0.268  0.000 -0.086
+textual~~speed   -0.023 -0.032 -0.275  0.047  0.144 -0.034  0.106  0.000 -0.011
+x1~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+                 x4~~x4 x5~~x5 x6~~x6 x7~~x7 x8~~x8 x9~~x9 vsl~~v txtl~~t
+visual=~x2                                                               
+visual=~x3                                                               
+textual=~x5                                                              
+textual=~x6                                                              
+speed=~x8                                                                
+speed=~x9                                                                
+x1~~x1                                                                   
+x2~~x2                                                                   
+x3~~x3                                                                   
+x4~~x4            1.968                                                  
+x5~~x5            0.349  1.348                                           
+x6~~x6            0.227  0.307  2.181                                    
+x7~~x7            0.039  0.009  0.000  0.742                             
+x8~~x8            0.021  0.005  0.003  0.157  1.107                      
+x9~~x9            0.002  0.017  0.002  0.036  0.077  1.132               
+visual~~visual    0.044  0.014  0.033  0.023  0.013  0.113  0.689        
+textual~~textual  0.091  0.032  0.083  0.009  0.000  0.003  0.063   0.594
+speed~~speed      0.000  0.016  0.000  0.044  0.215  0.474  0.121   0.017
+visual~~textual  -0.127  0.042 -0.104 -0.029 -0.005  0.036 -0.415  -0.386
+visual~~speed    -0.008 -0.029  0.004  0.064 -0.105 -0.462 -0.579   0.066
+textual~~speed    0.011 -0.045 -0.007 -0.040  0.020 -0.073  0.174  -0.203
+x1~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x2~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x3~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x4~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x5~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x6~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x7~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x8~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x9~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+                 spd~~s vsl~~t vsl~~s txtl~~s   x1~1   x2~1   x3~1   x4~1
+visual=~x2                                                               
+visual=~x3                                                               
+textual=~x5                                                              
+textual=~x6                                                              
+speed=~x8                                                                
+speed=~x9                                                                
+x1~~x1                                                                   
+x2~~x2                                                                   
+x3~~x3                                                                   
+x4~~x4                                                                   
+x5~~x5                                                                   
+x6~~x6                                                                   
+x7~~x7                                                                   
+x8~~x8                                                                   
+x9~~x9                                                                   
+visual~~visual                                                           
+textual~~textual                                                         
+speed~~speed      2.231                                                  
+visual~~textual   0.092  1.405                                           
+visual~~speed    -1.041 -0.044  2.723                                    
+textual~~speed   -0.393 -0.471 -0.656   2.337                            
+x1~1              0.000  0.000  0.000   0.000  1.140                     
+x2~1              0.000  0.000  0.000   0.000 -0.104  0.869              
+x3~1              0.000  0.000  0.000   0.000 -0.325 -0.218  1.085       
+x4~1              0.000  0.000  0.000   0.000 -0.270 -0.010 -0.030  1.980
+x5~1              0.000  0.000  0.000   0.000  0.034 -0.006  0.189 -0.835
+x6~1              0.000  0.000  0.000   0.000 -0.116 -0.077 -0.147 -0.672
+x7~1              0.000  0.000  0.000   0.000  0.136  0.158  0.005 -0.279
+x8~1              0.000  0.000  0.000   0.000 -0.112 -0.046 -0.038  0.205
+x9~1              0.000  0.000  0.000   0.000 -0.288 -0.097 -0.199  0.070
+                   x5~1   x6~1   x7~1   x8~1   x9~1
+visual=~x2                                         
+visual=~x3                                         
+textual=~x5                                        
+textual=~x6                                        
+speed=~x8                                          
+speed=~x9                                          
+x1~~x1                                             
+x2~~x2                                             
+x3~~x3                                             
+x4~~x4                                             
+x5~~x5                                             
+x6~~x6                                             
+x7~~x7                                             
+x8~~x8                                             
+x9~~x9                                             
+visual~~visual                                     
+textual~~textual                                   
+speed~~speed                                       
+visual~~textual                                    
+visual~~speed                                      
+textual~~speed                                     
+x1~1                                               
+x2~1                                               
+x3~1                                               
+x4~1                                               
+x5~1              1.639                            
+x6~1             -0.782  2.085                     
+x7~1              0.137 -0.009  1.216              
+x8~1             -0.097 -0.072 -0.559  1.485       
+x9~1             -0.185  0.065 -0.267 -0.393  1.502
+> lavCor(object)
+       x1     x2     x3     x4     x5     x6     x7     x8     x9
+x1  1.000                                                        
+x2  0.297  1.000                                                 
+x3  0.441  0.340  1.000                                          
+x4  0.373  0.153  0.159  1.000                                   
+x5  0.293  0.139  0.077  0.733  1.000                            
+x6  0.357  0.193  0.198  0.704  0.720  1.000                     
+x7  0.067 -0.076  0.072  0.174  0.102  0.121  1.000              
+x8  0.224  0.092  0.186  0.107  0.139  0.150  0.487  1.000       
+x9  0.390  0.206  0.329  0.208  0.227  0.214  0.341  0.449  1.000
+> lavTables(object, dimension = 0L)
+> lavTables(object, dimension = 1L)
+> lavTables(object, dimension = 2L)
+> lavTestLRT(object)
+Chi-Squared Test Statistic (unscaled)
+
+          Df AIC BIC  Chisq Chisq diff Df diff Pr(>Chisq)    
+Saturated  0          0.000                                  
+Model     24         77.471     77.471      24  1.531e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> lavInspect(object, what = "mean.lv")
+ visual textual   speed 
+      0       0       0 
+> lavInspect(object, what = "mean.ov")
+   x1    x2    x3    x4    x5    x6    x7    x8    x9 
+4.936 6.088 2.250 3.061 4.341 2.186 4.186 5.527 5.374 
+> parameterEstimates(object)
+       lhs op     rhs   est    se      z pvalue ci.lower ci.upper
+1   visual =~      x1 1.000 0.000     NA     NA    1.000    1.000
+2   visual =~      x2 0.481 0.110  4.369      0    0.265    0.697
+3   visual =~      x3 0.702 0.115  6.081      0    0.476    0.929
+4  textual =~      x4 1.000 0.000     NA     NA    1.000    1.000
+5  textual =~      x5 1.110 0.066 16.737      0    0.980    1.240
+6  textual =~      x6 0.933 0.057 16.274      0    0.821    1.046
+7    speed =~      x7 1.000 0.000     NA     NA    1.000    1.000
+8    speed =~      x8 1.112 0.138  8.069      0    0.842    1.382
+9    speed =~      x9 1.115 0.149  7.484      0    0.823    1.407
+10      x1 ~~      x1 0.549 0.101  5.418      0    0.351    0.748
+11      x2 ~~      x2 1.047 0.095 11.028      0    0.861    1.233
+12      x3 ~~      x3 0.749 0.081  9.292      0    0.591    0.907
+13      x4 ~~      x4 0.334 0.046  7.335      0    0.245    0.424
+14      x5 ~~      x5 0.386 0.056  6.850      0    0.275    0.496
+15      x6 ~~      x6 0.355 0.042  8.394      0    0.272    0.438
+16      x7 ~~      x7 0.594 0.076  7.863      0    0.446    0.742
+17      x8 ~~      x8 0.481 0.066  7.338      0    0.353    0.610
+18      x9 ~~      x9 0.455 0.065  6.992      0    0.327    0.583
+19  visual ~~  visual 0.612 0.129  4.752      0    0.360    0.865
+20 textual ~~ textual 0.938 0.110  8.517      0    0.723    1.154
+21   speed ~~   speed 0.410 0.087  4.741      0    0.241    0.580
+22  visual ~~ textual 0.402 0.074  5.406      0    0.256    0.547
+23  visual ~~   speed 0.302 0.054  5.636      0    0.197    0.407
+24 textual ~~   speed 0.197 0.050  3.928      0    0.099    0.295
+25      x1 ~1         4.936 0.067 73.229      0    4.804    5.068
+26      x2 ~1         6.088 0.068 89.556      0    5.955    6.221
+27      x3 ~1         2.250 0.065 34.464      0    2.122    2.378
+28      x4 ~1         3.061 0.067 45.542      0    2.929    3.193
+29      x5 ~1         4.341 0.075 58.258      0    4.195    4.487
+30      x6 ~1         2.186 0.063 34.552      0    2.062    2.310
+31      x7 ~1         4.186 0.063 66.544      0    4.063    4.309
+32      x8 ~1         5.527 0.058 94.539      0    5.412    5.642
+33      x9 ~1         5.374 0.058 92.238      0    5.260    5.488
+34  visual ~1         0.000 0.000     NA     NA    0.000    0.000
+35 textual ~1         0.000 0.000     NA     NA    0.000    0.000
+36   speed ~1         0.000 0.000     NA     NA    0.000    0.000
+> parameterTable(object)
+   id     lhs op     rhs user block group free ustart exo label plabel start
+1   1  visual =~      x1    1     1     1    0      1   0         .p1. 1.000
+2   2  visual =~      x2    1     1     1    1     NA   0         .p2. 0.778
+3   3  visual =~      x3    1     1     1    2     NA   0         .p3. 1.107
+4   4 textual =~      x4    1     1     1    0      1   0         .p4. 1.000
+5   5 textual =~      x5    1     1     1    3     NA   0         .p5. 1.133
+6   6 textual =~      x6    1     1     1    4     NA   0         .p6. 0.924
+7   7   speed =~      x7    1     1     1    0      1   0         .p7. 1.000
+8   8   speed =~      x8    1     1     1    5     NA   0         .p8. 1.225
+9   9   speed =~      x9    1     1     1    6     NA   0         .p9. 0.854
+10 10      x1 ~~      x1    0     1     1    7     NA   0        .p10. 0.681
+11 11      x2 ~~      x2    0     1     1    8     NA   0        .p11. 0.693
+12 12      x3 ~~      x3    0     1     1    9     NA   0        .p12. 0.640
+13 13      x4 ~~      x4    0     1     1   10     NA   0        .p13. 0.678
+14 14      x5 ~~      x5    0     1     1   11     NA   0        .p14. 0.833
+15 15      x6 ~~      x6    0     1     1   12     NA   0        .p15. 0.600
+16 16      x7 ~~      x7    0     1     1   13     NA   0        .p16. 0.594
+17 17      x8 ~~      x8    0     1     1   14     NA   0        .p17. 0.513
+18 18      x9 ~~      x9    0     1     1   15     NA   0        .p18. 0.509
+19 19  visual ~~  visual    0     1     1   16     NA   0        .p19. 0.050
+20 20 textual ~~ textual    0     1     1   17     NA   0        .p20. 0.050
+21 21   speed ~~   speed    0     1     1   18     NA   0        .p21. 0.050
+22 22  visual ~~ textual    0     1     1   19     NA   0        .p22. 0.000
+23 23  visual ~~   speed    0     1     1   20     NA   0        .p23. 0.000
+24 24 textual ~~   speed    0     1     1   21     NA   0        .p24. 0.000
+25 25      x1 ~1            0     1     1   22     NA   0        .p25. 4.936
+26 26      x2 ~1            0     1     1   23     NA   0        .p26. 6.088
+27 27      x3 ~1            0     1     1   24     NA   0        .p27. 2.250
+28 28      x4 ~1            0     1     1   25     NA   0        .p28. 3.061
+29 29      x5 ~1            0     1     1   26     NA   0        .p29. 4.341
+30 30      x6 ~1            0     1     1   27     NA   0        .p30. 2.186
+31 31      x7 ~1            0     1     1   28     NA   0        .p31. 4.186
+32 32      x8 ~1            0     1     1   29     NA   0        .p32. 5.527
+33 33      x9 ~1            0     1     1   30     NA   0        .p33. 5.374
+34 34  visual ~1            0     1     1    0      0   0        .p34. 0.000
+35 35 textual ~1            0     1     1    0      0   0        .p35. 0.000
+36 36   speed ~1            0     1     1    0      0   0        .p36. 0.000
+     est    se
+1  1.000 0.000
+2  0.481 0.110
+3  0.702 0.115
+4  1.000 0.000
+5  1.110 0.066
+6  0.933 0.057
+7  1.000 0.000
+8  1.112 0.138
+9  1.115 0.149
+10 0.549 0.101
+11 1.047 0.095
+12 0.749 0.081
+13 0.334 0.046
+14 0.386 0.056
+15 0.355 0.042
+16 0.594 0.076
+17 0.481 0.066
+18 0.455 0.065
+19 0.612 0.129
+20 0.938 0.110
+21 0.410 0.087
+22 0.402 0.074
+23 0.302 0.054
+24 0.197 0.050
+25 4.936 0.067
+26 6.088 0.068
+27 2.250 0.065
+28 3.061 0.067
+29 4.341 0.075
+30 2.186 0.063
+31 4.186 0.063
+32 5.527 0.058
+33 5.374 0.058
+34 0.000 0.000
+35 0.000 0.000
+36 0.000 0.000
+> lavInspect(object, what = "partable")
+$lambda
+   visual textul speed
+x1      1      0     0
+x2      2      0     0
+x3      3      0     0
+x4      0      4     0
+x5      0      5     0
+x6      0      6     0
+x7      0      0     7
+x8      0      0     8
+x9      0      0     9
+
+$theta
+   x1 x2 x3 x4 x5 x6 x7 x8 x9
+x1 10                        
+x2  0 11                     
+x3  0  0 12                  
+x4  0  0  0 13               
+x5  0  0  0  0 14            
+x6  0  0  0  0  0 15         
+x7  0  0  0  0  0  0 16      
+x8  0  0  0  0  0  0  0 17   
+x9  0  0  0  0  0  0  0  0 18
+
+$psi
+        visual textul speed
+visual      19             
+textual     22     20      
+speed       23     24    21
+
+$nu
+   intrcp
+x1     25
+x2     26
+x3     27
+x4     28
+x5     29
+x6     30
+x7     31
+x8     32
+x9     33
+
+$alpha
+        intrcp
+visual      34
+textual     35
+speed       36
+
+> lavInspect(object, what = "patterns")
+    x1 x2 x3 x4 x5 x6 x7 x8 x9
+301  1  1  1  1  1  1  1  1  1
+> lavInspect(object, what = "rsquare")
+   x1    x2    x3    x4    x5    x6    x7    x8    x9 
+0.527 0.119 0.287 0.737 0.750 0.697 0.408 0.513 0.529 
+> lavInspect(object, what = "sampstat")
+$cov
+       x1     x2     x3     x4     x5     x6     x7     x8     x9
+x1  1.363                                                        
+x2  0.409  1.386                                                 
+x3  0.582  0.453  1.279                                          
+x4  0.507  0.210  0.209  1.355                                   
+x5  0.442  0.212  0.113  1.101  1.665                            
+x6  0.456  0.248  0.245  0.899  1.018  1.200                     
+x7  0.085 -0.097  0.089  0.220  0.143  0.145  1.187              
+x8  0.265  0.110  0.213  0.126  0.181  0.166  0.537  1.025       
+x9  0.460  0.245  0.375  0.244  0.296  0.237  0.375  0.459  1.018
+
+$mean
+   x1    x2    x3    x4    x5    x6    x7    x8    x9 
+4.936 6.088 2.250 3.061 4.341 2.186 4.186 5.527 5.374 
+
+> lavInspect(object, what = "se")
+$lambda
+   visual textul speed
+x1  0.000  0.000 0.000
+x2  0.110  0.000 0.000
+x3  0.115  0.000 0.000
+x4  0.000  0.000 0.000
+x5  0.000  0.066 0.000
+x6  0.000  0.057 0.000
+x7  0.000  0.000 0.000
+x8  0.000  0.000 0.138
+x9  0.000  0.000 0.149
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.101                                                
+x2 0.000 0.095                                          
+x3 0.000 0.000 0.081                                    
+x4 0.000 0.000 0.000 0.046                              
+x5 0.000 0.000 0.000 0.000 0.056                        
+x6 0.000 0.000 0.000 0.000 0.000 0.042                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.076            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.066      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.065
+
+$psi
+        visual textul speed
+visual   0.129             
+textual  0.074  0.110      
+speed    0.054  0.050 0.087
+
+$nu
+   intrcp
+x1  0.067
+x2  0.068
+x3  0.065
+x4  0.067
+x5  0.075
+x6  0.063
+x7  0.063
+x8  0.058
+x9  0.058
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> standardizedSolution(object)
+       lhs op     rhs est.std    se      z pvalue ci.lower ci.upper
+1   visual =~      x1   0.726 0.061 11.938      0    0.607    0.845
+2   visual =~      x2   0.345 0.068  5.096      0    0.212    0.478
+3   visual =~      x3   0.536 0.061  8.766      0    0.416    0.656
+4  textual =~      x4   0.859 0.023 37.949      0    0.814    0.903
+5  textual =~      x5   0.866 0.023 38.149      0    0.821    0.910
+6  textual =~      x6   0.835 0.024 35.223      0    0.788    0.881
+7    speed =~      x7   0.639 0.053 11.976      0    0.534    0.744
+8    speed =~      x8   0.716 0.046 15.574      0    0.626    0.806
+9    speed =~      x9   0.727 0.046 15.748      0    0.637    0.818
+10      x1 ~~      x1   0.473 0.088  5.356      0    0.300    0.646
+11      x2 ~~      x2   0.881 0.047 18.825      0    0.789    0.972
+12      x3 ~~      x3   0.713 0.066 10.869      0    0.584    0.841
+13      x4 ~~      x4   0.263 0.039  6.763      0    0.187    0.339
+14      x5 ~~      x5   0.250 0.039  6.361      0    0.173    0.327
+15      x6 ~~      x6   0.303 0.040  7.657      0    0.225    0.381
+16      x7 ~~      x7   0.592 0.068  8.674      0    0.458    0.725
+17      x8 ~~      x8   0.487 0.066  7.393      0    0.358    0.616
+18      x9 ~~      x9   0.471 0.067  7.022      0    0.340    0.603
+19  visual ~~  visual   1.000 0.000     NA     NA    1.000    1.000
+20 textual ~~ textual   1.000 0.000     NA     NA    1.000    1.000
+21   speed ~~   speed   1.000 0.000     NA     NA    1.000    1.000
+22  visual ~~ textual   0.530 0.075  7.113      0    0.384    0.676
+23  visual ~~   speed   0.602 0.081  7.467      0    0.444    0.760
+24 textual ~~   speed   0.317 0.067  4.711      0    0.185    0.449
+25      x1 ~1           4.579 0.216 21.175      0    4.155    5.003
+26      x2 ~1           5.583 0.254 21.983      0    5.086    6.081
+27      x3 ~1           2.195 0.119 18.400      0    1.962    2.429
+28      x4 ~1           2.713 0.130 20.872      0    2.458    2.968
+29      x5 ~1           3.496 0.162 21.541      0    3.178    3.814
+30      x6 ~1           2.018 0.102 19.782      0    1.818    2.218
+31      x7 ~1           4.177 0.202 20.640      0    3.780    4.573
+32      x8 ~1           5.559 0.241 23.062      0    5.087    6.032
+33      x9 ~1           5.470 0.241 22.703      0    4.998    5.942
+34  visual ~1           0.000 0.000     NA     NA    0.000    0.000
+35 textual ~1           0.000 0.000     NA     NA    0.000    0.000
+36   speed ~1           0.000 0.000     NA     NA    0.000    0.000
+> lavInspect(object, what = "start")
+$lambda
+   visual textul speed
+x1  1.000  0.000 0.000
+x2  0.778  0.000 0.000
+x3  1.107  0.000 0.000
+x4  0.000  1.000 0.000
+x5  0.000  1.133 0.000
+x6  0.000  0.924 0.000
+x7  0.000  0.000 1.000
+x8  0.000  0.000 1.225
+x9  0.000  0.000 0.854
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.681                                                
+x2 0.000 0.693                                          
+x3 0.000 0.000 0.640                                    
+x4 0.000 0.000 0.000 0.678                              
+x5 0.000 0.000 0.000 0.000 0.833                        
+x6 0.000 0.000 0.000 0.000 0.000 0.600                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.594            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.513      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.509
+
+$psi
+        visual textul speed
+visual    0.05             
+textual   0.00   0.05      
+speed     0.00   0.00  0.05
+
+$nu
+   intrcp
+x1  4.936
+x2  6.088
+x3  2.250
+x4  3.061
+x5  4.341
+x6  2.186
+x7  4.186
+x8  5.527
+x9  5.374
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavInspect(object, what = "std.all")
+$lambda
+   visual textul speed
+x1  0.726  0.000 0.000
+x2  0.345  0.000 0.000
+x3  0.536  0.000 0.000
+x4  0.000  0.859 0.000
+x5  0.000  0.866 0.000
+x6  0.000  0.835 0.000
+x7  0.000  0.000 0.639
+x8  0.000  0.000 0.716
+x9  0.000  0.000 0.727
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.473                                                
+x2 0.000 0.881                                          
+x3 0.000 0.000 0.713                                    
+x4 0.000 0.000 0.000 0.263                              
+x5 0.000 0.000 0.000 0.000 0.250                        
+x6 0.000 0.000 0.000 0.000 0.000 0.303                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.592            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.487      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.471
+
+$psi
+        visual textul speed
+visual   1.000             
+textual  0.530  1.000      
+speed    0.602  0.317 1.000
+
+$nu
+   intrcp
+x1  4.579
+x2  5.583
+x3  2.195
+x4  2.713
+x5  3.496
+x6  2.018
+x7  4.177
+x8  5.559
+x9  5.470
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavInspect(object, what = "std.lv")
+$lambda
+   visual textul speed
+x1  0.782  0.000 0.000
+x2  0.376  0.000 0.000
+x3  0.550  0.000 0.000
+x4  0.000  0.969 0.000
+x5  0.000  1.075 0.000
+x6  0.000  0.904 0.000
+x7  0.000  0.000 0.640
+x8  0.000  0.000 0.712
+x9  0.000  0.000 0.714
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.549                                                
+x2 0.000 1.047                                          
+x3 0.000 0.000 0.749                                    
+x4 0.000 0.000 0.000 0.334                              
+x5 0.000 0.000 0.000 0.000 0.386                        
+x6 0.000 0.000 0.000 0.000 0.000 0.355                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.594            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.481      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.455
+
+$psi
+        visual textul speed
+visual   1.000             
+textual  0.530  1.000      
+speed    0.602  0.317 1.000
+
+$nu
+   intrcp
+x1  4.936
+x2  6.088
+x3  2.250
+x4  3.061
+x5  4.341
+x6  2.186
+x7  4.186
+x8  5.527
+x9  5.374
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavInspect(object, what = "std.nox")
+$lambda
+   visual textul speed
+x1  0.726  0.000 0.000
+x2  0.345  0.000 0.000
+x3  0.536  0.000 0.000
+x4  0.000  0.859 0.000
+x5  0.000  0.866 0.000
+x6  0.000  0.835 0.000
+x7  0.000  0.000 0.639
+x8  0.000  0.000 0.716
+x9  0.000  0.000 0.727
+
+$theta
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.473                                                
+x2 0.000 0.881                                          
+x3 0.000 0.000 0.713                                    
+x4 0.000 0.000 0.000 0.263                              
+x5 0.000 0.000 0.000 0.000 0.250                        
+x6 0.000 0.000 0.000 0.000 0.000 0.303                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.592            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.487      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.471
+
+$psi
+        visual textul speed
+visual   1.000             
+textual  0.530  1.000      
+speed    0.602  0.317 1.000
+
+$nu
+   intrcp
+x1  4.579
+x2  5.583
+x3  2.195
+x4  2.713
+x5  3.496
+x6  2.018
+x7  4.177
+x8  5.559
+x9  5.470
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavInspect(object, what = "th")
+numeric(0)
+> lavInspect(object, what = "theta")
+      x1    x2    x3    x4    x5    x6    x7    x8    x9
+x1 0.549                                                
+x2 0.000 1.047                                          
+x3 0.000 0.000 0.749                                    
+x4 0.000 0.000 0.000 0.334                              
+x5 0.000 0.000 0.000 0.000 0.386                        
+x6 0.000 0.000 0.000 0.000 0.000 0.355                  
+x7 0.000 0.000 0.000 0.000 0.000 0.000 0.594            
+x8 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.481      
+x9 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.455
+> lavInspect(object, what = "theta.cor")
+   x1 x2 x3 x4 x5 x6 x7 x8 x9
+x1  1                        
+x2  0  1                     
+x3  0  0  1                  
+x4  0  0  0  1               
+x5  0  0  0  0  1            
+x6  0  0  0  0  0  1         
+x7  0  0  0  0  0  0  1      
+x8  0  0  0  0  0  0  0  1   
+x9  0  0  0  0  0  0  0  0  1
+> varTable(object)
+  name idx nobs    type exo user  mean   var nlev lnam
+1   x1   7  301 numeric   0    0 4.936 1.363    0     
+2   x2   8  301 numeric   0    0 6.088 1.386    0     
+3   x3   9  301 numeric   0    0 2.250 1.279    0     
+4   x4  10  301 numeric   0    0 3.061 1.355    0     
+5   x5  11  301 numeric   0    0 4.341 1.665    0     
+6   x6  12  301 numeric   0    0 2.186 1.200    0     
+7   x7  13  301 numeric   0    0 4.186 1.187    0     
+8   x8  14  301 numeric   0    0 5.527 1.025    0     
+9   x9  15  301 numeric   0    0 5.374 1.018    0     
+> lavInspect(object, what = "wls.est")
+  x1~1   x2~1   x3~1   x4~1   x5~1   x6~1   x7~1   x8~1   x9~1 x1~~x1 x1~~x2 
+ 4.936  6.088  2.250  3.061  4.341  2.186  4.186  5.527  5.374  1.162  0.295 
+x1~~x3 x1~~x4 x1~~x5 x1~~x6 x1~~x7 x1~~x8 x1~~x9 x2~~x2 x2~~x3 x2~~x4 x2~~x5 
+ 0.430  0.402  0.446  0.375  0.302  0.335  0.337  1.189  0.207  0.193  0.215 
+x2~~x6 x2~~x7 x2~~x8 x2~~x9 x3~~x3 x3~~x4 x3~~x5 x3~~x6 x3~~x7 x3~~x8 x3~~x9 
+ 0.180  0.145  0.161  0.162  1.051  0.282  0.313  0.263  0.212  0.236  0.236 
+x4~~x4 x4~~x5 x4~~x6 x4~~x7 x4~~x8 x4~~x9 x5~~x5 x5~~x6 x5~~x7 x5~~x8 x5~~x9 
+ 1.273  1.042  0.876  0.197  0.219  0.220  1.542  0.972  0.219  0.243  0.244 
+x6~~x6 x6~~x7 x6~~x8 x6~~x9 x7~~x7 x7~~x8 x7~~x9 x8~~x8 x8~~x9 x9~~x9 
+ 1.173  0.184  0.204  0.205  1.004  0.456  0.458  0.988  0.509  0.965 
+> lavInspect(object, what = "wls.obs")
+  x1~1   x2~1   x3~1   x4~1   x5~1   x6~1   x7~1   x8~1   x9~1 x1~~x1 x1~~x2 
+ 4.936  6.088  2.250  3.061  4.341  2.186  4.186  5.527  5.374  1.363  0.409 
+x1~~x3 x1~~x4 x1~~x5 x1~~x6 x1~~x7 x1~~x8 x1~~x9 x2~~x2 x2~~x3 x2~~x4 x2~~x5 
+ 0.582  0.507  0.442  0.456  0.085  0.265  0.460  1.386  0.453  0.210  0.212 
+x2~~x6 x2~~x7 x2~~x8 x2~~x9 x3~~x3 x3~~x4 x3~~x5 x3~~x6 x3~~x7 x3~~x8 x3~~x9 
+ 0.248 -0.097  0.110  0.245  1.279  0.209  0.113  0.245  0.089  0.213  0.375 
+x4~~x4 x4~~x5 x4~~x6 x4~~x7 x4~~x8 x4~~x9 x5~~x5 x5~~x6 x5~~x7 x5~~x8 x5~~x9 
+ 1.355  1.101  0.899  0.220  0.126  0.244  1.665  1.018  0.143  0.181  0.296 
+x6~~x6 x6~~x7 x6~~x8 x6~~x9 x7~~x7 x7~~x8 x7~~x9 x8~~x8 x8~~x9 x9~~x9 
+ 1.200  0.145  0.166  0.237  1.187  0.537  0.375  1.025  0.459  1.018 
+> lavInspect(object, what = "wls.v")
+         x1~1   x2~1   x3~1   x4~1   x5~1   x6~1   x7~1   x8~1   x9~1 x1~~x1
+x1~1    1.144 -0.105 -0.326 -0.271  0.034 -0.117  0.136 -0.112 -0.289  0.000
+x2~1   -0.105  0.872 -0.219 -0.010 -0.006 -0.077  0.159 -0.046 -0.097  0.000
+x3~1   -0.326 -0.219  1.088 -0.030  0.190 -0.148  0.005 -0.038 -0.200  0.000
+x4~1   -0.271 -0.010 -0.030  1.987 -0.837 -0.675 -0.280  0.206  0.070  0.000
+x5~1    0.034 -0.006  0.190 -0.837  1.645 -0.785  0.138 -0.097 -0.186  0.000
+x6~1   -0.117 -0.077 -0.148 -0.675 -0.785  2.092 -0.009 -0.072  0.065  0.000
+x7~1    0.136  0.159  0.005 -0.280  0.138 -0.009  1.220 -0.560 -0.268  0.000
+x8~1   -0.112 -0.046 -0.038  0.206 -0.097 -0.072 -0.560  1.490 -0.394  0.000
+x9~1   -0.289 -0.097 -0.200  0.070 -0.186  0.065 -0.268 -0.394  1.507  0.000
+x1~~x1  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.654
+x1~~x2  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.120
+x1~~x3  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.372
+x1~~x4  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.310
+x1~~x5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.039
+x1~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.133
+x1~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.156
+x1~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.129
+x1~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.330
+x2~~x2  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.005
+x2~~x3  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.034
+x2~~x4  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.028
+x2~~x5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.004
+x2~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.012
+x2~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.014
+x2~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.012
+x2~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.030
+x3~~x3  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.053
+x3~~x4  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.088
+x3~~x5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.011
+x3~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.038
+x3~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.044
+x3~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.037
+x3~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.094
+x4~~x4  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.037
+x4~~x5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.009
+x4~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.032
+x4~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.037
+x4~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.030
+x4~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.078
+x5~~x5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.001
+x5~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.004
+x5~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.005
+x5~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.004
+x5~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.010
+x6~~x6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.007
+x6~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.016
+x6~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.013
+x6~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.034
+x7~~x7  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.009
+x7~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.015
+x7~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 -0.039
+x8~~x8  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.006
+x8~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.032
+x9~~x9  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.042
+       x1~~x2 x1~~x3 x1~~x4 x1~~x5 x1~~x6 x1~~x7 x1~~x8 x1~~x9 x2~~x2 x2~~x3
+x1~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x1~~x1 -0.120 -0.372 -0.310  0.039 -0.133  0.156 -0.129 -0.330  0.005  0.034
+x1~~x2  1.008 -0.216  0.017 -0.010 -0.076  0.167 -0.041 -0.081 -0.091 -0.261
+x1~~x3 -0.216  1.350  0.054  0.206 -0.131 -0.039 -0.007 -0.134  0.023 -0.043
+x1~~x4  0.017  0.054  2.346 -0.967 -0.740 -0.357  0.266  0.159  0.001  0.006
+x1~~x5 -0.010  0.206 -0.967  1.882 -0.902  0.162 -0.115 -0.223  0.001 -0.018
+x1~~x6 -0.076 -0.131 -0.740 -0.902  2.406 -0.027 -0.070  0.108  0.008  0.040
+x1~~x7  0.167 -0.039 -0.357  0.162 -0.027  1.414 -0.656 -0.346 -0.017 -0.052
+x1~~x8 -0.041 -0.007  0.266 -0.115 -0.070 -0.656  1.717 -0.418  0.005  0.019
+x1~~x9 -0.081 -0.134  0.159 -0.223  0.108 -0.346 -0.418  1.807  0.010  0.053
+x2~~x2 -0.091  0.023  0.001  0.001  0.008 -0.017  0.005  0.010  0.380 -0.191
+x2~~x3 -0.261 -0.043  0.006 -0.018  0.040 -0.052  0.019  0.053 -0.191  0.996
+x2~~x4 -0.235  0.062 -0.205  0.089  0.092 -0.014 -0.009  0.019 -0.009 -0.024
+x2~~x5  0.031 -0.027  0.087 -0.173  0.080 -0.009  0.009  0.016 -0.005  0.167
+x2~~x6 -0.094  0.041  0.072  0.083 -0.210 -0.017  0.013  0.005 -0.067 -0.112
+x2~~x7  0.102 -0.030  0.028 -0.015 -0.009 -0.106  0.052  0.015  0.138 -0.030
+x2~~x8 -0.093  0.029 -0.020  0.011  0.016  0.041 -0.151  0.052 -0.040 -0.023
+x2~~x9 -0.241  0.084 -0.004  0.021  0.015 -0.018  0.054 -0.130 -0.085 -0.153
+x3~~x3  0.071 -0.354  0.010 -0.062  0.048 -0.002  0.012  0.065  0.024 -0.238
+x3~~x4  0.063 -0.286 -0.639  0.221  0.260  0.090 -0.057  0.031  0.002 -0.005
+x3~~x5 -0.006 -0.024  0.272 -0.529  0.251 -0.045  0.030  0.054  0.001 -0.048
+x3~~x6  0.050 -0.079  0.223  0.233 -0.664  0.002  0.028  0.002  0.017 -0.051
+x3~~x7 -0.081  0.147  0.087 -0.019 -0.017 -0.397  0.177  0.060 -0.035  0.171
+x3~~x8  0.039 -0.110 -0.064  0.010  0.040  0.182 -0.481  0.151  0.010 -0.042
+x3~~x9  0.095 -0.249 -0.014  0.006  0.021  0.086  0.139 -0.433  0.021 -0.062
+x4~~x4  0.003  0.008 -0.539  0.227  0.183  0.076 -0.056 -0.019  0.000  0.000
+x4~~x5  0.001 -0.053  0.295 -0.475  0.190 -0.047  0.033  0.053  0.000 -0.002
+x4~~x6  0.022  0.044 -0.048  0.311 -0.489  0.035 -0.004 -0.026  0.001  0.004
+x4~~x7 -0.044 -0.005  0.347 -0.151 -0.089 -0.369  0.180  0.082 -0.002 -0.005
+x4~~x8  0.014  0.014 -0.279  0.121  0.095  0.184 -0.428  0.099  0.000  0.002
+x4~~x9  0.029  0.063 -0.592  0.292  0.177  0.154  0.048 -0.429  0.001  0.005
+x5~~x5  0.000  0.007 -0.029  0.056 -0.027  0.005 -0.003 -0.006  0.000 -0.001
+x5~~x6 -0.002 -0.027  0.074 -0.219  0.163 -0.016  0.009  0.024  0.000 -0.014
+x5~~x7  0.005  0.026 -0.124  0.229 -0.107  0.061 -0.032 -0.035 -0.001  0.030
+x5~~x8 -0.001 -0.023  0.101 -0.188  0.086 -0.035  0.062  0.007  0.000 -0.008
+x5~~x9 -0.002 -0.062  0.244 -0.481  0.229 -0.049  0.015  0.105  0.001 -0.017
+x6~~x6  0.009  0.017  0.079  0.091 -0.244  0.001  0.008 -0.008  0.003  0.011
+x6~~x7 -0.029 -0.021 -0.059 -0.123  0.286 -0.143  0.055  0.040 -0.012 -0.024
+x6~~x8  0.014  0.021  0.052  0.100 -0.227  0.066 -0.166  0.039  0.004  0.010
+x6~~x9  0.034  0.066  0.186  0.248 -0.611  0.034  0.067 -0.194  0.007  0.030
+x7~~x7  0.022  0.001 -0.038  0.019 -0.001  0.166 -0.076 -0.037  0.013  0.001
+x7~~x8 -0.024 -0.006  0.059 -0.029 -0.009 -0.213  0.266 -0.023 -0.007 -0.006
+x7~~x9 -0.059 -0.029  0.090 -0.065  0.012 -0.389  0.108  0.283 -0.015 -0.032
+x8~~x8  0.005  0.004 -0.023  0.011  0.008  0.063 -0.167  0.044  0.001  0.002
+x8~~x9  0.024  0.033 -0.067  0.049  0.014  0.192 -0.386 -0.056  0.004  0.013
+x9~~x9  0.028  0.058 -0.020  0.054 -0.019  0.077  0.114 -0.435  0.005  0.019
+       x2~~x4 x2~~x5 x2~~x6 x2~~x7 x2~~x8 x2~~x9 x3~~x3 x3~~x4 x3~~x5 x3~~x6
+x1~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x1~~x1  0.028 -0.004  0.012 -0.014  0.012  0.030  0.053  0.088 -0.011  0.038
+x1~~x2 -0.235  0.031 -0.094  0.102 -0.093 -0.241  0.071  0.063 -0.006  0.050
+x1~~x3  0.062 -0.027  0.041 -0.030  0.029  0.084 -0.354 -0.286 -0.024 -0.079
+x1~~x4 -0.205  0.087  0.072  0.028 -0.020 -0.004  0.010 -0.639  0.272  0.223
+x1~~x5  0.089 -0.173  0.083 -0.015  0.011  0.021 -0.062  0.221 -0.529  0.233
+x1~~x6  0.092  0.080 -0.210 -0.009  0.016  0.015  0.048  0.260  0.251 -0.664
+x1~~x7 -0.014 -0.009 -0.017 -0.106  0.041 -0.018 -0.002  0.090 -0.045  0.002
+x1~~x8 -0.009  0.009  0.013  0.052 -0.151  0.054  0.012 -0.057  0.030  0.028
+x1~~x9  0.019  0.016  0.005  0.015  0.052 -0.130  0.065  0.031  0.054  0.002
+x2~~x2 -0.009 -0.005 -0.067  0.138 -0.040 -0.085  0.024  0.002  0.001  0.017
+x2~~x3 -0.024  0.167 -0.112 -0.030 -0.023 -0.153 -0.238 -0.005 -0.048 -0.051
+x2~~x4  1.732 -0.730 -0.587 -0.246  0.180  0.062  0.007 -0.434  0.183  0.150
+x2~~x5 -0.730  1.434 -0.684  0.119 -0.085 -0.162 -0.042  0.181 -0.361  0.157
+x2~~x6 -0.587 -0.684  1.830 -0.020 -0.059  0.064  0.032  0.149  0.173 -0.446
+x2~~x7 -0.246  0.119 -0.020  1.089 -0.496 -0.249 -0.001  0.061 -0.030  0.002
+x2~~x8  0.180 -0.085 -0.059 -0.496  1.301 -0.339  0.008 -0.045  0.022  0.019
+x2~~x9  0.062 -0.162  0.064 -0.249 -0.339  1.324  0.044 -0.013  0.042  0.001
+x3~~x3  0.007 -0.042  0.032 -0.001  0.008  0.044  0.592 -0.033  0.207 -0.161
+x3~~x4 -0.434  0.181  0.149  0.061 -0.045 -0.013 -0.033  2.163 -0.917 -0.730
+x3~~x5  0.183 -0.361  0.173 -0.030  0.022  0.042  0.207 -0.917  1.826 -0.882
+x3~~x6  0.150  0.157 -0.446  0.002  0.019  0.001 -0.161 -0.730 -0.882  2.299
+x3~~x7  0.056  0.000 -0.021 -0.266  0.117  0.027  0.005 -0.305  0.151 -0.011
+x3~~x8 -0.044  0.013  0.023  0.122 -0.324  0.095 -0.041  0.225 -0.113 -0.073
+x3~~x9 -0.012  0.022  0.000  0.058  0.090 -0.310 -0.217  0.083 -0.240  0.100
+x4~~x4 -0.020  0.009  0.007  0.003 -0.002 -0.001  0.000 -0.059  0.025  0.020
+x4~~x5 -0.003 -0.012  0.012  0.000  0.000  0.001 -0.006  0.402 -0.208 -0.105
+x4~~x6 -0.146  0.072  0.030  0.022 -0.015 -0.006  0.004 -0.273  0.147  0.037
+x4~~x7  0.318 -0.134 -0.107 -0.057  0.038  0.014  0.000  0.018 -0.008 -0.003
+x4~~x8 -0.093  0.039  0.032  0.019 -0.025  0.001  0.001 -0.081  0.034  0.028
+x4~~x9 -0.194  0.083  0.065  0.030 -0.016 -0.022  0.006 -0.399  0.173  0.133
+x5~~x5  0.005 -0.010  0.005 -0.001  0.001  0.001  0.018 -0.159  0.312 -0.149
+x5~~x6  0.068 -0.122  0.048 -0.011  0.008  0.014 -0.028 -0.005 -0.392  0.513
+x5~~x7 -0.131  0.260 -0.124  0.015 -0.012 -0.028  0.001 -0.057  0.034 -0.006
+x5~~x8  0.037 -0.075  0.036 -0.003 -0.004  0.011 -0.007  0.071 -0.080  0.016
+x5~~x9  0.081 -0.159  0.076 -0.012  0.012  0.009 -0.038  0.181 -0.364  0.169
+x6~~x6  0.052  0.060 -0.161  0.001  0.006 -0.005  0.011  0.100  0.116 -0.309
+x6~~x7 -0.085 -0.135  0.332 -0.095  0.032  0.031 -0.001  0.038 -0.024  0.012
+x6~~x8  0.015  0.043 -0.090  0.043 -0.111  0.027  0.006 -0.005  0.044 -0.068
+x6~~x9  0.060  0.091 -0.209  0.022  0.037 -0.122  0.029  0.124  0.184 -0.427
+x7~~x7 -0.044  0.022 -0.001  0.193 -0.089 -0.043  0.000 -0.001  0.001  0.000
+x7~~x8  0.045 -0.022 -0.011 -0.145  0.262 -0.050  0.000  0.012 -0.006  0.000
+x7~~x9  0.038 -0.043  0.011 -0.161 -0.008  0.265 -0.001  0.056 -0.028  0.002
+x8~~x8 -0.009  0.004  0.003  0.026 -0.068  0.018  0.001 -0.008  0.004  0.003
+x8~~x9 -0.023  0.018  0.004  0.067 -0.127 -0.031  0.008 -0.044  0.026  0.012
+x9~~x9 -0.007  0.018 -0.006  0.026  0.038 -0.147  0.020 -0.014  0.037 -0.013
+       x3~~x7 x3~~x8 x3~~x9 x4~~x4 x4~~x5 x4~~x6 x4~~x7 x4~~x8 x4~~x9 x5~~x5
+x1~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x1~~x1 -0.044  0.037  0.094  0.037 -0.009  0.032 -0.037  0.030  0.078  0.001
+x1~~x2 -0.081  0.039  0.095  0.003  0.001  0.022 -0.044  0.014  0.029  0.000
+x1~~x3  0.147 -0.110 -0.249  0.008 -0.053  0.044 -0.005  0.014  0.063  0.007
+x1~~x4  0.087 -0.064 -0.014 -0.539  0.295 -0.048  0.347 -0.279 -0.592 -0.029
+x1~~x5 -0.019  0.010  0.006  0.227 -0.475  0.311 -0.151  0.121  0.292  0.056
+x1~~x6 -0.017  0.040  0.021  0.183  0.190 -0.489 -0.089  0.095  0.177 -0.027
+x1~~x7 -0.397  0.182  0.086  0.076 -0.047  0.035 -0.369  0.184  0.154  0.005
+x1~~x8  0.177 -0.481  0.139 -0.056  0.033 -0.004  0.180 -0.428  0.048 -0.003
+x1~~x9  0.060  0.151 -0.433 -0.019  0.053 -0.026  0.082  0.099 -0.429 -0.006
+x2~~x2 -0.035  0.010  0.021  0.000  0.000  0.001 -0.002  0.000  0.001  0.000
+x2~~x3  0.171 -0.042 -0.062  0.000 -0.002  0.004 -0.005  0.002  0.005 -0.001
+x2~~x4  0.056 -0.044 -0.012 -0.020 -0.003 -0.146  0.318 -0.093 -0.194  0.005
+x2~~x5  0.000  0.013  0.022  0.009 -0.012  0.072 -0.134  0.039  0.083 -0.010
+x2~~x6 -0.021  0.023  0.000  0.007  0.012  0.030 -0.107  0.032  0.065  0.005
+x2~~x7 -0.266  0.122  0.058  0.003  0.000  0.022 -0.057  0.019  0.030 -0.001
+x2~~x8  0.117 -0.324  0.090 -0.002  0.000 -0.015  0.038 -0.025 -0.016  0.001
+x2~~x9  0.027  0.095 -0.310 -0.001  0.001 -0.006  0.014  0.001 -0.022  0.001
+x3~~x3  0.005 -0.041 -0.217  0.000 -0.006  0.004  0.000  0.001  0.006  0.018
+x3~~x4 -0.305  0.225  0.083 -0.059  0.402 -0.273  0.018 -0.081 -0.399 -0.159
+x3~~x5  0.151 -0.113 -0.240  0.025 -0.208  0.147 -0.008  0.034  0.173  0.312
+x3~~x6 -0.011 -0.073  0.100  0.020 -0.105  0.037 -0.003  0.028  0.133 -0.149
+x3~~x7  1.328 -0.610 -0.293  0.008 -0.057  0.042 -0.038  0.027  0.064  0.026
+x3~~x8 -0.610  1.623 -0.421 -0.006  0.042 -0.028  0.018 -0.052 -0.029 -0.018
+x3~~x9 -0.293 -0.421  1.680 -0.002  0.019 -0.012  0.008  0.009 -0.059 -0.035
+x4~~x4  0.008 -0.006 -0.002  1.974 -1.664 -1.340 -0.556  0.408  0.140  0.351
+x4~~x5 -0.057  0.042  0.019 -1.664  3.969 -0.995  0.509 -0.366 -0.429 -1.377
+x4~~x6  0.042 -0.028 -0.012 -1.340 -0.995  4.612  0.170 -0.282  0.082  0.657
+x4~~x7 -0.038  0.018  0.008 -0.556  0.509  0.170  2.503 -1.171 -0.553 -0.115
+x4~~x8  0.027 -0.052  0.009  0.408 -0.366 -0.282 -1.171  3.004 -0.768  0.082
+x4~~x9  0.064 -0.029 -0.059  0.140 -0.429  0.082 -0.553 -0.768  3.000  0.156
+x5~~x5  0.026 -0.018 -0.035  0.351 -1.377  0.657 -0.115  0.082  0.156  1.352
+x5~~x6 -0.022  0.001  0.040  0.565 -0.452 -1.222 -0.085  0.126  0.071 -1.291
+x5~~x7  0.232 -0.107 -0.052  0.234 -0.576  0.228 -1.060  0.497  0.277  0.227
+x5~~x8 -0.112  0.287 -0.068 -0.172  0.420 -0.101  0.498 -1.268  0.292 -0.160
+x5~~x9 -0.078 -0.055  0.323 -0.059  0.272 -0.110  0.234  0.323 -1.275 -0.306
+x6~~x6  0.001  0.011 -0.010  0.227  0.529 -1.411  0.006  0.049 -0.044  0.308
+x6~~x7 -0.180  0.082  0.040  0.189  0.127 -0.580 -0.820  0.398  0.163 -0.108
+x6~~x8  0.083 -0.217  0.056 -0.139 -0.096  0.479  0.376 -1.020  0.279  0.076
+x6~~x9  0.041  0.073 -0.235 -0.047  0.070  0.103  0.180  0.261 -1.012  0.146
+x7~~x7  0.006 -0.003 -0.001  0.039 -0.039  0.003 -0.342  0.157  0.075  0.010
+x7~~x8 -0.049  0.028  0.008 -0.058  0.056  0.018  0.408 -0.533  0.055 -0.013
+x7~~x9 -0.245  0.110  0.061 -0.020  0.062 -0.019  0.161  0.071 -0.441 -0.026
+x8~~x8  0.021 -0.056  0.015  0.021 -0.020 -0.015 -0.115  0.306 -0.081  0.005
+x8~~x9  0.122 -0.283  0.022  0.014 -0.045  0.008 -0.095  0.024  0.282  0.018
+x9~~x9  0.054  0.079 -0.301  0.002 -0.013  0.005 -0.019 -0.028  0.106  0.017
+       x5~~x6 x5~~x7 x5~~x8 x5~~x9 x6~~x6 x6~~x7 x6~~x8 x6~~x9 x7~~x7 x7~~x8
+x1~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1    0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x1~~x1 -0.004  0.005 -0.004 -0.010  0.007 -0.016  0.013  0.034  0.009 -0.015
+x1~~x2 -0.002  0.005 -0.001 -0.002  0.009 -0.029  0.014  0.034  0.022 -0.024
+x1~~x3 -0.027  0.026 -0.023 -0.062  0.017 -0.021  0.021  0.066  0.001 -0.006
+x1~~x4  0.074 -0.124  0.101  0.244  0.079 -0.059  0.052  0.186 -0.038  0.059
+x1~~x5 -0.219  0.229 -0.188 -0.481  0.091 -0.123  0.100  0.248  0.019 -0.029
+x1~~x6  0.163 -0.107  0.086  0.229 -0.244  0.286 -0.227 -0.611 -0.001 -0.009
+x1~~x7 -0.016  0.061 -0.035 -0.049  0.001 -0.143  0.066  0.034  0.166 -0.213
+x1~~x8  0.009 -0.032  0.062  0.015  0.008  0.055 -0.166  0.067 -0.076  0.266
+x1~~x9  0.024 -0.035  0.007  0.105 -0.008  0.040  0.039 -0.194 -0.037 -0.023
+x2~~x2  0.000 -0.001  0.000  0.001  0.003 -0.012  0.004  0.007  0.013 -0.007
+x2~~x3 -0.014  0.030 -0.008 -0.017  0.011 -0.024  0.010  0.030  0.001 -0.006
+x2~~x4  0.068 -0.131  0.037  0.081  0.052 -0.085  0.015  0.060 -0.044  0.045
+x2~~x5 -0.122  0.260 -0.075 -0.159  0.060 -0.135  0.043  0.091  0.022 -0.022
+x2~~x6  0.048 -0.124  0.036  0.076 -0.161  0.332 -0.090 -0.209 -0.001 -0.011
+x2~~x7 -0.011  0.015 -0.003 -0.012  0.001 -0.095  0.043  0.022  0.193 -0.145
+x2~~x8  0.008 -0.012 -0.004  0.012  0.006  0.032 -0.111  0.037 -0.089  0.262
+x2~~x9  0.014 -0.028  0.011  0.009 -0.005  0.031  0.027 -0.122 -0.043 -0.050
+x3~~x3 -0.028  0.001 -0.007 -0.038  0.011 -0.001  0.006  0.029  0.000  0.000
+x3~~x4 -0.005 -0.057  0.071  0.181  0.100  0.038 -0.005  0.124 -0.001  0.012
+x3~~x5 -0.392  0.034 -0.080 -0.364  0.116 -0.024  0.044  0.184  0.001 -0.006
+x3~~x6  0.513 -0.006  0.016  0.169 -0.309  0.012 -0.068 -0.427  0.000  0.000
+x3~~x7 -0.022  0.232 -0.112 -0.078  0.001 -0.180  0.083  0.041  0.006 -0.049
+x3~~x8  0.001 -0.107  0.287 -0.055  0.011  0.082 -0.217  0.073 -0.003  0.028
+x3~~x9  0.040 -0.052 -0.068  0.323 -0.010  0.040  0.056 -0.235 -0.001  0.008
+x4~~x4  0.565  0.234 -0.172 -0.059  0.227  0.189 -0.139 -0.047  0.039 -0.058
+x4~~x5 -0.452 -0.576  0.420  0.272  0.529  0.127 -0.096  0.070 -0.039  0.056
+x4~~x6 -1.222  0.228 -0.101 -0.110 -1.411 -0.580  0.479  0.103  0.003  0.018
+x4~~x7 -0.085 -1.060  0.498  0.234  0.006 -0.820  0.376  0.180 -0.342  0.408
+x4~~x8  0.126  0.497 -1.268  0.323  0.049  0.398 -1.020  0.261  0.157 -0.533
+x4~~x9  0.071  0.277  0.292 -1.275 -0.044  0.163  0.279 -1.012  0.075  0.055
+x5~~x5 -1.291  0.227 -0.160 -0.306  0.308 -0.108  0.076  0.146  0.010 -0.013
+x5~~x6  4.057 -0.124 -0.042  0.253 -1.642  0.296 -0.147 -0.440 -0.001 -0.009
+x5~~x7 -0.124  2.025 -0.935 -0.467  0.007 -0.959  0.441  0.212  0.168 -0.196
+x5~~x8 -0.042 -0.935  2.461 -0.630  0.057  0.430 -1.163  0.323 -0.077  0.260
+x5~~x9  0.253 -0.467 -0.630  2.514 -0.051  0.220  0.303 -1.195 -0.037 -0.028
+x6~~x6 -1.642  0.007  0.057 -0.051  2.189 -0.020 -0.151  0.136  0.000  0.001
+x6~~x7  0.296 -0.959  0.430  0.220 -0.020  2.552 -1.172 -0.562 -0.011 -0.083
+x6~~x8 -0.147  0.441 -1.163  0.303 -0.151 -1.172  3.124 -0.829  0.005  0.027
+x6~~x9 -0.440  0.212  0.323 -1.195  0.136 -0.562 -0.829  3.158  0.003  0.023
+x7~~x7 -0.001  0.168 -0.077 -0.037  0.000 -0.011  0.005  0.003  0.744 -0.684
+x7~~x8 -0.009 -0.196  0.260 -0.028  0.001 -0.083  0.027  0.023 -0.684  2.132
+x7~~x9  0.011 -0.264  0.050  0.258 -0.001  0.082 -0.033 -0.032 -0.327 -0.330
+x8~~x8  0.007  0.055 -0.145  0.038  0.003  0.041 -0.108  0.028  0.157 -0.835
+x8~~x9  0.007  0.130 -0.239 -0.074 -0.005 -0.017  0.125 -0.135  0.150 -0.179
+x9~~x9 -0.012  0.050  0.073 -0.280  0.002 -0.017 -0.026  0.098  0.036  0.106
+       x7~~x9 x8~~x8 x8~~x9 x9~~x9
+x1~1    0.000  0.000  0.000  0.000
+x2~1    0.000  0.000  0.000  0.000
+x3~1    0.000  0.000  0.000  0.000
+x4~1    0.000  0.000  0.000  0.000
+x5~1    0.000  0.000  0.000  0.000
+x6~1    0.000  0.000  0.000  0.000
+x7~1    0.000  0.000  0.000  0.000
+x8~1    0.000  0.000  0.000  0.000
+x9~1    0.000  0.000  0.000  0.000
+x1~~x1 -0.039  0.006  0.032  0.042
+x1~~x2 -0.059  0.005  0.024  0.028
+x1~~x3 -0.029  0.004  0.033  0.058
+x1~~x4  0.090 -0.023 -0.067 -0.020
+x1~~x5 -0.065  0.011  0.049  0.054
+x1~~x6  0.012  0.008  0.014 -0.019
+x1~~x7 -0.389  0.063  0.192  0.077
+x1~~x8  0.108 -0.167 -0.386  0.114
+x1~~x9  0.283  0.044 -0.056 -0.435
+x2~~x2 -0.015  0.001  0.004  0.005
+x2~~x3 -0.032  0.002  0.013  0.019
+x2~~x4  0.038 -0.009 -0.023 -0.007
+x2~~x5 -0.043  0.004  0.018  0.018
+x2~~x6  0.011  0.003  0.004 -0.006
+x2~~x7 -0.161  0.026  0.067  0.026
+x2~~x8 -0.008 -0.068 -0.127  0.038
+x2~~x9  0.265  0.018 -0.031 -0.147
+x3~~x3 -0.001  0.001  0.008  0.020
+x3~~x4  0.056 -0.008 -0.044 -0.014
+x3~~x5 -0.028  0.004  0.026  0.037
+x3~~x6  0.002  0.003  0.012 -0.013
+x3~~x7 -0.245  0.021  0.122  0.054
+x3~~x8  0.110 -0.056 -0.283  0.079
+x3~~x9  0.061  0.015  0.022 -0.301
+x4~~x4 -0.020  0.021  0.014  0.002
+x4~~x5  0.062 -0.020 -0.045 -0.013
+x4~~x6 -0.019 -0.015  0.008  0.005
+x4~~x7  0.161 -0.115 -0.095 -0.019
+x4~~x8  0.071  0.306  0.024 -0.028
+x4~~x9 -0.441 -0.081  0.282  0.106
+x5~~x5 -0.026  0.005  0.018  0.017
+x5~~x6  0.011  0.007  0.007 -0.012
+x5~~x7 -0.264  0.055  0.130  0.050
+x5~~x8  0.050 -0.145 -0.239  0.073
+x5~~x9  0.258  0.038 -0.074 -0.280
+x6~~x6 -0.001  0.003 -0.005  0.002
+x6~~x7  0.082  0.041 -0.017 -0.017
+x6~~x8 -0.033 -0.108  0.125 -0.026
+x6~~x9 -0.032  0.028 -0.135  0.098
+x7~~x7 -0.327  0.157  0.150  0.036
+x7~~x8 -0.330 -0.835 -0.179  0.106
+x7~~x9  1.911  0.221 -0.739 -0.404
+x8~~x8  0.221  1.111 -0.587  0.078
+x8~~x9 -0.739 -0.587  2.402 -0.594
+x9~~x9 -0.404  0.078 -0.594  1.136
+> lavInspect(object)
+$lambda
+   visual textul speed
+x1      0      0     0
+x2      1      0     0
+x3      2      0     0
+x4      0      0     0
+x5      0      3     0
+x6      0      4     0
+x7      0      0     0
+x8      0      0     5
+x9      0      0     6
+
+$theta
+   x1 x2 x3 x4 x5 x6 x7 x8 x9
+x1  7                        
+x2  0  8                     
+x3  0  0  9                  
+x4  0  0  0 10               
+x5  0  0  0  0 11            
+x6  0  0  0  0  0 12         
+x7  0  0  0  0  0  0 13      
+x8  0  0  0  0  0  0  0 14   
+x9  0  0  0  0  0  0  0  0 15
+
+$psi
+        visual textul speed
+visual      16             
+textual     19     17      
+speed       20     21    18
+
+$nu
+   intrcp
+x1     22
+x2     23
+x3     24
+x4     25
+x5     26
+x6     27
+x7     28
+x8     29
+x9     30
+
+$alpha
+        intrcp
+visual       0
+textual      0
+speed        0
+
+> lavNames(object, "all")
+$ov
+$ov[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$ov.x
+$ov.x[[1]]
+character(0)
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$ov.model
+$ov.model[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$ov.y
+$ov.y[[1]]
+character(0)
+
+
+$ov.num
+$ov.num[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+character(0)
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "x1" "x2" "x3" "x4" "x5" "x6" "x7" "x8" "x9"
+
+
+$lv
+$lv[[1]]
+[1] "visual"  "textual" "speed"  
+
+
+$lv.regular
+$lv.regular[[1]]
+[1] "visual"  "textual" "speed"  
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+[1] "visual"  "textual" "speed"  
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+character(0)
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+ visual textual   speed 
+   "x1"    "x4"    "x7" 
+
+
+$eqs.y
+$eqs.y[[1]]
+character(0)
+
+
+$eqs.x
+$eqs.x[[1]]
+character(0)
+
+
+> logLik(object)
+'log Lik.' NA (df=30)
+> coef(update(object, orthogonal = TRUE))
+      visual=~x2       visual=~x3      textual=~x5      textual=~x6 
+           1.178            2.885            1.275            0.947 
+       speed=~x8        speed=~x9           x1~~x1           x2~~x2 
+           0.866            0.554            0.702            1.067 
+          x3~~x3           x4~~x4           x5~~x5           x6~~x6 
+           0.398            0.356            0.344            0.366 
+          x7~~x7           x8~~x8           x9~~x9   visual~~visual 
+           0.498            0.478            0.527            0.067 
+textual~~textual     speed~~speed             x1~1             x2~1 
+           0.631            0.583            4.936            6.088 
+            x3~1             x4~1             x5~1             x6~1 
+           2.250            3.061            4.341            2.186 
+            x7~1             x8~1             x9~1 
+           4.186            5.527            5.374 
+> summary(object)
+lavaan 0.6-22.2670 ended normally after 31 iterations
+
+  Estimator                                        GLS
+  Optimization method                           NLMINB
+  Number of model parameters                        30
+
+  Number of observations                           301
+
+Model Test User Model:
+                                                      
+  Test statistic                                77.471
+  Degrees of freedom                                24
+  P-value (Chi-square)                           0.000
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual =~                                           
+    x1                1.000                           
+    x2                0.481    0.110    4.369    0.000
+    x3                0.702    0.115    6.081    0.000
+  textual =~                                          
+    x4                1.000                           
+    x5                1.110    0.066   16.737    0.000
+    x6                0.933    0.057   16.274    0.000
+  speed =~                                            
+    x7                1.000                           
+    x8                1.112    0.138    8.069    0.000
+    x9                1.115    0.149    7.484    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.402    0.074    5.406    0.000
+    speed             0.302    0.054    5.636    0.000
+  textual ~~                                          
+    speed             0.197    0.050    3.928    0.000
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .x1                4.936    0.067   73.229    0.000
+   .x2                6.088    0.068   89.556    0.000
+   .x3                2.250    0.065   34.464    0.000
+   .x4                3.061    0.067   45.542    0.000
+   .x5                4.341    0.075   58.258    0.000
+   .x6                2.186    0.063   34.552    0.000
+   .x7                4.186    0.063   66.544    0.000
+   .x8                5.527    0.058   94.539    0.000
+   .x9                5.374    0.058   92.238    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .x1                0.549    0.101    5.418    0.000
+   .x2                1.047    0.095   11.028    0.000
+   .x3                0.749    0.081    9.292    0.000
+   .x4                0.334    0.046    7.335    0.000
+   .x5                0.386    0.056    6.850    0.000
+   .x6                0.355    0.042    8.394    0.000
+   .x7                0.594    0.076    7.863    0.000
+   .x8                0.481    0.066    7.338    0.000
+   .x9                0.455    0.065    6.992    0.000
+    visual            0.612    0.129    4.752    0.000
+    textual           0.938    0.110    8.517    0.000
+    speed             0.410    0.087    4.741    0.000
+
+> vcov(object)
+                 vsl=~2 vsl=~3 txt=~5 txt=~6 spd=~8 spd=~9 x1~~x1 x2~~x2 x3~~x3
+visual=~x2        0.012                                                        
+visual=~x3        0.005  0.013                                                 
+textual=~x5       0.000  0.000  0.004                                          
+textual=~x6       0.000  0.000  0.002  0.003                                   
+speed=~x8         0.001  0.000  0.001  0.000  0.019                            
+speed=~x9         0.001  0.000  0.000  0.000  0.012  0.022                     
+x1~~x1            0.004  0.006  0.000  0.000  0.000  0.000  0.010              
+x2~~x2           -0.001  0.000  0.000  0.000  0.000  0.000  0.000  0.009       
+x3~~x3            0.000 -0.003  0.000  0.000  0.000  0.000 -0.002  0.000  0.006
+x4~~x4            0.000  0.000  0.001  0.001  0.000  0.000  0.000  0.000  0.000
+x5~~x5            0.000  0.000 -0.001  0.000  0.000  0.000  0.000  0.000  0.000
+x6~~x6            0.000  0.000  0.000 -0.001  0.000  0.000  0.000  0.000  0.000
+x7~~x7            0.000  0.000  0.000  0.000  0.004  0.003  0.000  0.000  0.000
+x8~~x8            0.000  0.000  0.000  0.000 -0.004  0.000  0.000  0.000  0.000
+x9~~x9            0.000  0.000  0.000  0.000  0.000 -0.003  0.000  0.000  0.000
+visual~~visual   -0.005 -0.008  0.000  0.000  0.001  0.003 -0.008  0.000  0.001
+textual~~textual  0.000 -0.001 -0.004 -0.003 -0.001  0.000 -0.001  0.000  0.000
+speed~~speed     -0.001  0.000  0.000  0.000 -0.009 -0.010  0.000  0.000  0.000
+visual~~textual  -0.001 -0.002 -0.001 -0.001  0.000  0.001 -0.001  0.000  0.000
+visual~~speed    -0.001 -0.001  0.000  0.000 -0.002 -0.002 -0.001  0.000  0.000
+textual~~speed    0.000  0.000  0.000  0.000 -0.002 -0.002  0.000  0.000  0.000
+x1~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x2~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x3~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x4~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x5~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x6~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x7~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x8~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+x9~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+                 x4~~x4 x5~~x5 x6~~x6 x7~~x7 x8~~x8 x9~~x9 vsl~~v txtl~~t
+visual=~x2                                                               
+visual=~x3                                                               
+textual=~x5                                                              
+textual=~x6                                                              
+speed=~x8                                                                
+speed=~x9                                                                
+x1~~x1                                                                   
+x2~~x2                                                                   
+x3~~x3                                                                   
+x4~~x4            0.002                                                  
+x5~~x5           -0.001  0.003                                           
+x6~~x6            0.000 -0.001  0.002                                    
+x7~~x7            0.000  0.000  0.000  0.006                             
+x8~~x8            0.000  0.000  0.000 -0.001  0.004                      
+x9~~x9            0.000  0.000  0.000  0.000 -0.001  0.004               
+visual~~visual    0.000  0.000  0.000  0.000  0.000 -0.001  0.017        
+textual~~textual -0.001  0.001  0.000  0.000  0.000  0.000  0.002   0.012
+speed~~speed      0.000  0.000  0.000 -0.002  0.001  0.000 -0.001   0.000
+visual~~textual   0.000  0.000  0.000  0.000  0.000  0.000  0.005   0.004
+visual~~speed     0.000  0.000  0.000 -0.001  0.000  0.000  0.003   0.001
+textual~~speed    0.000  0.000  0.000 -0.001  0.000  0.000  0.001   0.002
+x1~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x2~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x3~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x4~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x5~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x6~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x7~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x8~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+x9~1              0.000  0.000  0.000  0.000  0.000  0.000  0.000   0.000
+                 spd~~s vsl~~t vsl~~s txtl~~s   x1~1   x2~1   x3~1   x4~1
+visual=~x2                                                               
+visual=~x3                                                               
+textual=~x5                                                              
+textual=~x6                                                              
+speed=~x8                                                                
+speed=~x9                                                                
+x1~~x1                                                                   
+x2~~x2                                                                   
+x3~~x3                                                                   
+x4~~x4                                                                   
+x5~~x5                                                                   
+x6~~x6                                                                   
+x7~~x7                                                                   
+x8~~x8                                                                   
+x9~~x9                                                                   
+visual~~visual                                                           
+textual~~textual                                                         
+speed~~speed      0.007                                                  
+visual~~textual   0.000  0.006                                           
+visual~~speed     0.002  0.001  0.003                                    
+textual~~speed    0.002  0.001  0.001   0.003                            
+x1~1              0.000  0.000  0.000   0.000  0.005                     
+x2~1              0.000  0.000  0.000   0.000  0.001  0.005              
+x3~1              0.000  0.000  0.000   0.000  0.002  0.002  0.004       
+x4~1              0.000  0.000  0.000   0.000  0.002  0.001  0.001  0.005
+x5~1              0.000  0.000  0.000   0.000  0.001  0.001  0.000  0.004
+x6~1              0.000  0.000  0.000   0.000  0.002  0.001  0.001  0.003
+x7~1              0.000  0.000  0.000   0.000  0.000  0.000  0.000  0.001
+x8~1              0.000  0.000  0.000   0.000  0.001  0.000  0.001  0.000
+x9~1              0.000  0.000  0.000   0.000  0.002  0.001  0.001  0.001
+                   x5~1   x6~1   x7~1   x8~1   x9~1
+visual=~x2                                         
+visual=~x3                                         
+textual=~x5                                        
+textual=~x6                                        
+speed=~x8                                          
+speed=~x9                                          
+x1~~x1                                             
+x2~~x2                                             
+x3~~x3                                             
+x4~~x4                                             
+x5~~x5                                             
+x6~~x6                                             
+x7~~x7                                             
+x8~~x8                                             
+x9~~x9                                             
+visual~~visual                                     
+textual~~textual                                   
+speed~~speed                                       
+visual~~textual                                    
+visual~~speed                                      
+textual~~speed                                     
+x1~1                                               
+x2~1                                               
+x3~1                                               
+x4~1                                               
+x5~1              0.006                            
+x6~1              0.003  0.004                     
+x7~1              0.000  0.000  0.004              
+x8~1              0.001  0.001  0.002  0.003       
+x9~1              0.001  0.001  0.001  0.002  0.003
+> resid(object)
+$type
+[1] "raw"
+
+$cov
+       x1     x2     x3     x4     x5     x6     x7     x8     x9
+x1  0.201                                                        
+x2  0.114  0.197                                                 
+x3  0.152  0.246  0.228                                          
+x4  0.105  0.016 -0.073  0.082                                   
+x5 -0.004 -0.003 -0.200  0.060  0.124                            
+x6  0.081  0.068 -0.018  0.023  0.046  0.027                     
+x7 -0.217 -0.242 -0.123  0.024 -0.075 -0.039  0.183              
+x8 -0.071 -0.051 -0.023 -0.093 -0.062 -0.038  0.081  0.037       
+x9  0.123  0.083  0.139  0.025  0.052  0.032 -0.083 -0.050  0.053
+
+$mean
+x1 x2 x3 x4 x5 x6 x7 x8 x9 
+ 0  0  0  0  0  0  0  0  0 
+
+> residuals(object)[[2]]
+       x1     x2     x3     x4     x5     x6     x7     x8     x9
+x1  0.201                                                        
+x2  0.114  0.197                                                 
+x3  0.152  0.246  0.228                                          
+x4  0.105  0.016 -0.073  0.082                                   
+x5 -0.004 -0.003 -0.200  0.060  0.124                            
+x6  0.081  0.068 -0.018  0.023  0.046  0.027                     
+x7 -0.217 -0.242 -0.123  0.024 -0.075 -0.039  0.183              
+x8 -0.071 -0.051 -0.023 -0.093 -0.062 -0.038  0.081  0.037       
+x9  0.123  0.083  0.139  0.025  0.052  0.032 -0.083 -0.050  0.053
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = "Bartlett"), 
++     "acov")
+[[1]]
+               visual      textual         speed
+visual   3.704364e-01 2.720046e-15  1.498801e-15
+textual -3.552714e-15 1.157985e-01 -2.053913e-15
+speed    1.942890e-15 1.831868e-15  1.431893e-01
+
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = "Bartlett"), 
++     "fsm")
+[[1]]
+                   x1            x2            x3           x4           x5
+visual   6.741598e-01  1.701906e-01  3.473941e-01 3.313322e-16 1.337472e-15
+textual -1.242062e-15 -1.630640e-16 -1.051242e-15 3.461886e-01 3.333625e-01
+speed    1.026956e-15  5.516421e-16  1.179612e-16 7.285839e-17 6.800116e-16
+                   x6            x7            x8            x9
+visual  -9.367507e-17  1.471046e-15 -1.387779e-16 -1.110223e-16
+textual  3.040658e-01 -3.608225e-16 -6.522560e-16 -7.216450e-16
+speed    2.949030e-16  2.409548e-01  3.306888e-01  3.509379e-01
+
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE, method = "Bartlett"), 
++     "se")
+[[1]]
+        visual   textual     speed
+[1,] 0.6086349 0.3402917 0.3784036
+
+> lavInspect(object, what = "gamma")
+         x1~1   x2~1   x3~1   x4~1   x5~1   x6~1   x7~1   x8~1   x9~1 x1~~x1
+x1~1    1.358                                                               
+x2~1    0.407  1.382                                                        
+x3~1    0.580  0.451  1.275                                                 
+x4~1    0.505  0.209  0.208  1.351                                          
+x5~1    0.441  0.211  0.112  1.098  1.660                                   
+x6~1    0.455  0.248  0.244  0.896  1.015  1.196                            
+x7~1    0.085 -0.097  0.088  0.220  0.143  0.144  1.183                     
+x8~1    0.264  0.110  0.212  0.126  0.181  0.165  0.535  1.022              
+x9~1    0.458  0.244  0.374  0.243  0.295  0.236  0.373  0.457  1.015       
+x1~~x1 -0.405  0.105 -0.117  0.111  0.062  0.159  0.009  0.047 -0.024  4.299
+x1~~x2  0.105  0.148 -0.046  0.051  0.084  0.189 -0.102  0.011  0.028  1.366
+x1~~x3 -0.117 -0.046  0.075  0.012  0.072  0.155 -0.001  0.087  0.003  1.800
+x1~~x4  0.111  0.051  0.012  0.207  0.105  0.229  0.158 -0.030  0.195  1.381
+x1~~x5  0.062  0.084  0.072  0.105 -0.018  0.257  0.039 -0.094  0.037  1.224
+x1~~x6  0.159  0.189  0.155  0.229  0.257  0.478  0.020  0.082  0.217  1.432
+x1~~x7  0.009 -0.102 -0.001  0.158  0.039  0.020 -0.088 -0.063 -0.075  0.532
+x1~~x8  0.047  0.011  0.087 -0.030 -0.094  0.082 -0.063  0.067 -0.020  1.120
+x1~~x9 -0.024  0.028  0.003  0.195  0.037  0.217 -0.075 -0.020 -0.161  1.348
+x2~~x2  0.148  0.767  0.462  0.111 -0.002  0.201 -0.264 -0.001  0.047  0.518
+x2~~x3 -0.046  0.462  0.228 -0.012 -0.017  0.161 -0.100  0.124  0.108  0.642
+x2~~x4  0.051  0.111 -0.012  0.206  0.262  0.232  0.070  0.131  0.064  0.268
+x2~~x5  0.084 -0.002 -0.017  0.262  0.323  0.295  0.088  0.139  0.045  0.265
+x2~~x6  0.189  0.201  0.161  0.232  0.295  0.399  0.017  0.121  0.113  0.496
+x2~~x7 -0.102 -0.264 -0.100  0.070  0.088  0.017 -0.097 -0.036 -0.051  0.059
+x2~~x8  0.011 -0.001  0.124  0.131  0.139  0.121 -0.036 -0.029 -0.059  0.376
+x2~~x9  0.028  0.047  0.108  0.064  0.045  0.113 -0.051 -0.059 -0.100  0.506
+x3~~x3  0.075  0.228  0.555  0.112  0.034  0.097  0.011  0.043  0.125  0.488
+x3~~x4  0.012 -0.012  0.112  0.125  0.191  0.280 -0.029  0.071  0.105  0.623
+x3~~x5  0.072 -0.017  0.034  0.191  0.241  0.385  0.017  0.055 -0.040  0.522
+x3~~x6  0.155  0.161  0.097  0.280  0.385  0.503  0.013  0.116  0.165  0.794
+x3~~x7 -0.001 -0.100  0.011 -0.029  0.017  0.013 -0.145  0.012  0.020  0.210
+x3~~x8  0.087  0.124  0.043  0.071  0.055  0.116  0.012  0.162  0.063  0.584
+x3~~x9  0.003  0.108  0.125  0.105 -0.040  0.165  0.020  0.063  0.027  0.595
+x4~~x4  0.207  0.206  0.125  0.422 -0.077  0.502  0.180  0.017  0.206  0.959
+x4~~x5  0.105  0.262  0.191 -0.077 -0.468  0.188  0.038 -0.056  0.163  0.710
+x4~~x6  0.229  0.232  0.280  0.502  0.188  0.720  0.065  0.084  0.275  0.828
+x4~~x7  0.158  0.070 -0.029  0.180  0.038  0.065  0.029 -0.063  0.034  0.317
+x4~~x8 -0.030  0.131  0.071  0.017 -0.056  0.084 -0.063 -0.196  0.002  0.545
+x4~~x9  0.195  0.064  0.105  0.206  0.163  0.275  0.034  0.002  0.104  0.461
+x5~~x5 -0.018  0.323  0.241 -0.468 -0.752 -0.112 -0.088 -0.029  0.062  0.598
+x5~~x6  0.257  0.295  0.385  0.188 -0.112  0.502 -0.077  0.027  0.169  0.620
+x5~~x7  0.039  0.088  0.017  0.038 -0.088 -0.077 -0.057 -0.106  0.008  0.198
+x5~~x8 -0.094  0.139  0.055 -0.056 -0.029  0.027 -0.106 -0.096  0.039  0.588
+x5~~x9  0.037  0.045 -0.040  0.163  0.062  0.169  0.008  0.039 -0.011  0.453
+x6~~x6  0.478  0.399  0.503  0.720  0.502  1.128 -0.004  0.188  0.388  0.958
+x6~~x7  0.020  0.017  0.013  0.065 -0.077 -0.004 -0.077 -0.043  0.027  0.372
+x6~~x8  0.082  0.121  0.116  0.084  0.027  0.188 -0.043 -0.147  0.046  0.547
+x6~~x9  0.217  0.113  0.165  0.275  0.169  0.388  0.027  0.046  0.147  0.475
+x7~~x7 -0.088 -0.097 -0.145  0.029 -0.057 -0.077  0.322 -0.013  0.017  0.240
+x7~~x8 -0.063 -0.036  0.012 -0.063 -0.106 -0.043 -0.013  0.088 -0.043  0.036
+x7~~x9 -0.075 -0.051  0.020  0.034  0.008  0.027  0.017 -0.043  0.144  0.157
+x8~~x8  0.067 -0.029  0.162 -0.196 -0.096 -0.147  0.088  0.545  0.109  0.362
+x8~~x9 -0.020 -0.059  0.063  0.002  0.039  0.046 -0.043  0.109  0.049  0.308
+x9~~x9 -0.161 -0.100  0.027  0.104 -0.011  0.147  0.144  0.049  0.210  0.412
+       x1~~x2 x1~~x3 x1~~x4 x1~~x5 x1~~x6 x1~~x7 x1~~x8 x1~~x9 x2~~x2 x2~~x3
+x1~1                                                                        
+x2~1                                                                        
+x3~1                                                                        
+x4~1                                                                        
+x5~1                                                                        
+x6~1                                                                        
+x7~1                                                                        
+x8~1                                                                        
+x9~1                                                                        
+x1~~x1                                                                      
+x1~~x2  2.229                                                               
+x1~~x3  1.018  1.884                                                        
+x1~~x4  0.347  0.613  2.539                                                 
+x1~~x5  0.372  0.419  1.978  2.659                                          
+x1~~x6  0.647  0.862  1.815  1.797  2.376                                   
+x1~~x7 -0.107  0.281  0.573  0.355  0.529  1.840                            
+x1~~x8  0.417  0.719  0.583  0.717  0.651  0.741  1.681                     
+x1~~x9  0.650  0.837  0.560  0.652  0.587  0.625  0.808  1.581              
+x2~~x2  1.234  0.351 -0.476 -0.366  0.014 -0.119  0.137  0.157  4.496       
+x2~~x3  0.969  0.486 -0.055  0.113  0.374 -0.090  0.286  0.336  1.508  2.023
+x2~~x4  0.136  0.052  0.575  0.532  0.427  0.074  0.025  0.134 -0.114 -0.010
+x2~~x5  0.156  0.190  0.517  0.807  0.543  0.057  0.068  0.193 -0.261 -0.120
+x2~~x6  0.541  0.436  0.398  0.530  0.772 -0.027  0.152  0.271  0.190  0.323
+x2~~x7  0.037  0.005  0.141  0.117  0.038  0.537  0.258  0.226 -0.478  0.069
+x2~~x8  0.457  0.341  0.025  0.075  0.167  0.223  0.568  0.315  0.465  0.425
+x2~~x9  0.691  0.401  0.107  0.182  0.273  0.161  0.301  0.569  0.666  0.689
+x3~~x3  0.228  0.827  0.152  0.011  0.329  0.302  0.269  0.237  0.465  0.522
+x3~~x4  0.088  0.675  0.904  0.650  0.799  0.253  0.385  0.345 -0.203  0.214
+x3~~x5  0.266  0.508  0.685  1.008  0.837  0.169  0.421  0.402 -0.180  0.343
+x3~~x6  0.480  0.767  0.771  0.780  1.270  0.269  0.450  0.430  0.097  0.525
+x3~~x7 -0.087  0.359  0.226  0.140  0.249  0.745  0.408  0.321 -0.097 -0.196
+x3~~x8  0.318  0.483  0.333  0.357  0.417  0.414  0.858  0.475  0.181  0.325
+x3~~x9  0.390  0.605  0.251  0.289  0.372  0.330  0.474  0.782  0.282  0.560
+x4~~x4  0.131  0.226  1.409  1.164  0.985  0.546  0.646  0.665  0.252  0.132
+x4~~x5  0.177  0.105  1.205  1.288  0.899  0.405  0.627  0.490  0.238  0.183
+x4~~x6  0.158  0.375  1.147  1.004  1.300  0.564  0.581  0.614  0.292  0.212
+x4~~x7  0.002  0.143  0.549  0.402  0.540  0.922  0.331  0.447 -0.251  0.078
+x4~~x8  0.029  0.367  0.939  0.861  0.760  0.379  0.646  0.390 -0.090  0.155
+x4~~x9  0.131  0.299  1.161  0.886  0.914  0.527  0.383  0.654 -0.118  0.148
+x5~~x5  0.224  0.095  0.934  1.172  0.697  0.167  0.572  0.346  0.091  0.194
+x5~~x6  0.226  0.300  0.886  1.005  1.139  0.339  0.543  0.492  0.334  0.273
+x5~~x7  0.016  0.096  0.426  0.245  0.360  0.958  0.408  0.469 -0.143  0.127
+x5~~x8  0.050  0.346  0.825  0.931  0.729  0.431  0.655  0.439 -0.131  0.148
+x5~~x9  0.170  0.282  0.844  0.976  0.823  0.509  0.444  0.553 -0.093  0.130
+x6~~x6  0.397  0.687  1.103  1.073  1.794  0.433  0.606  0.669  0.463  0.480
+x6~~x7 -0.065  0.206  0.568  0.362  0.469  0.882  0.429  0.470 -0.274  0.067
+x6~~x8  0.149  0.418  0.734  0.738  0.846  0.452  0.602  0.455 -0.026  0.225
+x6~~x9  0.288  0.405  0.905  0.853  1.110  0.516  0.468  0.676  0.024  0.321
+x7~~x7  0.047  0.066  0.344  0.449  0.356  0.378  0.218  0.121 -0.248 -0.209
+x7~~x8  0.014  0.121  0.119  0.210  0.223  0.485  0.396  0.292 -0.135 -0.043
+x7~~x9  0.029  0.145  0.360  0.370  0.366  0.632  0.439  0.303 -0.173  0.036
+x8~~x8  0.181  0.322  0.163  0.252  0.181  0.451  1.077  0.391 -0.120  0.179
+x8~~x9  0.179  0.307  0.217  0.320  0.323  0.499  0.738  0.522 -0.004  0.218
+x9~~x9  0.268  0.364  0.254  0.241  0.323  0.388  0.464  0.868  0.030  0.335
+       x2~~x4 x2~~x5 x2~~x6 x2~~x7 x2~~x8 x2~~x9 x3~~x3 x3~~x4 x3~~x5 x3~~x6
+x1~1                                                                        
+x2~1                                                                        
+x3~1                                                                        
+x4~1                                                                        
+x5~1                                                                        
+x6~1                                                                        
+x7~1                                                                        
+x8~1                                                                        
+x9~1                                                                        
+x1~~x1                                                                      
+x1~~x2                                                                      
+x1~~x3                                                                      
+x1~~x4                                                                      
+x1~~x5                                                                      
+x1~~x6                                                                      
+x1~~x7                                                                      
+x1~~x8                                                                      
+x1~~x9                                                                      
+x2~~x2                                                                      
+x2~~x3                                                                      
+x2~~x4  2.075                                                               
+x2~~x5  1.710  2.340                                                        
+x2~~x6  1.478  1.684  2.054                                                 
+x2~~x7  0.073  0.075 -0.051  1.377                                          
+x2~~x8  0.060  0.095  0.175  0.615  1.280                                   
+x2~~x9  0.168  0.263  0.290  0.367  0.601  1.373                            
+x3~~x3  0.042  0.124  0.319 -0.032  0.281  0.417  1.798                     
+x3~~x4  0.698  0.635  0.564  0.197  0.189  0.207  0.343  1.682              
+x3~~x5  0.655  0.919  0.702  0.203  0.217  0.236  0.113  1.360  2.216       
+x3~~x6  0.565  0.679  0.959  0.156  0.273  0.368  0.390  1.233  1.454  1.835
+x3~~x7  0.159  0.173  0.111  0.333  0.189  0.183  0.270  0.456  0.343  0.354
+x3~~x8  0.167  0.185  0.247  0.219  0.617  0.372  0.335  0.422  0.489  0.486
+x3~~x9  0.180  0.185  0.335  0.240  0.383  0.701  0.679  0.431  0.458  0.543
+x4~~x4  0.425  0.203  0.273  0.263  0.037  0.319  0.004  0.575  0.454  0.543
+x4~~x5  0.259  0.091  0.112  0.158  0.012  0.242 -0.016  0.377  0.413  0.367
+x4~~x6  0.421  0.195  0.524  0.253  0.093  0.293  0.142  0.686  0.535  0.863
+x4~~x7  0.087  0.005  0.112  0.291  0.109  0.122  0.194  0.155  0.066  0.258
+x4~~x8  0.158  0.105  0.161  0.146  0.252  0.240  0.306  0.498  0.476  0.482
+x4~~x9  0.598  0.458  0.452  0.199  0.244  0.484  0.198  0.898  0.762  0.730
+x5~~x5 -0.024 -0.091 -0.088 -0.011  0.021  0.211  0.112  0.191  0.105  0.086
+x5~~x6  0.172  0.109  0.416  0.120  0.145  0.257  0.188  0.424  0.377  0.583
+x5~~x7  0.022 -0.202 -0.014  0.302  0.062  0.105  0.171  0.061  0.016  0.141
+x5~~x8  0.094  0.165  0.211  0.095  0.184  0.176  0.282  0.452  0.529  0.511
+x5~~x9  0.448  0.553  0.432  0.168  0.187  0.396  0.124  0.728  0.831  0.716
+x6~~x6  0.495  0.415  1.068  0.237  0.341  0.388  0.370  0.833  0.696  1.365
+x6~~x7  0.136 -0.009  0.085  0.357  0.126  0.217  0.192  0.281  0.160  0.327
+x6~~x8  0.157  0.221  0.431  0.157  0.309  0.314  0.327  0.478  0.537  0.667
+x6~~x9  0.462  0.455  0.621  0.275  0.328  0.640  0.334  0.740  0.761  0.971
+x7~~x7  0.023  0.038  0.051 -0.032 -0.085 -0.109  0.009  0.020  0.097  0.117
+x7~~x8  0.022 -0.036  0.009  0.096 -0.063 -0.010  0.089  0.202  0.140  0.143
+x7~~x9  0.097  0.061  0.160  0.216  0.080  0.032  0.127  0.280  0.224  0.281
+x8~~x8  0.052 -0.012  0.074  0.094  0.258  0.093  0.171  0.394  0.220  0.234
+x8~~x9  0.175  0.123  0.241  0.165  0.292  0.289  0.220  0.342  0.328  0.349
+x9~~x9  0.332  0.254  0.446  0.221  0.289  0.605  0.256  0.307  0.248  0.500
+       x3~~x7 x3~~x8 x3~~x9 x4~~x4 x4~~x5 x4~~x6 x4~~x7 x4~~x8 x4~~x9 x5~~x5
+x1~1                                                                        
+x2~1                                                                        
+x3~1                                                                        
+x4~1                                                                        
+x5~1                                                                        
+x6~1                                                                        
+x7~1                                                                        
+x8~1                                                                        
+x9~1                                                                        
+x1~~x1                                                                      
+x1~~x2                                                                      
+x1~~x3                                                                      
+x1~~x4                                                                      
+x1~~x5                                                                      
+x1~~x6                                                                      
+x1~~x7                                                                      
+x1~~x8                                                                      
+x1~~x9                                                                      
+x2~~x2                                                                      
+x2~~x3                                                                      
+x2~~x4                                                                      
+x2~~x5                                                                      
+x2~~x6                                                                      
+x2~~x7                                                                      
+x2~~x8                                                                      
+x2~~x9                                                                      
+x3~~x3                                                                      
+x3~~x4                                                                      
+x3~~x5                                                                      
+x3~~x6                                                                      
+x3~~x7  1.510                                                               
+x3~~x8  0.752  1.429                                                        
+x3~~x9  0.569  0.724  1.410                                                 
+x4~~x4  0.082  0.238  0.444  3.832                                          
+x4~~x5 -0.006  0.257  0.379  3.032  3.238                                   
+x4~~x6  0.232  0.322  0.455  2.668  2.285  2.839                            
+x4~~x7  0.247  0.267  0.276  0.602  0.513  0.642  1.696                     
+x4~~x8  0.302  0.580  0.390  0.647  0.662  0.682  0.733  1.469              
+x4~~x9  0.337  0.385  0.428  0.817  0.775  0.876  0.747  0.824  1.811       
+x5~~x5 -0.115  0.197  0.244  2.201  2.981  1.703  0.443  0.597  0.598  4.033
+x5~~x6  0.086  0.340  0.409  1.897  2.075  2.121  0.514  0.641  0.720  2.227
+x5~~x7  0.218  0.170  0.213  0.562  0.651  0.609  1.498  0.708  0.695  0.645
+x5~~x8  0.184  0.296  0.312  0.556  0.607  0.607  0.686  1.196  0.687  0.774
+x5~~x9  0.240  0.316  0.251  0.643  0.678  0.703  0.665  0.694  1.347  0.756
+x6~~x6  0.257  0.453  0.581  2.025  1.717  2.808  0.621  0.663  0.945  1.385
+x6~~x7  0.393  0.243  0.319  0.645  0.579  0.755  1.242  0.731  0.696  0.495
+x6~~x8  0.259  0.448  0.398  0.571  0.587  0.665  0.713  1.154  0.762  0.535
+x6~~x9  0.352  0.410  0.659  0.775  0.708  1.025  0.679  0.773  1.437  0.553
+x7~~x7  0.158  0.202  0.119  0.146  0.230  0.214  0.696  0.297  0.274  0.284
+x7~~x8  0.406  0.383  0.273  0.038  0.138  0.270  0.328  0.263  0.281  0.222
+x7~~x9  0.528  0.394  0.347  0.296  0.320  0.397  0.480  0.365  0.551  0.257
+x8~~x8  0.407  0.661  0.322  0.105  0.097  0.259  0.106  0.092  0.181  0.313
+x8~~x9  0.432  0.607  0.507  0.237  0.229  0.393  0.311  0.372  0.422  0.282
+x9~~x9  0.397  0.462  0.995  0.499  0.304  0.586  0.419  0.405  0.626  0.174
+       x5~~x6 x5~~x7 x5~~x8 x5~~x9 x6~~x6 x6~~x7 x6~~x8 x6~~x9 x7~~x7 x7~~x8
+x1~1                                                                        
+x2~1                                                                        
+x3~1                                                                        
+x4~1                                                                        
+x5~1                                                                        
+x6~1                                                                        
+x7~1                                                                        
+x8~1                                                                        
+x9~1                                                                        
+x1~~x1                                                                      
+x1~~x2                                                                      
+x1~~x3                                                                      
+x1~~x4                                                                      
+x1~~x5                                                                      
+x1~~x6                                                                      
+x1~~x7                                                                      
+x1~~x8                                                                      
+x1~~x9                                                                      
+x2~~x2                                                                      
+x2~~x3                                                                      
+x2~~x4                                                                      
+x2~~x5                                                                      
+x2~~x6                                                                      
+x2~~x7                                                                      
+x2~~x8                                                                      
+x2~~x9                                                                      
+x3~~x3                                                                      
+x3~~x4                                                                      
+x3~~x5                                                                      
+x3~~x6                                                                      
+x3~~x7                                                                      
+x3~~x8                                                                      
+x3~~x9                                                                      
+x4~~x4                                                                      
+x4~~x5                                                                      
+x4~~x6                                                                      
+x4~~x7                                                                      
+x4~~x8                                                                      
+x4~~x9                                                                      
+x5~~x5                                                                      
+x5~~x6  2.341                                                               
+x5~~x7  0.589  2.227                                                        
+x5~~x8  0.627  1.085  1.977                                                 
+x5~~x9  0.646  0.834  0.987  1.771                                          
+x6~~x6  2.485  0.489  0.586  0.818  4.068                                   
+x6~~x7  0.513  1.416  0.814  0.651  0.614  1.514                            
+x6~~x8  0.634  0.817  1.240  0.763  0.778  0.864  1.481                     
+x6~~x9  0.932  0.660  0.769  1.327  1.332  0.746  0.942  1.832              
+x7~~x7  0.237  0.587  0.315  0.388  0.120  0.503  0.242  0.262  2.394       
+x7~~x8  0.297  0.452  0.301  0.344  0.247  0.361  0.200  0.297  1.060  1.477
+x7~~x9  0.315  0.684  0.435  0.479  0.333  0.488  0.361  0.547  0.833  0.778
+x8~~x8  0.233  0.251  0.549  0.334  0.286  0.141 -0.073  0.170  0.554  1.440
+x8~~x9  0.347  0.437  0.553  0.439  0.434  0.357  0.335  0.530  0.437  0.783
+x9~~x9  0.367  0.444  0.390  0.604  0.673  0.489  0.470  0.985  0.268  0.371
+       x7~~x9 x8~~x8 x8~~x9 x9~~x9
+x1~1                              
+x2~1                              
+x3~1                              
+x4~1                              
+x5~1                              
+x6~1                              
+x7~1                              
+x8~1                              
+x9~1                              
+x1~~x1                            
+x1~~x2                            
+x1~~x3                            
+x1~~x4                            
+x1~~x5                            
+x1~~x6                            
+x1~~x7                            
+x1~~x8                            
+x1~~x9                            
+x2~~x2                            
+x2~~x3                            
+x2~~x4                            
+x2~~x5                            
+x2~~x6                            
+x2~~x7                            
+x2~~x8                            
+x2~~x9                            
+x3~~x3                            
+x3~~x4                            
+x3~~x5                            
+x3~~x6                            
+x3~~x7                            
+x3~~x8                            
+x3~~x9                            
+x4~~x4                            
+x4~~x5                            
+x4~~x6                            
+x4~~x7                            
+x4~~x8                            
+x4~~x9                            
+x5~~x5                            
+x5~~x6                            
+x5~~x7                            
+x5~~x8                            
+x5~~x9                            
+x6~~x6                            
+x6~~x7                            
+x6~~x8                            
+x6~~x9                            
+x7~~x7                            
+x7~~x8                            
+x7~~x9  1.329                     
+x8~~x8  0.646  3.342              
+x8~~x9  0.744  1.264  1.188       
+x9~~x9  0.809  0.360  0.896  2.382
+> head(lavScores(object))
+       visual=~x2   visual=~x3 textual=~x5 textual=~x6   speed=~x8    speed=~x9
+[1,] -1.118826153  0.803610954 -1.27031050  0.45118791 -0.17885009  0.028120330
+[2,]  0.144685746  0.002447486  0.80185111 -0.57762458 -0.08542243  2.286886507
+[3,]  0.321366562 -0.137303221  1.68393503 -0.24136706  1.07086094 -0.198034891
+[4,]  0.097325532 -0.079791004 -0.25179881 -0.26185701 -0.30290679 -0.002862696
+[5,]  0.326578788  0.386555412 -0.04771092 -0.63010118 -0.02017625 -0.054794614
+[6,] -0.004263803 -0.123984569 -0.40864592  0.05687671  0.18700327  1.798225950
+         x1~~x1      x2~~x2     x3~~x3     x4~~x4     x5~~x5     x6~~x6
+[1,]  0.5025228  1.30496130  0.8546377 -0.2625890  3.3908202  1.1810810
+[2,] -0.5603930  0.06378751 -0.2984996 -0.7504601 -0.3836660 -1.0113120
+[3,] -0.3117049 -0.35136145 -0.5440853 -0.7146374 -0.2920144 -1.0459497
+[4,] -0.5629697  0.17112364 -0.4494691 -0.5128512 -0.6960333 -0.9815434
+[5,] -0.5494362  0.11132482  0.4680985 -0.9350278 -0.2866379  0.3067180
+[6,] -0.4364830  0.16197310 -0.4809092  0.7017555 -0.8171758 -1.0162078
+         x7~~x7      x8~~x8     x9~~x9 visual~~visual textual~~textual
+[1,] -0.1887372 -0.68661664  1.0889742      0.9303488       -0.5449282
+[2,]  0.4370663 -0.72322758  6.2664261     -0.2501371        0.5650065
+[3,] -0.6065405  0.34224251 -0.7525089     -0.4532839        1.2717801
+[4,] -0.3422766 -0.70995115 -0.4051848     -0.1190535       -0.5420289
+[5,]  0.3039490  0.05363868 -0.1016096      0.2452803       -0.5448457
+[6,] -0.3528979 -0.59146508  2.9797892     -0.5554088        1.3692687
+     speed~~speed visual~~textual visual~~speed textual~~speed       x1~1
+[1,]    0.2283281       0.2801048    -2.3014266      0.2547865 -1.4633886
+[2,]    3.3382556       1.5797823    -1.9441151     -4.2332947  0.1507887
+[3,]    0.2414450      -0.6354500    -0.3433913      3.2599021  0.7200424
+[4,]   -0.1226747       0.2698965    -0.8310104      0.3057466  0.1326685
+[5,]   -0.1773770       0.2969234    -1.2196353      0.2454909  0.2111353
+[6,]    3.2849526       0.8545138    -0.2595417     -5.5814346  0.5193591
+           x2~1         x3~1       x4~1       x5~1        x6~1        x7~1
+[1,]  1.8628094 -1.669787219 -1.2070679  2.8979781 -2.10703252 -0.91633109
+[2,] -0.9979770 -0.699697594 -0.6960693 -0.9350852  0.26337698 -1.44468388
+[3,] -0.4103884 -0.006096163 -0.7456003 -1.0281432 -0.01794447  0.08265711
+[4,]  1.0999623  0.434328149 -0.9788521  0.5017222  0.35875717 -0.73048213
+[5,] -1.0443739 -1.420450405 -0.3414723 -1.0333421  1.64215397 -1.34972639
+[6,] -1.0916395 -0.354921965 -1.8382857  0.1012178 -0.24414802 -0.71584363
+           x8~1        x9~1
+[1,]  0.3417942  1.91655300
+[2,]  0.2093912  3.74081242
+[3,] -1.4723129 -0.04944532
+[4,]  0.2651590 -0.83353777
+[5,]  1.2619094  1.14013976
+[6,]  0.5536192  2.72804724
+> nobs(object)
+[1] 301
+> head(resid(object, "obs"))
+             x1         x2         x3         x4         x5            x6
+[1,] -0.9310356  1.9849889 -1.4039251 -0.6153530  1.5340205 -0.7951075548
+[2,]  0.3096201 -0.8803518 -0.1871735 -0.3753522 -0.2096928  0.0511936367
+[3,]  0.4080903 -0.4320363  0.2171842 -0.1780071 -0.5007485  0.0005363732
+[4,]  0.1197145  1.5282795  0.5544656 -0.4131554  0.1384763  0.2253447886
+[5,]  0.2263262 -1.1798634 -1.1445422 -0.2492117 -0.1795669  0.5212302640
+[6,]  0.3367757 -1.1172866 -0.0431035 -0.7311375  0.1353464 -0.0871949942
+              x7          x8           x9
+[1,] -0.82509428  0.18901903  0.952975031
+[2,] -1.08750439 -0.03774943  1.779442408
+[3,] -0.06981623 -0.67628799 -0.003633364
+[4,] -0.88492554  0.10753487 -0.177332870
+[5,] -0.64475809  0.60114875  0.370220284
+[6,] -0.59671117  0.27950933  1.279770362
+> head(predict(object))
+          visual     textual       speed
+[1,] -0.67140071 -0.11222181  0.03049651
+[2,]  0.08794353 -1.01888922  0.68421102
+[3,] -0.84385998 -1.88290103 -0.85521623
+[4,]  0.27784913  0.01891401 -0.30097653
+[5,] -0.32876257 -0.14502969  0.15450822
+[6,]  0.06078791 -1.32977062  0.75863521
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), "acov")
+[[1]]
+            visual     textual       speed
+visual  0.18250220 0.017573337 0.031876202
+textual 0.01757334 0.100530796 0.003013465
+speed   0.03187620 0.003013465 0.098095657
+
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), "fsm")
+[[1]]
+                x1          x2         x3         x4          x5          x6
+visual  0.33213700 0.083847489 0.17114998 0.05253688 0.050590407 0.046144409
+textual 0.03198184 0.008073767 0.01648022 0.30054475 0.289409686 0.263975719
+speed   0.05801172 0.014644972 0.02989340 0.00900899 0.008675211 0.007912814
+                x7         x8         x9
+visual  0.05364034 0.07361654 0.07812432
+textual 0.00507097 0.00695945 0.00738560
+speed   0.16507249 0.22654715 0.24041937
+
+> attr(lavPredict(object, fsm = TRUE, se = TRUE, acov = TRUE), "se")
+[[1]]
+        visual   textual     speed
+[1,] 0.4272028 0.3170659 0.3132023
+
+Warning messages:
+1: lavaan->ll():  
+   logLik only available if estimator is ML 
+2: lavaan->ll():  
+   logLik only available if estimator is ML 
+3: lavaan->lav_tables_pattern():  
+   no categorical variables are found 
+4: lavaan->lav_tables_oneway():  
+   no categorical variables are found 
+5: lavaan->lav_tables_pairwise_cells():  
+   no categorical variables are found 
+6: lavaan->logLik():  
+   logLik only available if estimator is ML 
+> 

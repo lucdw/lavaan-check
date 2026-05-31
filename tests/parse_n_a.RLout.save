@@ -1,0 +1,67 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_n_a
+> # ===================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ 
++  F =~ 2 * x1 + 3 * label("NA") * x2 + 4 * x3 + b * x3
++  G =~ z * x10 + x11 + 4 * h * x12
++  H =~ x1 + x10 + 3 * x20 + 0.4 ? x21
++ 
++  G ~ f1 * F +  0 * G
++  H ~ f2 * F +  g2 * G
++ 
++  
++ 
++  
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+   lhs op rhs mod.idx block fixed start lower upper label prior efa rv
+1    F =~  x1       1     1     2                                     
+2    F =~  x2       2     1     3                      NA             
+3    F =~  x3       3     1     4                       b             
+4    G =~ x10       4     1                             z             
+5    G =~ x11       0     1                                           
+6    G =~ x12       5     1     4                       h             
+7    H =~  x1       0     1                                           
+8    H =~ x10       0     1                                           
+9    H =~ x20       6     1     3                                     
+10   H =~ x21       7     1         0.4                               
+11   G  ~   F       8     1                            f1             
+12   G  ~   G       9     1     0                                     
+13   H  ~   F      10     1                            f2             
+14   H  ~   G      11     1                            g2             
+> 

@@ -1,0 +1,52 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_OKT20_9
+> # ==========================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ Sepal.Width ~ ~Sepal.Length
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+Warning message:
+lavaan->lav_parse_text_tokens():  
+   splitting of '~~' deprecated at line 1, pos 13
+Sepal.Width ~ ~Sepal.Length
+            ^
+ 
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+          lhs op          rhs mod.idx block fixed start lower upper label prior
+1 Sepal.Width ~~ Sepal.Length       0     1                                    
+  efa rv
+1       
+> 

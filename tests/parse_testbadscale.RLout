@@ -1,0 +1,208 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_testbadscale
+> # ============================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++   Hopeless~~Hopeless
++ TB~~TB
++ PB~~PB
++ SI~~SI
++ Hopeless~1
++ TB~1
++ PB~1
++ SI~1
++ Time~~Time
++ Hopelesslag~~Time
++ TBlag~~Time
++ PBlag~~Time
++ SIlag~~Time
++ Hopelesslag~~Hopelesslag
++ TBlag~~Hopelesslag
++ PBlag~~Hopelesslag
++ SIlag~~Hopelesslag
++ TBlag~~TBlag
++ PBlag~~TBlag
++ SIlag~~TBlag
++ PBlag~~PBlag
++ SIlag~~PBlag
++ SIlag~~SIlag
++ Time~1
++ Hopelesslag~1
++ TBlag~1
++ PBlag~1
++ SIlag~1
++ Time~0*Hopeless
++ Time~0*TB
++ Time~0*PB
++ Time~0*SI
++ Hopelesslag~0*Hopeless
++ Hopelesslag~0*TB
++ Hopelesslag~0*PB
++ Hopelesslag~0*SI
++ TBlag~0*Hopeless
++ TBlag~0*TB
++ TBlag~0*PB
++ TBlag~0*SI
++ PBlag~0*Hopeless
++ PBlag~0*TB
++ PBlag~0*PB
++ PBlag~0*SI
++ SIlag~0*Hopeless
++ SIlag~0*TB
++ SIlag~0*PB
++ SIlag~0*SI
++ Hopeless~Hopelesslag
++ TB~TBlag
++ PB~PBlag
++ SI~SIlag
++ TB~PB
++ PB~Hopeless
++ SI~PB
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+           lhs op         rhs mod.idx block fixed start lower upper label prior
+1     Hopeless ~~    Hopeless       0     1                                    
+2           TB ~~          TB       0     1                                    
+3           PB ~~          PB       0     1                                    
+4           SI ~~          SI       0     1                                    
+5     Hopeless ~1                   0     1                                    
+6           TB ~1                   0     1                                    
+7           PB ~1                   0     1                                    
+8           SI ~1                   0     1                                    
+9         Time ~~        Time       0     1                                    
+10        Time ~~ Hopelesslag       0     1                                    
+11        Time ~~       TBlag       0     1                                    
+12        Time ~~       PBlag       0     1                                    
+13        Time ~~       SIlag       0     1                                    
+14 Hopelesslag ~~ Hopelesslag       0     1                                    
+15 Hopelesslag ~~       TBlag       0     1                                    
+16 Hopelesslag ~~       PBlag       0     1                                    
+17 Hopelesslag ~~       SIlag       0     1                                    
+18       TBlag ~~       TBlag       0     1                                    
+19       TBlag ~~       PBlag       0     1                                    
+20       TBlag ~~       SIlag       0     1                                    
+21       PBlag ~~       PBlag       0     1                                    
+22       PBlag ~~       SIlag       0     1                                    
+23       SIlag ~~       SIlag       0     1                                    
+24        Time ~1                   0     1                                    
+25 Hopelesslag ~1                   0     1                                    
+26       TBlag ~1                   0     1                                    
+27       PBlag ~1                   0     1                                    
+28       SIlag ~1                   0     1                                    
+29        Time  ~    Hopeless       1     1     0                              
+30        Time  ~          TB       2     1     0                              
+31        Time  ~          PB       3     1     0                              
+32        Time  ~          SI       4     1     0                              
+33 Hopelesslag  ~    Hopeless       5     1     0                              
+34 Hopelesslag  ~          TB       6     1     0                              
+35 Hopelesslag  ~          PB       7     1     0                              
+36 Hopelesslag  ~          SI       8     1     0                              
+37       TBlag  ~    Hopeless       9     1     0                              
+38       TBlag  ~          TB      10     1     0                              
+39       TBlag  ~          PB      11     1     0                              
+40       TBlag  ~          SI      12     1     0                              
+41       PBlag  ~    Hopeless      13     1     0                              
+42       PBlag  ~          TB      14     1     0                              
+43       PBlag  ~          PB      15     1     0                              
+44       PBlag  ~          SI      16     1     0                              
+45       SIlag  ~    Hopeless      17     1     0                              
+46       SIlag  ~          TB      18     1     0                              
+47       SIlag  ~          PB      19     1     0                              
+48       SIlag  ~          SI      20     1     0                              
+49    Hopeless  ~ Hopelesslag       0     1                                    
+50          TB  ~       TBlag       0     1                                    
+51          PB  ~       PBlag       0     1                                    
+52          SI  ~       SIlag       0     1                                    
+53          TB  ~          PB       0     1                                    
+54          PB  ~    Hopeless       0     1                                    
+55          SI  ~          PB       0     1                                    
+   efa rv
+1        
+2        
+3        
+4        
+5        
+6        
+7        
+8        
+9        
+10       
+11       
+12       
+13       
+14       
+15       
+16       
+17       
+18       
+19       
+20       
+21       
+22       
+23       
+24       
+25       
+26       
+27       
+28       
+29       
+30       
+31       
+32       
+33       
+34       
+35       
+36       
+37       
+38       
+39       
+40       
+41       
+42       
+43       
+44       
+45       
+46       
+47       
+48       
+49       
+50       
+51       
+52       
+53       
+54       
+55       
+> 

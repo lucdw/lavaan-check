@@ -1,0 +1,106 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_OKT18_B
+> # ==========================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ i =~ 1*d1 + 1*d2 + 1*d3 + 1*d4 + 1*d5
++ + 1*d6 + 1*d7 + 1*d8 + 1*d9 + 1*d10
++ 
++ s = ~ 0*d1 + 1*d2 + 2*d3 + 3*d4 + 4*d5
++ + 5*d6 + 6*d7 + 7*d8 + 8*d9 + 9*d10
++ 
++ d1 ~~ evar*d1
++ d2 ~~ evar*d2
++ d3 ~~ evar*d3
++ d4 ~~ evar*d4
++ d5 ~~ evar*d5
++ d6 ~~ evar*d6
++ d7 ~~ evar*d7
++ d8 ~~ evar*d8
++ d9 ~~ evar*d9
++ d10 ~~ evar*d10
++ 
++ ## reparameterize as sd
++ sdevar := sqrt(evar)
++ i ~~ ivar*i
++ isd := sqrt(ivar)
++ s ~~ svar*s
++ ssd := sqrt(svar)
++ i ~~ iscov*s
++ rho := iscov/(isd*ssd)
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+Warning message:
+lavaan->lav_parse_text_tokens():  
+   splitting of '=~' deprecated at line 4, pos 3
+s = ~ 0*d1 + 1*d2 + 2*d3 + 3*d4 + 4*d5
+  ^
+ 
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+   lhs op rhs mod.idx block fixed start lower upper label prior efa rv
+1    i =~  d1       1     1     1                                     
+2    i =~  d2       2     1     1                                     
+3    i =~  d3       3     1     1                                     
+4    i =~  d4       4     1     1                                     
+5    i =~  d5       5     1     1                                     
+6    i =~  d6       6     1     1                                     
+7    i =~  d7       7     1     1                                     
+8    i =~  d8       8     1     1                                     
+9    i =~  d9       9     1     1                                     
+10   i =~ d10      10     1     1                                     
+11   s =~  d1      11     1     0                                     
+12   s =~  d2      12     1     1                                     
+13   s =~  d3      13     1     2                                     
+14   s =~  d4      14     1     3                                     
+15   s =~  d5      15     1     4                                     
+16   s =~  d6      16     1     5                                     
+17   s =~  d7      17     1     6                                     
+18   s =~  d8      18     1     7                                     
+19   s =~  d9      19     1     8                                     
+20   s =~ d10      20     1     9                                     
+21  d1 ~~  d1      21     1                          evar             
+22  d2 ~~  d2      22     1                          evar             
+23  d3 ~~  d3      23     1                          evar             
+24  d4 ~~  d4      24     1                          evar             
+25  d5 ~~  d5      25     1                          evar             
+26  d6 ~~  d6      26     1                          evar             
+27  d7 ~~  d7      27     1                          evar             
+28  d8 ~~  d8      28     1                          evar             
+29  d9 ~~  d9      29     1                          evar             
+30 d10 ~~ d10      30     1                          evar             
+31   i ~~   i      31     1                          ivar             
+32   s ~~   s      32     1                          svar             
+33   i ~~   s      33     1                         iscov             
+> 

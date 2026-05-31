@@ -1,0 +1,62 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_OKT20_1
+> # ==========================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ 
++ level =~ 1* X1 +1* X2 +1* X3 +1* X4 +1* X5 +1* X6 
++  X1 ~~(vare)* X1 
++  X2 ~~(vare)* X2 
++  X3 ~~(vare)* X3 
++  X4 ~~(vare)* X4 
++  X5 ~~(vare)* X5 
++  X6 ~~(vare)* X6 
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+     lhs op rhs mod.idx block fixed start lower upper label prior efa rv
+1  level =~  X1       1     1     1                                     
+2  level =~  X2       2     1     1                                     
+3  level =~  X3       3     1     1                                     
+4  level =~  X4       4     1     1                                     
+5  level =~  X5       5     1     1                                     
+6  level =~  X6       6     1     1                                     
+7     X1 ~~  X1       7     1                          vare             
+8     X2 ~~  X2       8     1                          vare             
+9     X3 ~~  X3       9     1                          vare             
+10    X4 ~~  X4      10     1                          vare             
+11    X5 ~~  X5      11     1                          vare             
+12    X6 ~~  X6      12     1                          vare             
+> 

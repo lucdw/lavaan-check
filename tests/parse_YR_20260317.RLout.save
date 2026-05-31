@@ -1,0 +1,68 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_20260317
+> # ===========================
+> # error detected on mars 17, 2026
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++    f1 =~ 1*x1 + 0.7*x2 + 0.5*x3
++    f2 =~ 1*x4 + 0.8*x5 + 1.1*x6
++    f1 ~~ 0.6*f1
++    f2 ~~ 0.6*f2
++    f1 ~~ 0.3*f2
++    x1 | -0.1*t1
++    x2 | -0.2*t1
++    x3 | -0.3*t1
++    x4 |  0.3*t1
++    x5 |  0.2*t1
++    x6 |  0.1*t1
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+   lhs op rhs mod.idx block fixed start lower upper label prior efa rv
+1   f1 =~  x1       1     1     1                                     
+2   f1 =~  x2       2     1   0.7                                     
+3   f1 =~  x3       3     1   0.5                                     
+4   f2 =~  x4       4     1     1                                     
+5   f2 =~  x5       5     1   0.8                                     
+6   f2 =~  x6       6     1   1.1                                     
+7   f1 ~~  f1       7     1   0.6                                     
+8   f2 ~~  f2       8     1   0.6                                     
+9   f1 ~~  f2       9     1   0.3                                     
+10  x1  |  t1      10     1  -0.1                                     
+11  x2  |  t1      11     1  -0.2                                     
+12  x3  |  t1      12     1  -0.3                                     
+13  x4  |  t1      13     1   0.3                                     
+14  x5  |  t1      14     1   0.2                                     
+15  x6  |  t1      15     1   0.1                                     
+> 

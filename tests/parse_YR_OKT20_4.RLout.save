@@ -1,0 +1,302 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_OKT20_4
+> # ==========================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ 
++   # loadings
++     A1B1 =~ 1*var1
++     A2B1 =~ 1*var2
++     A3B1 =~ 1*var3
++     A1B2 =~ 1*var4
++     A2B2 =~ 1*var5
++     A3B2 =~ 1*var6
++   # intercepts
++     var1 ~ 0*1
++     var2 ~ 0*1
++     var3 ~ 0*1
++     var4 ~ 0*1
++     var5 ~ 0*1
++     var6 ~ 0*1
++     A1B1 ~ 0*1
++     A2B1 ~ 0*1
++     A3B1 ~ 0*1
++     A1B2 ~ 0*1
++     A2B2 ~ 0*1
++     A3B2 ~ 0*1
++   # variances
++     A1B1 ~~ 0*A1B1
++     A2B1 ~~ 0*A1B1 + 0*A2B1
++     A3B1 ~~ 0*A1B1 + 0*A2B1 + 0*A3B1
++     A1B2 ~~ 0*A1B1 + 0*A2B1 + 0*A3B1 + 0*A1B2
++     A2B2 ~~ 0*A1B1 + 0*A2B1 + 0*A3B1 + 0*A1B2 + 0*A2B2
++     A3B2 ~~ 0*A1B1 + 0*A2B1 + 0*A3B1 + 0*A1B2 + 0*A2B2 + 0*A3B2
++     .pi1 ~~ .pi1
++     .pi2 ~~ .pi1 + .pi2
++     .pi3 ~~ .pi1 + .pi2 + .pi3
++     .pi4 ~~ .pi1 + .pi2 + .pi3 + .pi4
++     .pi5 ~~ .pi1 + .pi2 + .pi3 + .pi4 + .pi5
++     .pi6 ~~ .pi1 + .pi2 + .pi3 + .pi4 + .pi5 + .pi6
++   # struc_coeff
++     .pi1 =~ 0.166666666666667*A1B1 + 0.166666666666667*A2B1 + 0.166666666666667*A3B1 + 0.166666666666667*A1B2 + 0.166666666666667*A2B2 + 0.166666666666667*A3B2
++     .pi2 =~ 0.333333333333333*A1B1 + -0.166666666666667*A2B1 + -0.166666666666667*A3B1 + 0.333333333333333*A1B2 + -0.166666666666667*A2B2 + -0.166666666666667*A3B2
++     .pi3 =~ -0.166666666666667*A1B1 + 0.333333333333333*A2B1 + -0.166666666666667*A3B1 + -0.166666666666667*A1B2 + 0.333333333333333*A2B2 + -0.166666666666667*A3B2
++     .pi4 =~ 0.166666666666667*A1B1 + 0.166666666666667*A2B1 + 0.166666666666667*A3B1 + -0.166666666666667*A1B2 + -0.166666666666667*A2B2 + -0.166666666666667*A3B2
++     .pi5 =~ 0.333333333333333*A1B1 + -0.166666666666667*A2B1 + -0.166666666666667*A3B1 + -0.333333333333333*A1B2 + 0.166666666666667*A2B2 + 0.166666666666667*A3B2
++     .pi6 =~ -0.166666666666667*A1B1 + 0.333333333333333*A2B1 + -0.166666666666667*A3B1 + 0.166666666666667*A1B2 + -0.333333333333333*A2B2 + 0.166666666666667*A3B2
++   # regressions
++     .pi1 ~ .m1*1
++     .pi2 ~ .m2*1
++     .pi3 ~ .m3*1
++     .pi4 ~ .m4*1
++     .pi5 ~ .m5*1
++     . pi6 ~ .m6*1
++   # constraints
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+Warning message:
+lavaan->lav_parse_model_string():  
+   having identifiers with spaces ('. pi6') is deprecated at line 48, pos 5
+    . pi6 ~ .m6*1
+    ^
+ 
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+      lhs op  rhs mod.idx block              fixed start lower upper label
+1    A1B1 =~ var1       1     1                  1                        
+2    A2B1 =~ var2       2     1                  1                        
+3    A3B1 =~ var3       3     1                  1                        
+4    A1B2 =~ var4       4     1                  1                        
+5    A2B2 =~ var5       5     1                  1                        
+6    A3B2 =~ var6       6     1                  1                        
+7    var1 ~1            7     1                  0                        
+8    var2 ~1            8     1                  0                        
+9    var3 ~1            9     1                  0                        
+10   var4 ~1           10     1                  0                        
+11   var5 ~1           11     1                  0                        
+12   var6 ~1           12     1                  0                        
+13   A1B1 ~1           13     1                  0                        
+14   A2B1 ~1           14     1                  0                        
+15   A3B1 ~1           15     1                  0                        
+16   A1B2 ~1           16     1                  0                        
+17   A2B2 ~1           17     1                  0                        
+18   A3B2 ~1           18     1                  0                        
+19   A1B1 ~~ A1B1      19     1                  0                        
+20   A1B1 ~~ A2B1      20     1                  0                        
+21   A2B1 ~~ A2B1      21     1                  0                        
+22   A1B1 ~~ A3B1      22     1                  0                        
+23   A2B1 ~~ A3B1      23     1                  0                        
+24   A3B1 ~~ A3B1      24     1                  0                        
+25   A1B1 ~~ A1B2      25     1                  0                        
+26   A2B1 ~~ A1B2      26     1                  0                        
+27   A3B1 ~~ A1B2      27     1                  0                        
+28   A1B2 ~~ A1B2      28     1                  0                        
+29   A1B1 ~~ A2B2      29     1                  0                        
+30   A2B1 ~~ A2B2      30     1                  0                        
+31   A3B1 ~~ A2B2      31     1                  0                        
+32   A1B2 ~~ A2B2      32     1                  0                        
+33   A2B2 ~~ A2B2      33     1                  0                        
+34   A1B1 ~~ A3B2      34     1                  0                        
+35   A2B1 ~~ A3B2      35     1                  0                        
+36   A3B1 ~~ A3B2      36     1                  0                        
+37   A1B2 ~~ A3B2      37     1                  0                        
+38   A2B2 ~~ A3B2      38     1                  0                        
+39   A3B2 ~~ A3B2      39     1                  0                        
+40   .pi1 ~~ .pi1       0     1                                           
+41   .pi1 ~~ .pi2       0     1                                           
+42   .pi2 ~~ .pi2       0     1                                           
+43   .pi1 ~~ .pi3       0     1                                           
+44   .pi2 ~~ .pi3       0     1                                           
+45   .pi3 ~~ .pi3       0     1                                           
+46   .pi1 ~~ .pi4       0     1                                           
+47   .pi2 ~~ .pi4       0     1                                           
+48   .pi3 ~~ .pi4       0     1                                           
+49   .pi4 ~~ .pi4       0     1                                           
+50   .pi1 ~~ .pi5       0     1                                           
+51   .pi2 ~~ .pi5       0     1                                           
+52   .pi3 ~~ .pi5       0     1                                           
+53   .pi4 ~~ .pi5       0     1                                           
+54   .pi5 ~~ .pi5       0     1                                           
+55   .pi1 ~~ .pi6       0     1                                           
+56   .pi2 ~~ .pi6       0     1                                           
+57   .pi3 ~~ .pi6       0     1                                           
+58   .pi4 ~~ .pi6       0     1                                           
+59   .pi5 ~~ .pi6       0     1                                           
+60   .pi6 ~~ .pi6       0     1                                           
+61   .pi1 =~ A1B1      40     1  0.166666666666667                        
+62   .pi1 =~ A2B1      41     1  0.166666666666667                        
+63   .pi1 =~ A3B1      42     1  0.166666666666667                        
+64   .pi1 =~ A1B2      43     1  0.166666666666667                        
+65   .pi1 =~ A2B2      44     1  0.166666666666667                        
+66   .pi1 =~ A3B2      45     1  0.166666666666667                        
+67   .pi2 =~ A1B1      46     1  0.333333333333333                        
+68   .pi2 =~ A2B1      47     1 -0.166666666666667                        
+69   .pi2 =~ A3B1      48     1 -0.166666666666667                        
+70   .pi2 =~ A1B2      49     1  0.333333333333333                        
+71   .pi2 =~ A2B2      50     1 -0.166666666666667                        
+72   .pi2 =~ A3B2      51     1 -0.166666666666667                        
+73   .pi3 =~ A1B1      52     1 -0.166666666666667                        
+74   .pi3 =~ A2B1      53     1  0.333333333333333                        
+75   .pi3 =~ A3B1      54     1 -0.166666666666667                        
+76   .pi3 =~ A1B2      55     1 -0.166666666666667                        
+77   .pi3 =~ A2B2      56     1  0.333333333333333                        
+78   .pi3 =~ A3B2      57     1 -0.166666666666667                        
+79   .pi4 =~ A1B1      58     1  0.166666666666667                        
+80   .pi4 =~ A2B1      59     1  0.166666666666667                        
+81   .pi4 =~ A3B1      60     1  0.166666666666667                        
+82   .pi4 =~ A1B2      61     1 -0.166666666666667                        
+83   .pi4 =~ A2B2      62     1 -0.166666666666667                        
+84   .pi4 =~ A3B2      63     1 -0.166666666666667                        
+85   .pi5 =~ A1B1      64     1  0.333333333333333                        
+86   .pi5 =~ A2B1      65     1 -0.166666666666667                        
+87   .pi5 =~ A3B1      66     1 -0.166666666666667                        
+88   .pi5 =~ A1B2      67     1 -0.333333333333333                        
+89   .pi5 =~ A2B2      68     1  0.166666666666667                        
+90   .pi5 =~ A3B2      69     1  0.166666666666667                        
+91   .pi6 =~ A1B1      70     1 -0.166666666666667                        
+92   .pi6 =~ A2B1      71     1  0.333333333333333                        
+93   .pi6 =~ A3B1      72     1 -0.166666666666667                        
+94   .pi6 =~ A1B2      73     1  0.166666666666667                        
+95   .pi6 =~ A2B2      74     1 -0.333333333333333                        
+96   .pi6 =~ A3B2      75     1  0.166666666666667                        
+97   .pi1 ~1           76     1                                        .m1
+98   .pi2 ~1           77     1                                        .m2
+99   .pi3 ~1           78     1                                        .m3
+100  .pi4 ~1           79     1                                        .m4
+101  .pi5 ~1           80     1                                        .m5
+102 . pi6 ~1           81     1                                        .m6
+    prior efa rv
+1               
+2               
+3               
+4               
+5               
+6               
+7               
+8               
+9               
+10              
+11              
+12              
+13              
+14              
+15              
+16              
+17              
+18              
+19              
+20              
+21              
+22              
+23              
+24              
+25              
+26              
+27              
+28              
+29              
+30              
+31              
+32              
+33              
+34              
+35              
+36              
+37              
+38              
+39              
+40              
+41              
+42              
+43              
+44              
+45              
+46              
+47              
+48              
+49              
+50              
+51              
+52              
+53              
+54              
+55              
+56              
+57              
+58              
+59              
+60              
+61              
+62              
+63              
+64              
+65              
+66              
+67              
+68              
+69              
+70              
+71              
+72              
+73              
+74              
+75              
+76              
+77              
+78              
+79              
+80              
+81              
+82              
+83              
+84              
+85              
+86              
+87              
+88              
+89              
+90              
+91              
+92              
+93              
+94              
+95              
+96              
+97              
+98              
+99              
+100             
+101             
+102             
+> 

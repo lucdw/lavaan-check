@@ -1,0 +1,71 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_d_a
+> # ===================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++      # efa
++      efa("efa1")*f1 + efa("efa1")*f2 =~ y1 + y2 + y3 + y4 + y5 + y6 + y7
++ + y8
++ 
++      f1 + f2 ~ x1 + x2
++      y1 ~ x1
++      y8 ~ x2
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+   lhs op rhs mod.idx block fixed start lower upper label prior  efa rv
+1   f1 =~  y1       1     1                                     efa1   
+2   f1 =~  y2       2     1                                     efa1   
+3   f1 =~  y3       3     1                                     efa1   
+4   f1 =~  y4       4     1                                     efa1   
+5   f1 =~  y5       5     1                                     efa1   
+6   f1 =~  y6       6     1                                     efa1   
+7   f1 =~  y7       7     1                                     efa1   
+8   f1 =~  y8       8     1                                     efa1   
+9   f2 =~  y1       9     1                                     efa1   
+10  f2 =~  y2      10     1                                     efa1   
+11  f2 =~  y3      11     1                                     efa1   
+12  f2 =~  y4      12     1                                     efa1   
+13  f2 =~  y5      13     1                                     efa1   
+14  f2 =~  y6      14     1                                     efa1   
+15  f2 =~  y7      15     1                                     efa1   
+16  f2 =~  y8      16     1                                     efa1   
+17  f1  ~  x1       0     1                                            
+18  f1  ~  x2       0     1                                            
+19  f2  ~  x1       0     1                                            
+20  f2  ~  x2       0     1                                            
+21  y1  ~  x1       0     1                                            
+22  y8  ~  x2       0     1                                            
+> 

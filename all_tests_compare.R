@@ -127,16 +127,17 @@ compare_files <- function(infile1, infile2, outfile,
 if (file.exists("README.md")) setwd("tests")
 source("../select_tests.R")
 testfiles <- select_tests()
+extra <- substr(Sys.info()[["sysname"]], 1, 1) # because results depend on OS
 for (test.i in seq_along(testfiles)) {
   testfile <- testfiles[test.i]
-  file1 <- paste0(testfile, "out.save")
-  file2 <- paste0(testfile, "out")
+  file1 <- paste0(testfile, extra, "out.save")
+  file2 <- paste0(testfile, extra, "out")
   filediff <- gsub(".R$", ".diff", testfile)
   cat("Processing", sprintf("%-50s", testfile), ":" )
   if (!file.exists(file2)) {
-    cat("no Rout file!\n")
+    cat("no R", extra, "out file!\n", sep = "")
   } else if (!file.exists(file1)) {
-    cat("no Rout.save file!\n")
+    cat("no R", extra, "out.save file!\n", sep = "")
   } else {
     aantal <- compare_files(
       infile1 = file1,

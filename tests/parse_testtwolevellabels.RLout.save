@@ -1,0 +1,72 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_testtwolevellabels
+> # ==================================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++   group: type1
++     level: within
++       fac =~ y1 + L2*y2 + L3*y3
++     level: between
++       fac =~ y1 + L2*y2 + L3*y3
++      
++   group: type2w
++     level: within
++       fac =~ y1 + L2*y2 + L3*y3
++     level: between
++       fac =~ y1 + L2*y2 + L3*y3
++ 
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+     lhs op     rhs mod.idx block fixed start lower upper label prior efa rv
+1  group  :   type1       0     1                                           
+2  level  :  within       0     2                                           
+3    fac =~      y1       0     2                                           
+4    fac =~      y2       1     2                            L2             
+5    fac =~      y3       2     2                            L3             
+6  level  : between       0     3                                           
+7    fac =~      y1       0     3                                           
+8    fac =~      y2       3     3                            L2             
+9    fac =~      y3       4     3                            L3             
+10 group  :  type2w       0     4                                           
+11 level  :  within       0     5                                           
+12   fac =~      y1       0     5                                           
+13   fac =~      y2       5     5                            L2             
+14   fac =~      y3       6     5                            L3             
+15 level  : between       0     6                                           
+16   fac =~      y1       0     6                                           
+17   fac =~      y2       7     6                            L2             
+18   fac =~      y3       8     6                            L3             
+> 

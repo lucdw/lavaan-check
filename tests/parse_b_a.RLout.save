@@ -1,0 +1,91 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_b_a
+> # ===================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ 
++      efa("time1")*f1 =~ a*y1 + b*y2 + c*y3 + d*y4 + e*y5 + f*y6
++      efa("time1")*f2 =~ 0*y1 + h*y2 + i*y3 + j*y4 + k*y5 + l*y6
++ 
++      efa("time2")*f3 =~ a*y7 + b*y8 + c*y9 + d*y10 + e*y11 + f*y12
++      efa("time2")*f4 =~ 0*y7 + h*y8 + i*y9 + j*y10 + k*y11 + l*y12
++ 
++      y1 ~~ y7
++      y2 ~~ y8
++      y3 ~~ y9
++      y4 ~~ y10
++      y5 ~~ y11
++      y6 ~~ y12
++ 
++      # free varcov f3 and f4
++      f3 ~~ NA*f3 + start(1)*f3
++      f4 ~~ NA*f4 + start(1)*f4
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> print(as.data.frame(object))
+   lhs op rhs mod.idx block fixed start lower upper label prior   efa rv
+1   f1 =~  y1       1     1                             a       time1   
+2   f1 =~  y2       2     1                             b       time1   
+3   f1 =~  y3       3     1                             c       time1   
+4   f1 =~  y4       4     1                             d       time1   
+5   f1 =~  y5       5     1                             e       time1   
+6   f1 =~  y6       6     1                             f       time1   
+7   f2 =~  y1       7     1     0                               time1   
+8   f2 =~  y2       8     1                             h       time1   
+9   f2 =~  y3       9     1                             i       time1   
+10  f2 =~  y4      10     1                             j       time1   
+11  f2 =~  y5      11     1                             k       time1   
+12  f2 =~  y6      12     1                             l       time1   
+13  f3 =~  y7      13     1                             a       time2   
+14  f3 =~  y8      14     1                             b       time2   
+15  f3 =~  y9      15     1                             c       time2   
+16  f3 =~ y10      16     1                             d       time2   
+17  f3 =~ y11      17     1                             e       time2   
+18  f3 =~ y12      18     1                             f       time2   
+19  f4 =~  y7      19     1     0                               time2   
+20  f4 =~  y8      20     1                             h       time2   
+21  f4 =~  y9      21     1                             i       time2   
+22  f4 =~ y10      22     1                             j       time2   
+23  f4 =~ y11      23     1                             k       time2   
+24  f4 =~ y12      24     1                             l       time2   
+25  y1 ~~  y7       0     1                                             
+26  y2 ~~  y8       0     1                                             
+27  y3 ~~  y9       0     1                                             
+28  y4 ~~ y10       0     1                                             
+29  y5 ~~ y11       0     1                                             
+30  y6 ~~ y12       0     1                                             
+31  f3 ~~  f3      25     1    NA     1                                 
+32  f4 ~~  f4      26     1    NA     1                                 
+> 

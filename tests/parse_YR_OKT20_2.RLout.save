@@ -1,0 +1,54 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : parse_YR_OKT20_2
+> # ==========================
+> # 
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++ 
++    Composite model
++    Image <~ IMAG1 + IMAG2 + IMAG3 + IMAG4 + IMAG5
++    Expectation <~ CUEX1 + CUEX2 + CUEX3
++    Value  <~ PERV1  + PERV2
++    Satisfaction <~ CUSA1 + CUSA2 + CUSA3
++  
++    # Structural model
++    Satisfaction ~ Image + Expectation + Value
++ '
++ )
+> object <- try(lavParseModelString(
++ as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
++ ), outFile = stdout())
+Error : lavaan->lav_parse_tokens_formulas():  
+   formula without valid operator at line 2, pos 4
+   Composite model
+   ^
+
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ print(as.data.frame(object))
++ })}
+> 

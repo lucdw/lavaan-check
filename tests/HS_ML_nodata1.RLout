@@ -1,0 +1,56 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : HS_ML_nodata1
+> # =======================
+> # a run without data
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++   visual  =~ x1 + x2 + x3
++   textual =~ x4 + x5 + x6
++   speed   =~ x7 + x8 + x9
++ '
++ )
+> object <- try(sem(
++ model = Model, parser = 'new'
++ ), outFile = stdout())
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ fitted(object)
++ })}
+> fitted(object)
+$cov
+     x1   x2   x3   x4   x5   x6   x7   x8   x9
+x1 2.00                                        
+x2 0.70 1.49                                   
+x3 0.70 0.49 1.49                              
+x4 0.00 0.00 0.00 2.00                         
+x5 0.00 0.00 0.00 0.70 1.49                    
+x6 0.00 0.00 0.00 0.70 0.49 1.49               
+x7 0.00 0.00 0.00 0.00 0.00 0.00 2.00          
+x8 0.00 0.00 0.00 0.00 0.00 0.00 0.70 1.49     
+x9 0.00 0.00 0.00 0.00 0.00 0.00 0.70 0.49 1.49
+
+> 

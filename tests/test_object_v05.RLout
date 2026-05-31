@@ -1,0 +1,2687 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+>  library(lavaan) # >= 0.6
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> load("usemmodelfit_lavaan0.5.RData")
+> 
+> fit <- usemmodelfit
+> 
+> summary(fit)
+lavaan PRE 0.6 ended normally after 71 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        14
+
+  Number of observations                            99
+  Number of missing patterns                         1
+
+Model Test User Model:
+                                                      
+  Test statistic                                18.701
+  Degrees of freedom                                13
+  P-value (Chi-square)                           0.133
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Observed
+  Observed information based on                Hessian
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  eta1 =~                                             
+    happy.lag.obs     1.000                           
+  eta2 =~                                             
+    sad.lag.obs       1.000                           
+  eta3 =~                                             
+    othr.cmmnn.lg.    1.000                           
+  eta4 =~                                             
+    happy.obs         1.000                           
+  eta5 =~                                             
+    sad.obs           1.000                           
+  eta6 =~                                             
+    other.cmmnn.bs    1.000                           
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  eta1 ~                                              
+    eta1              0.000                           
+    eta2              0.000                           
+    eta3              0.000                           
+    eta4              0.000                           
+    eta5              0.000                           
+    eta6              0.000                           
+  eta2 ~                                              
+    eta1              0.000                           
+    eta2              0.000                           
+    eta3              0.000                           
+    eta4              0.000                           
+    eta5              0.000                           
+    eta6              0.000                           
+  eta3 ~                                              
+    eta1              0.000                           
+    eta2              0.000                           
+    eta3              0.000                           
+    eta4              0.000                           
+    eta5              0.000                           
+    eta6              0.000                           
+  eta4 ~                                              
+    eta1              0.267    0.079    3.398    0.001
+  eta5 ~                                              
+    eta2              0.356    0.069    5.128    0.000
+  eta6 ~                                              
+    eta3              0.375    0.089    4.197    0.000
+  eta4 ~                                              
+    eta6              0.449    0.094    4.804    0.000
+  eta6 ~                                              
+    eta2             -0.195    0.066   -2.961    0.003
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+ .eta1 ~~                                             
+   .eta2              0.006    0.002    2.955    0.003
+   .eta3              0.006    0.002    4.088    0.000
+ .eta2 ~~                                             
+   .eta3              0.002    0.002    0.978    0.328
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .eta1              0.017    0.002    7.036    0.000
+   .eta2              0.022    0.003    7.036    0.000
+   .eta3              0.012    0.002    7.036    0.000
+   .eta4              0.010    0.001    7.036    0.000
+   .eta5              0.011    0.002    7.036    0.000
+   .eta6              0.009    0.001    7.036    0.000
+   .happy.lag.obs     0.000                           
+   .sad.lag.obs       0.000                           
+   .othr.cmmnn.lg.    0.000                           
+   .happy.obs         0.000                           
+   .sad.obs           0.000                           
+   .other.cmmnn.bs    0.000                           
+
+> 
+> fit0 <- lavaan:::lav_object_independence(fit)
+> fit0
+lavaan 0.6-22.2670 ended normally after 1 iteration
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        12
+  Row rank of the constraints matrix                 6
+
+  Number of observations                            99
+  Number of missing patterns                         1
+
+Model Test User Model:
+                                                      
+  Test statistic                               116.785
+  Degrees of freedom                                15
+  P-value (Chi-square)                           0.000
+> 
+> fitMeasures(fit)
+                        npar                         fmin 
+                      14.000                        0.094 
+                       chisq                           df 
+                      18.701                       13.000 
+                      pvalue               baseline.chisq 
+                       0.133                      116.785 
+                 baseline.df              baseline.pvalue 
+                      15.000                        0.000 
+                         cfi                          tli 
+                       0.944                        0.935 
+                  cfi.robust                   tli.robust 
+                       0.944                        0.935 
+                        nnfi                          rfi 
+                       0.935                        0.815 
+                         nfi                         pnfi 
+                       0.840                        0.728 
+                         ifi                          rni 
+                       0.945                        0.944 
+                 nnfi.robust                   rni.robust 
+                       0.935                        0.944 
+                        logl            unrestricted.logl 
+                     468.287                      477.637 
+                         aic                          bic 
+                    -908.573                     -872.242 
+                      ntotal                         bic2 
+                      99.000                     -916.455 
+                       rmsea               rmsea.ci.lower 
+                       0.067                        0.000 
+              rmsea.ci.upper               rmsea.ci.level 
+                       0.129                        0.900 
+                rmsea.pvalue               rmsea.close.h0 
+                       0.307                        0.050 
+       rmsea.notclose.pvalue            rmsea.notclose.h0 
+                       0.409                        0.080 
+                rmsea.robust        rmsea.ci.lower.robust 
+                       0.067                        0.000 
+       rmsea.ci.upper.robust          rmsea.pvalue.robust 
+                       0.129                        0.307 
+rmsea.notclose.pvalue.robust                          rmr 
+                       0.409                        0.007 
+                  rmr_nomean                         srmr 
+                       0.001                        0.074 
+                srmr_bentler          srmr_bentler_nomean 
+                       0.074                        0.044 
+                        crmr                  crmr_nomean 
+                       0.082                        0.048 
+                  srmr_mplus            srmr_mplus_nomean 
+                       0.073                        0.043 
+                       cn_05                        cn_01 
+                     119.382                      147.578 
+                         gfi                         agfi 
+                       0.939                        0.874 
+                        pgfi                          mfi 
+                       0.452                        0.972 
+                        ecvi 
+                       0.472 
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df     AIC     BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0                  0.000                              
+Model     13 -908.57 -872.24 18.701     18.701      13     0.1327
+> parameterEstimates(fit)
+                       lhs op                     rhs    est    se      z
+1                     eta1  ~                    eta1  0.000 0.000     NA
+2                     eta1  ~                    eta2  0.000 0.000     NA
+3                     eta1  ~                    eta3  0.000 0.000     NA
+4                     eta1  ~                    eta4  0.000 0.000     NA
+5                     eta1  ~                    eta5  0.000 0.000     NA
+6                     eta1  ~                    eta6  0.000 0.000     NA
+7                     eta2  ~                    eta1  0.000 0.000     NA
+8                     eta2  ~                    eta2  0.000 0.000     NA
+9                     eta2  ~                    eta3  0.000 0.000     NA
+10                    eta2  ~                    eta4  0.000 0.000     NA
+11                    eta2  ~                    eta5  0.000 0.000     NA
+12                    eta2  ~                    eta6  0.000 0.000     NA
+13                    eta3  ~                    eta1  0.000 0.000     NA
+14                    eta3  ~                    eta2  0.000 0.000     NA
+15                    eta3  ~                    eta3  0.000 0.000     NA
+16                    eta3  ~                    eta4  0.000 0.000     NA
+17                    eta3  ~                    eta5  0.000 0.000     NA
+18                    eta3  ~                    eta6  0.000 0.000     NA
+19                    eta1 =~           happy.lag.obs  1.000 0.000     NA
+20                    eta2 =~             sad.lag.obs  1.000 0.000     NA
+21                    eta3 =~ other.communion.lag.obs  1.000 0.000     NA
+22                    eta4 =~               happy.obs  1.000 0.000     NA
+23                    eta5 =~                 sad.obs  1.000 0.000     NA
+24                    eta6 =~     other.communion.obs  1.000 0.000     NA
+25                    eta1 ~~                    eta1  0.017 0.002  7.036
+26                    eta1 ~~                    eta2  0.006 0.002  2.955
+27                    eta1 ~~                    eta3  0.006 0.002  4.088
+28                    eta2 ~~                    eta2  0.022 0.003  7.036
+29                    eta2 ~~                    eta3  0.002 0.002  0.978
+30                    eta3 ~~                    eta3  0.012 0.002  7.036
+31                    eta4 ~~                    eta4  0.010 0.001  7.036
+32                    eta5 ~~                    eta5  0.011 0.002  7.036
+33                    eta6 ~~                    eta6  0.009 0.001  7.036
+34                    eta4  ~                    eta1  0.267 0.079  3.398
+35                    eta5  ~                    eta2  0.356 0.069  5.128
+36                    eta6  ~                    eta3  0.375 0.089  4.197
+37                    eta4  ~                    eta6  0.449 0.094  4.804
+38                    eta6  ~                    eta2 -0.195 0.066 -2.961
+39           happy.lag.obs ~~           happy.lag.obs  0.000 0.000     NA
+40             sad.lag.obs ~~             sad.lag.obs  0.000 0.000     NA
+41 other.communion.lag.obs ~~ other.communion.lag.obs  0.000 0.000     NA
+42               happy.obs ~~               happy.obs  0.000 0.000     NA
+43                 sad.obs ~~                 sad.obs  0.000 0.000     NA
+44     other.communion.obs ~~     other.communion.obs  0.000 0.000     NA
+45           happy.lag.obs ~1                          0.000 0.000     NA
+46             sad.lag.obs ~1                          0.000 0.000     NA
+47 other.communion.lag.obs ~1                          0.000 0.000     NA
+48               happy.obs ~1                          0.000 0.000     NA
+49                 sad.obs ~1                          0.000 0.000     NA
+50     other.communion.obs ~1                          0.000 0.000     NA
+51                    eta1 ~1                          0.000 0.000     NA
+52                    eta2 ~1                          0.000 0.000     NA
+53                    eta3 ~1                          0.000 0.000     NA
+54                    eta4 ~1                          0.000 0.000     NA
+55                    eta5 ~1                          0.000 0.000     NA
+56                    eta6 ~1                          0.000 0.000     NA
+   pvalue ci.lower ci.upper
+1      NA    0.000    0.000
+2      NA    0.000    0.000
+3      NA    0.000    0.000
+4      NA    0.000    0.000
+5      NA    0.000    0.000
+6      NA    0.000    0.000
+7      NA    0.000    0.000
+8      NA    0.000    0.000
+9      NA    0.000    0.000
+10     NA    0.000    0.000
+11     NA    0.000    0.000
+12     NA    0.000    0.000
+13     NA    0.000    0.000
+14     NA    0.000    0.000
+15     NA    0.000    0.000
+16     NA    0.000    0.000
+17     NA    0.000    0.000
+18     NA    0.000    0.000
+19     NA    1.000    1.000
+20     NA    1.000    1.000
+21     NA    1.000    1.000
+22     NA    1.000    1.000
+23     NA    1.000    1.000
+24     NA    1.000    1.000
+25  0.000    0.012    0.021
+26  0.003    0.002    0.010
+27  0.000    0.003    0.009
+28  0.000    0.016    0.028
+29  0.328   -0.002    0.005
+30  0.000    0.009    0.015
+31  0.000    0.007    0.013
+32  0.000    0.008    0.014
+33  0.000    0.007    0.012
+34  0.001    0.113    0.421
+35  0.000    0.220    0.493
+36  0.000    0.200    0.550
+37  0.000    0.266    0.633
+38  0.003   -0.323   -0.066
+39     NA    0.000    0.000
+40     NA    0.000    0.000
+41     NA    0.000    0.000
+42     NA    0.000    0.000
+43     NA    0.000    0.000
+44     NA    0.000    0.000
+45     NA    0.000    0.000
+46     NA    0.000    0.000
+47     NA    0.000    0.000
+48     NA    0.000    0.000
+49     NA    0.000    0.000
+50     NA    0.000    0.000
+51     NA    0.000    0.000
+52     NA    0.000    0.000
+53     NA    0.000    0.000
+54     NA    0.000    0.000
+55     NA    0.000    0.000
+56     NA    0.000    0.000
+> 
+> lavInspect(fit, "information")
+              et1~~1    et1~~2    et1~~3    et2~~2    et2~~3    et3~~3
+eta1~~eta1  3488.786                                                  
+eta1~~eta2 -1621.733  4565.146                                        
+eta1~~eta3 -3475.655  1103.679 10514.044                              
+eta2~~eta2   188.462  -973.430   -68.765  1256.971                    
+eta2~~eta3   807.814 -2154.995 -2188.671   177.590  5284.313          
+eta3~~eta3   865.643  -147.376 -4374.851     6.273   372.408  5527.484
+eta4~~eta4     0.000     0.000     0.000     0.000     0.000     0.000
+eta5~~eta5     0.000     0.000     0.000     0.000     0.000     0.000
+eta6~~eta6     0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta1      0.000     0.000     0.000     0.000     0.000     0.000
+eta5~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta6      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+              et4~~4    et5~~5    et6~~6    et4~t1    et5~t2    et6~t3
+eta1~~eta1                                                            
+eta1~~eta2                                                            
+eta1~~eta3                                                            
+eta2~~eta2                                                            
+eta2~~eta3                                                            
+eta3~~eta3                                                            
+eta4~~eta4  4918.095                                                  
+eta5~~eta5     0.000  4463.856                                        
+eta6~~eta6     0.000     0.000  5698.395                              
+eta4~eta1      0.000     0.000     0.000     1.637                    
+eta5~eta2      0.000     0.000     0.000     0.000     2.091          
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     1.277
+eta4~eta6      0.000     0.000     0.000     0.054     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.172
+              et4~t6    et6~t2
+eta1~~eta1                    
+eta1~~eta2                    
+eta1~~eta3                    
+eta2~~eta2                    
+eta2~~eta3                    
+eta3~~eta3                    
+eta4~~eta4                    
+eta5~~eta5                    
+eta6~~eta6                    
+eta4~eta1                     
+eta5~eta2                     
+eta6~eta3                     
+eta4~eta6      1.156          
+eta6~eta2      0.000     2.363
+> lavInspect(fit, "information.expected")
+              et1~~1    et1~~2    et1~~3    et2~~2    et2~~3    et3~~3
+eta1~~eta1  3488.785                                                  
+eta1~~eta2 -1621.731  4565.144                                        
+eta1~~eta3 -3475.655  1103.679 10514.044                              
+eta2~~eta2   188.462  -973.429   -68.765  1256.970                    
+eta2~~eta3   807.814 -2154.994 -2188.669   177.590  5284.312          
+eta3~~eta3   865.643  -147.376 -4374.851     6.273   372.409  5527.484
+eta4~~eta4     0.000     0.000     0.000     0.000     0.000     0.000
+eta5~~eta5     0.000     0.000     0.000     0.000     0.000     0.000
+eta6~~eta6     0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta1      0.000     0.000     0.000     0.000     0.000     0.000
+eta5~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta6      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+              et4~~4    et5~~5    et6~~6    et4~t1    et5~t2    et6~t3
+eta1~~eta1                                                            
+eta1~~eta2                                                            
+eta1~~eta3                                                            
+eta2~~eta2                                                            
+eta2~~eta3                                                            
+eta3~~eta3                                                            
+eta4~~eta4  4918.095                                                  
+eta5~~eta5     0.000  4463.855                                        
+eta6~~eta6     0.000     0.000  5698.394                              
+eta4~eta1      0.000     0.000     0.000     1.637                    
+eta5~eta2      0.000     0.000     0.000     0.000     2.091          
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     1.277
+eta4~eta6      0.000     0.000     0.000     0.121     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.172
+              et4~t6    et6~t2
+eta1~~eta1                    
+eta1~~eta2                    
+eta1~~eta3                    
+eta2~~eta2                    
+eta2~~eta3                    
+eta3~~eta3                    
+eta4~~eta4                    
+eta5~~eta5                    
+eta6~~eta6                    
+eta4~eta1                     
+eta5~eta2                     
+eta6~eta3                     
+eta4~eta6      1.156          
+eta6~eta2      0.000     2.363
+> lavInspect(fit, "information.first.order")
+              et1~~1    et1~~2    et1~~3    et2~~2    et2~~3    et3~~3
+eta1~~eta1  2671.253                                                  
+eta1~~eta2   276.188 10261.468                                        
+eta1~~eta3 -1736.376  1617.421  8739.879                              
+eta2~~eta2  1612.543  5072.306  -490.730  5173.698                    
+eta2~~eta3  1064.686 -2998.925 -3281.781  -291.865  5266.451          
+eta3~~eta3   422.102  -693.931 -2500.033     1.807   397.336  4279.905
+eta4~~eta4  -271.736  -711.957  1116.663   -63.936  -573.140  -633.983
+eta5~~eta5  -371.360   434.550   527.079  -734.224  -576.470   -78.743
+eta6~~eta6   -68.542  -176.805  1020.389    80.315  -480.775  -841.166
+eta4~eta1     -4.588   -27.374     1.355   -20.829     4.502     5.245
+eta5~eta2     -3.073    -5.796    -0.712    -4.117    10.600     3.157
+eta6~eta3     -6.172   -18.869   -14.011   -10.233     9.660    11.956
+eta4~eta6      3.427    15.651     9.332     7.944    -7.022    -2.418
+eta6~eta2    -16.259   -84.106   -14.416   -55.766    13.559     9.966
+              et4~~4    et5~~5    et6~~6    et4~t1    et5~t2    et6~t3
+eta1~~eta1                                                            
+eta1~~eta2                                                            
+eta1~~eta3                                                            
+eta2~~eta2                                                            
+eta2~~eta3                                                            
+eta3~~eta3                                                            
+eta4~~eta4  4124.443                                                  
+eta5~~eta5  -328.278  5907.753                                        
+eta6~~eta6   426.775     2.205  8131.976                              
+eta4~eta1     -2.221     9.744    14.651     1.331                    
+eta5~eta2      0.630    -9.262    -7.995    -0.053     0.766          
+eta6~eta3      5.754    10.969     4.188     0.211    -0.051     1.050
+eta4~eta6      5.538    -6.957    42.150     0.515    -0.129    -0.002
+eta6~eta2      4.368   -14.103    37.835     0.515     0.285    -0.036
+              et4~t6    et6~t2
+eta1~~eta1                    
+eta1~~eta2                    
+eta1~~eta3                    
+eta2~~eta2                    
+eta2~~eta3                    
+eta3~~eta3                    
+eta4~~eta4                    
+eta5~~eta5                    
+eta6~~eta6                    
+eta4~eta1                     
+eta5~eta2                     
+eta6~eta3                     
+eta4~eta6      1.376          
+eta6~eta2     -0.037     2.379
+> 
+> FULL <- lavaan:::lav_pt_full(fit@ParTable, free = TRUE, start = TRUE,
++                           strict_exo = FALSE)
+> FULL$free <- rep(1L, nrow(FULL))
+> FULL$user <- rep(10L, nrow(FULL))
+> FIT <- lavaan:::lav_object_extended(fit, add = FULL, all_free = TRUE)
+> information <- lavTech(FIT, "information.expected")
+> 
+> # stats
+> coef(fit)
+eta1~~eta1 eta1~~eta2 eta1~~eta3 eta2~~eta2 eta2~~eta3 eta3~~eta3 eta4~~eta4 
+     0.017      0.006      0.006      0.022      0.002      0.012      0.010 
+eta5~~eta5 eta6~~eta6  eta4~eta1  eta5~eta2  eta6~eta3  eta4~eta6  eta6~eta2 
+     0.011      0.009      0.267      0.356      0.375      0.449     -0.195 
+> residuals(fit)
+$type
+[1] "raw"
+
+$cov
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.000                                   
+sad.lag.obs              0.000  0.000                            
+other.communion.lag.obs  0.000  0.000  0.000                     
+happy.obs                0.000 -0.002 -0.001  0.000              
+sad.obs                  0.001  0.000  0.001  0.000  0.000       
+other.communion.obs      0.000  0.000  0.000  0.000  0.001  0.000
+
+$mean
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                 -0.018                  -0.005                   0.020 
+              happy.obs                 sad.obs     other.communion.obs 
+                 -0.009                   0.002                   0.022 
+
+> resid(fit)
+$type
+[1] "raw"
+
+$cov
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.000                                   
+sad.lag.obs              0.000  0.000                            
+other.communion.lag.obs  0.000  0.000  0.000                     
+happy.obs                0.000 -0.002 -0.001  0.000              
+sad.obs                  0.001  0.000  0.001  0.000  0.000       
+other.communion.obs      0.000  0.000  0.000  0.000  0.001  0.000
+
+$mean
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                 -0.018                  -0.005                   0.020 
+              happy.obs                 sad.obs     other.communion.obs 
+                 -0.009                   0.002                   0.022 
+
+> head(resid(fit, "obs"))
+     happy.lag.obs   sad.lag.obs other.communion.lag.obs     happy.obs
+[1,]  1.110223e-16 -3.330669e-16            2.775558e-17 -2.107689e-16
+[2,]  6.765422e-17 -1.665335e-16            1.665335e-16  8.326673e-17
+[3,] -1.387779e-16  8.326673e-17            1.110223e-16  1.387779e-16
+[4,]  2.220446e-16  1.110223e-16            1.665335e-16  6.938894e-18
+[5,]  4.163336e-17 -8.326673e-17            1.110223e-16  1.110223e-16
+[6,]  1.110223e-16  3.469447e-17            1.804112e-16  2.220446e-16
+           sad.obs other.communion.obs
+[1,]  0.000000e+00        0.000000e+00
+[2,]  2.775558e-17        2.775558e-16
+[3,]  9.714451e-17        5.551115e-17
+[4,]  5.551115e-17        8.326673e-17
+[5,] -2.428613e-17        1.526557e-16
+[6,]  2.775558e-17        1.387779e-16
+> fitted.values(fit)
+$cov
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.017                                   
+sad.lag.obs              0.006  0.022                            
+other.communion.lag.obs  0.006  0.002  0.012                     
+happy.obs                0.005  0.000  0.004  0.014              
+sad.obs                  0.002  0.008  0.001  0.000  0.013       
+other.communion.obs      0.001 -0.004  0.004  0.006 -0.001  0.012
+
+$mean
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                      0                       0                       0 
+              happy.obs                 sad.obs     other.communion.obs 
+                      0                       0                       0 
+
+> fitted(fit)
+$cov
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.017                                   
+sad.lag.obs              0.006  0.022                            
+other.communion.lag.obs  0.006  0.002  0.012                     
+happy.obs                0.005  0.000  0.004  0.014              
+sad.obs                  0.002  0.008  0.001  0.000  0.013       
+other.communion.obs      0.001 -0.004  0.004  0.006 -0.001  0.012
+
+$mean
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                      0                       0                       0 
+              happy.obs                 sad.obs     other.communion.obs 
+                      0                       0                       0 
+
+> head(predict(fit))
+             eta1        eta2        eta3         eta4        eta5       eta6
+[1,] -0.579956989 -0.95327870 -0.17942859 -0.005646857 -0.33345546 0.20650404
+[2,] -0.005646857 -0.33345546  0.20650404  0.166192225 -0.09343729 0.14719370
+[3,]  0.166192225 -0.09343729  0.14719370 -0.148163758 -0.07827896 0.13291892
+[4,] -0.148163758 -0.07827896  0.13291892  0.047959546 -0.10608355 0.08669957
+[5,]  0.047959546 -0.10608355  0.08669957  0.109506625 -0.01512614 0.12327282
+[6,]  0.109506625 -0.01512614  0.12327282  0.054128703 -0.09416430 0.22425344
+> anova(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df     AIC     BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0                  0.000                              
+Model     13 -908.57 -872.24 18.701     18.701      13     0.1327
+> vcov(fit)
+           et1~~1 et1~~2 et1~~3 et2~~2 et2~~3 et3~~3 et4~~4 et5~~5 et6~~6
+eta1~~eta1  0.000                                                        
+eta1~~eta2  0.000  0.000                                                 
+eta1~~eta3  0.000  0.000  0.000                                          
+eta2~~eta2  0.000  0.000  0.000  0.000                                   
+eta2~~eta3  0.000  0.000  0.000  0.000  0.000                            
+eta3~~eta3  0.000  0.000  0.000  0.000  0.000  0.000                     
+eta4~~eta4  0.000  0.000  0.000  0.000  0.000  0.000  0.000              
+eta5~~eta5  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000       
+eta6~~eta6  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+eta4~eta1   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+eta5~eta2   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+eta6~eta3   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+eta4~eta6   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+eta6~eta2   0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000
+           et4~t1 et5~t2 et6~t3 et4~t6 et6~t2
+eta1~~eta1                                   
+eta1~~eta2                                   
+eta1~~eta3                                   
+eta2~~eta2                                   
+eta2~~eta3                                   
+eta3~~eta3                                   
+eta4~~eta4                                   
+eta5~~eta5                                   
+eta6~~eta6                                   
+eta4~eta1   0.006                            
+eta5~eta2   0.000  0.005                     
+eta6~eta3   0.000  0.000  0.008              
+eta4~eta6   0.000  0.000  0.000  0.009       
+eta6~eta2   0.000  0.000 -0.001  0.000  0.004
+> 
+> # stats4
+> AIC(fit)
+[1] -908.5735
+> BIC(fit)
+[1] -872.2418
+> logLik(fit)
+'log Lik.' 468.2867 (df=14)
+> nobs(fit)
+[1] 99
+> 
+> # lavaan fitting functions
+> lavNames(fit, "all")
+$ov
+$ov[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$ov.x
+$ov.x[[1]]
+character(0)
+
+
+$ov.nox
+$ov.nox[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$ov.model
+$ov.model[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$ov.y
+$ov.y[[1]]
+character(0)
+
+
+$ov.num
+$ov.num[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$ov.ord
+$ov.ord[[1]]
+character(0)
+
+
+$ov.ind
+$ov.ind[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$ov.cind
+$ov.cind[[1]]
+character(0)
+
+
+$ov.orphan
+$ov.orphan[[1]]
+character(0)
+
+
+$ov.interaction
+$ov.interaction[[1]]
+character(0)
+
+
+$ov.efa
+$ov.efa[[1]]
+character(0)
+
+
+$th
+$th[[1]]
+character(0)
+
+
+$th.mean
+$th.mean[[1]]
+[1] "happy.lag.obs"           "sad.lag.obs"            
+[3] "other.communion.lag.obs" "happy.obs"              
+[5] "sad.obs"                 "other.communion.obs"    
+
+
+$lv
+$lv[[1]]
+[1] "eta1" "eta2" "eta3" "eta4" "eta5" "eta6"
+
+
+$lv.regular
+$lv.regular[[1]]
+[1] "eta1" "eta2" "eta3" "eta4" "eta5" "eta6"
+
+
+$lv.formative
+$lv.formative[[1]]
+character(0)
+
+
+$lv.composite
+$lv.composite[[1]]
+character(0)
+
+
+$lv.x
+$lv.x[[1]]
+character(0)
+
+
+$lv.y
+$lv.y[[1]]
+character(0)
+
+
+$lv.nox
+$lv.nox[[1]]
+[1] "eta1" "eta2" "eta3" "eta4" "eta5" "eta6"
+
+
+$lv.nonnormal
+$lv.nonnormal[[1]]
+character(0)
+
+
+$lv.interaction
+$lv.interaction[[1]]
+character(0)
+
+
+$lv.efa
+$lv.efa[[1]]
+character(0)
+
+
+$lv.rv
+$lv.rv[[1]]
+character(0)
+
+
+$lv.ind
+$lv.ind[[1]]
+character(0)
+
+
+$lv.ho
+$lv.ho[[1]]
+character(0)
+
+
+$lv.marker
+$lv.marker[[1]]
+                     eta1                      eta2                      eta3 
+          "happy.lag.obs"             "sad.lag.obs" "other.communion.lag.obs" 
+                     eta4                      eta5                      eta6 
+              "happy.obs"                 "sad.obs"     "other.communion.obs" 
+
+
+$eqs.y
+$eqs.y[[1]]
+[1] "eta1" "eta2" "eta3" "eta4" "eta5" "eta6"
+
+
+$eqs.x
+$eqs.x[[1]]
+[1] "eta1" "eta2" "eta3" "eta4" "eta5" "eta6"
+
+
+> lavInspect(fit)
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              0    0    0    0    0    0
+sad.lag.obs                0    0    0    0    0    0
+other.communion.lag.obs    0    0    0    0    0    0
+happy.obs                  0    0    0    0    0    0
+sad.obs                    0    0    0    0    0    0
+other.communion.obs        0    0    0    0    0    0
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    1                         
+eta2    2    4                    
+eta3    3    5    6               
+eta4    0    0    0    7          
+eta5    0    0    0    0    8     
+eta6    0    0    0    0    0    9
+
+$beta
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    0    0    0    0    0    0
+eta2    0    0    0    0    0    0
+eta3    0    0    0    0    0    0
+eta4   10    0    0    0    0   13
+eta5    0   11    0    0    0    0
+eta6    0   14   12    0    0    0
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="partable")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs             19    0    0    0    0    0
+sad.lag.obs                0   20    0    0    0    0
+other.communion.lag.obs    0    0   21    0    0    0
+happy.obs                  0    0    0   22    0    0
+sad.obs                    0    0    0    0   23    0
+other.communion.obs        0    0    0    0    0   24
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs               39                                   
+sad.lag.obs                  0     40                            
+other.communion.lag.obs      0      0     41                     
+happy.obs                    0      0      0     42              
+sad.obs                      0      0      0      0     43       
+other.communion.obs          0      0      0      0      0     44
+
+$psi
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1   25                         
+eta2   26   28                    
+eta3   27   29   30               
+eta4    0    0    0   31          
+eta5    0    0    0    0   32     
+eta6    0    0    0    0    0   33
+
+$beta
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    1    2    3    4    5    6
+eta2    7    8    9   10   11   12
+eta3   13   14   15   16   17   18
+eta4   34    0    0    0    0   37
+eta5    0   35    0    0    0    0
+eta6    0   38   36    0    0    0
+
+$nu
+                        intrcp
+happy.lag.obs               45
+sad.lag.obs                 46
+other.communion.lag.obs     47
+happy.obs                   48
+sad.obs                     49
+other.communion.obs         50
+
+$alpha
+     intrcp
+eta1     51
+eta2     52
+eta3     53
+eta4     54
+eta5     55
+eta6     56
+
+> lavInspect(fit, what="se")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              0    0    0    0    0    0
+sad.lag.obs                0    0    0    0    0    0
+other.communion.lag.obs    0    0    0    0    0    0
+happy.obs                  0    0    0    0    0    0
+sad.obs                    0    0    0    0    0    0
+other.communion.obs        0    0    0    0    0    0
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+      eta1  eta2  eta3  eta4  eta5  eta6
+eta1 0.002                              
+eta2 0.002 0.003                        
+eta3 0.002 0.002 0.002                  
+eta4 0.000 0.000 0.000 0.001            
+eta5 0.000 0.000 0.000 0.000 0.002      
+eta6 0.000 0.000 0.000 0.000 0.000 0.001
+
+$beta
+      eta1  eta2  eta3 eta4 eta5  eta6
+eta1 0.000 0.000 0.000    0    0 0.000
+eta2 0.000 0.000 0.000    0    0 0.000
+eta3 0.000 0.000 0.000    0    0 0.000
+eta4 0.079 0.000 0.000    0    0 0.094
+eta5 0.000 0.069 0.000    0    0 0.000
+eta6 0.000 0.066 0.089    0    0 0.000
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="start")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              1    0    0    0    0    0
+sad.lag.obs                0    1    0    0    0    0
+other.communion.lag.obs    0    0    1    0    0    0
+happy.obs                  0    0    0    1    0    0
+sad.obs                    0    0    0    0    1    0
+other.communion.obs        0    0    0    0    0    1
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1 0.05                         
+eta2 0.00 0.05                    
+eta3 0.00 0.00 0.05               
+eta4 0.00 0.00 0.00 0.05          
+eta5 0.00 0.00 0.00 0.00 0.05     
+eta6 0.00 0.00 0.00 0.00 0.00 0.05
+
+$beta
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    0    0    0    0    0    0
+eta2    0    0    0    0    0    0
+eta3    0    0    0    0    0    0
+eta4    0    0    0    0    0    0
+eta5    0    0    0    0    0    0
+eta6    0    0    0    0    0    0
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="est")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              1    0    0    0    0    0
+sad.lag.obs                0    1    0    0    0    0
+other.communion.lag.obs    0    0    1    0    0    0
+happy.obs                  0    0    0    1    0    0
+sad.obs                    0    0    0    0    1    0
+other.communion.obs        0    0    0    0    0    1
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+      eta1  eta2  eta3  eta4  eta5  eta6
+eta1 0.017                              
+eta2 0.006 0.022                        
+eta3 0.006 0.002 0.012                  
+eta4 0.000 0.000 0.000 0.010            
+eta5 0.000 0.000 0.000 0.000 0.011      
+eta6 0.000 0.000 0.000 0.000 0.000 0.009
+
+$beta
+      eta1   eta2  eta3 eta4 eta5  eta6
+eta1 0.000  0.000 0.000    0    0 0.000
+eta2 0.000  0.000 0.000    0    0 0.000
+eta3 0.000  0.000 0.000    0    0 0.000
+eta4 0.267  0.000 0.000    0    0 0.449
+eta5 0.000  0.356 0.000    0    0 0.000
+eta6 0.000 -0.195 0.375    0    0 0.000
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="dx.free")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              0    0    0    0    0    0
+sad.lag.obs                0    0    0    0    0    0
+other.communion.lag.obs    0    0    0    0    0    0
+happy.obs                  0    0    0    0    0    0
+sad.obs                    0    0    0    0    0    0
+other.communion.obs        0    0    0    0    0    0
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    0                         
+eta2    0    0                    
+eta3    0    0    0               
+eta4    0    0    0    0          
+eta5    0    0    0    0    0     
+eta6    0    0    0    0    0    0
+
+$beta
+     eta1 eta2 eta3 eta4 eta5 eta6
+eta1    0    0    0    0    0    0
+eta2    0    0    0    0    0    0
+eta3    0    0    0    0    0    0
+eta4    0    0    0    0    0    0
+eta5    0    0    0    0    0    0
+eta6    0    0    0    0    0    0
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> #lavInspect(fit, what="dx")
+> lavInspect(fit, what="std.all")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              1    0    0    0    0    0
+sad.lag.obs                0    1    0    0    0    0
+other.communion.lag.obs    0    0    1    0    0    0
+happy.obs                  0    0    0    1    0    0
+sad.obs                    0    0    0    0    1    0
+other.communion.obs        0    0    0    0    0    1
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+      eta1  eta2  eta3  eta4  eta5  eta6
+eta1 1.000                              
+eta2 0.311 1.000                        
+eta3 0.451 0.099 1.000                  
+eta4 0.000 0.000 0.000 0.725            
+eta5 0.000 0.000 0.000 0.000 0.790      
+eta6 0.000 0.000 0.000 0.000 0.000 0.804
+
+$beta
+      eta1   eta2 eta3 eta4 eta5  eta6
+eta1 0.000  0.000 0.00    0    0 0.000
+eta2 0.000  0.000 0.00    0    0 0.000
+eta3 0.000  0.000 0.00    0    0 0.000
+eta4 0.291  0.000 0.00    0    0 0.411
+eta5 0.000  0.458 0.00    0    0 0.000
+eta6 0.000 -0.268 0.38    0    0 0.000
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="std.lv")
+$lambda
+                         eta1  eta2  eta3  eta4  eta5  eta6
+happy.lag.obs           0.128 0.000 0.000 0.000 0.000 0.000
+sad.lag.obs             0.000 0.149 0.000 0.000 0.000 0.000
+other.communion.lag.obs 0.000 0.000 0.109 0.000 0.000 0.000
+happy.obs               0.000 0.000 0.000 0.118 0.000 0.000
+sad.obs                 0.000 0.000 0.000 0.000 0.116 0.000
+other.communion.obs     0.000 0.000 0.000 0.000 0.000 0.108
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+      eta1  eta2  eta3  eta4  eta5  eta6
+eta1 1.000                              
+eta2 0.311 1.000                        
+eta3 0.451 0.099 1.000                  
+eta4 0.000 0.000 0.000 0.725            
+eta5 0.000 0.000 0.000 0.000 0.790      
+eta6 0.000 0.000 0.000 0.000 0.000 0.804
+
+$beta
+      eta1   eta2 eta3 eta4 eta5  eta6
+eta1 0.000  0.000 0.00    0    0 0.000
+eta2 0.000  0.000 0.00    0    0 0.000
+eta3 0.000  0.000 0.00    0    0 0.000
+eta4 0.291  0.000 0.00    0    0 0.411
+eta5 0.000  0.458 0.00    0    0 0.000
+eta6 0.000 -0.268 0.38    0    0 0.000
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="std.nox")
+$lambda
+                        eta1 eta2 eta3 eta4 eta5 eta6
+happy.lag.obs              1    0    0    0    0    0
+sad.lag.obs                0    1    0    0    0    0
+other.communion.lag.obs    0    0    1    0    0    0
+happy.obs                  0    0    0    1    0    0
+sad.obs                    0    0    0    0    1    0
+other.communion.obs        0    0    0    0    0    1
+
+$theta
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+
+$psi
+      eta1  eta2  eta3  eta4  eta5  eta6
+eta1 1.000                              
+eta2 0.311 1.000                        
+eta3 0.451 0.099 1.000                  
+eta4 0.000 0.000 0.000 0.725            
+eta5 0.000 0.000 0.000 0.000 0.790      
+eta6 0.000 0.000 0.000 0.000 0.000 0.804
+
+$beta
+      eta1   eta2 eta3 eta4 eta5  eta6
+eta1 0.000  0.000 0.00    0    0 0.000
+eta2 0.000  0.000 0.00    0    0 0.000
+eta3 0.000  0.000 0.00    0    0 0.000
+eta4 0.291  0.000 0.00    0    0 0.411
+eta5 0.000  0.458 0.00    0    0 0.000
+eta6 0.000 -0.268 0.38    0    0 0.000
+
+$nu
+                        intrcp
+happy.lag.obs                0
+sad.lag.obs                  0
+other.communion.lag.obs      0
+happy.obs                    0
+sad.obs                      0
+other.communion.obs          0
+
+$alpha
+     intrcp
+eta1      0
+eta2      0
+eta3      0
+eta4      0
+eta5      0
+eta6      0
+
+> lavInspect(fit, what="sampstat")
+$cov
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.016                                   
+sad.lag.obs              0.006  0.022                            
+other.communion.lag.obs  0.007  0.002  0.012                     
+happy.obs                0.004 -0.002  0.002  0.014              
+sad.obs                  0.003  0.008  0.001  0.000  0.013       
+other.communion.obs      0.001 -0.004  0.004  0.006  0.000  0.011
+
+$mean
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                 -0.018                  -0.005                   0.020 
+              happy.obs                 sad.obs     other.communion.obs 
+                 -0.009                   0.002                   0.022 
+
+> lavInspect(fit, what="rsquare")
+                   eta1                    eta2                    eta3 
+                  0.000                   0.000                   0.000 
+                   eta4                    eta5                    eta6 
+                  0.275                   0.210                   0.196 
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                  1.000                   1.000                   1.000 
+              happy.obs                 sad.obs     other.communion.obs 
+                  1.000                   1.000                   1.000 
+> lavInspect(fit, what="cov.lv")
+       eta1   eta2   eta3   eta4   eta5   eta6
+eta1  0.017                                   
+eta2  0.006  0.022                            
+eta3  0.006  0.002  0.012                     
+eta4  0.005  0.000  0.004  0.014              
+eta5  0.002  0.008  0.001  0.000  0.013       
+eta6  0.001 -0.004  0.004  0.006 -0.001  0.012
+> lavInspect(fit, what="cor.lv")
+       eta1   eta2   eta3   eta4   eta5   eta6
+eta1  1.000                                   
+eta2  0.311  1.000                            
+eta3  0.451  0.099  1.000                     
+eta4  0.327 -0.004  0.277  1.000              
+eta5  0.142  0.458  0.045 -0.002  1.000       
+eta6  0.088 -0.231  0.354  0.437 -0.106  1.000
+> lavInspect(fit, what="mean.lv")
+eta1 eta2 eta3 eta4 eta5 eta6 
+   0    0    0    0    0    0 
+> lavInspect(fit, what="cov.ov")
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            0.017                                   
+sad.lag.obs              0.006  0.022                            
+other.communion.lag.obs  0.006  0.002  0.012                     
+happy.obs                0.005  0.000  0.004  0.014              
+sad.obs                  0.002  0.008  0.001  0.000  0.013       
+other.communion.obs      0.001 -0.004  0.004  0.006 -0.001  0.012
+> lavInspect(fit, what="cor.ov")
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            1.000                                   
+sad.lag.obs              0.311  1.000                            
+other.communion.lag.obs  0.451  0.099  1.000                     
+happy.obs                0.327 -0.004  0.277  1.000              
+sad.obs                  0.142  0.458  0.045 -0.002  1.000       
+other.communion.obs      0.088 -0.231  0.354  0.437 -0.106  1.000
+> lavInspect(fit, what="mean.ov")
+          happy.lag.obs             sad.lag.obs other.communion.lag.obs 
+                      0                       0                       0 
+              happy.obs                 sad.obs     other.communion.obs 
+                      0                       0                       0 
+> lavInspect(fit, what="th")
+numeric(0)
+> lavInspect(fit, what="theta")
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+> lavInspect(fit, what="theta.cor")
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                0                                   
+sad.lag.obs                  0      0                            
+other.communion.lag.obs      0      0      0                     
+happy.obs                    0      0      0      0              
+sad.obs                      0      0      0      0      0       
+other.communion.obs          0      0      0      0      0      0
+> lavInspect(fit, what="coverage")
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs                1                                   
+sad.lag.obs                  1      1                            
+other.communion.lag.obs      1      1      1                     
+happy.obs                    1      1      1      1              
+sad.obs                      1      1      1      1      1       
+other.communion.obs          1      1      1      1      1      1
+> lavInspect(fit, what="patterns")
+     hppy.. sd.lg. oth... hppy.b sad.bs othr..
+[1,]      1      1      1      1      1      1
+> lavInspect(fit, what="converged")
+[1] TRUE
+> lavInspect(fit, what="wls.est")
+                                 happy.lag.obs~1 
+                                           0.000 
+                                   sad.lag.obs~1 
+                                           0.000 
+                       other.communion.lag.obs~1 
+                                           0.000 
+                                     happy.obs~1 
+                                           0.000 
+                                       sad.obs~1 
+                                           0.000 
+                           other.communion.obs~1 
+                                           0.000 
+                    happy.lag.obs~~happy.lag.obs 
+                                           0.017 
+                      happy.lag.obs~~sad.lag.obs 
+                                           0.006 
+          happy.lag.obs~~other.communion.lag.obs 
+                                           0.006 
+                        happy.lag.obs~~happy.obs 
+                                           0.005 
+                          happy.lag.obs~~sad.obs 
+                                           0.002 
+              happy.lag.obs~~other.communion.obs 
+                                           0.001 
+                        sad.lag.obs~~sad.lag.obs 
+                                           0.022 
+            sad.lag.obs~~other.communion.lag.obs 
+                                           0.002 
+                          sad.lag.obs~~happy.obs 
+                                           0.000 
+                            sad.lag.obs~~sad.obs 
+                                           0.008 
+                sad.lag.obs~~other.communion.obs 
+                                          -0.004 
+other.communion.lag.obs~~other.communion.lag.obs 
+                                           0.012 
+              other.communion.lag.obs~~happy.obs 
+                                           0.004 
+                other.communion.lag.obs~~sad.obs 
+                                           0.001 
+    other.communion.lag.obs~~other.communion.obs 
+                                           0.004 
+                            happy.obs~~happy.obs 
+                                           0.014 
+                              happy.obs~~sad.obs 
+                                           0.000 
+                  happy.obs~~other.communion.obs 
+                                           0.006 
+                                sad.obs~~sad.obs 
+                                           0.013 
+                    sad.obs~~other.communion.obs 
+                                          -0.001 
+        other.communion.obs~~other.communion.obs 
+                                           0.012 
+> lavInspect(fit, what="wls.obs")
+                                 happy.lag.obs~1 
+                                          -0.018 
+                                   sad.lag.obs~1 
+                                          -0.005 
+                       other.communion.lag.obs~1 
+                                           0.020 
+                                     happy.obs~1 
+                                          -0.009 
+                                       sad.obs~1 
+                                           0.002 
+                           other.communion.obs~1 
+                                           0.022 
+                    happy.lag.obs~~happy.lag.obs 
+                                           0.016 
+                      happy.lag.obs~~sad.lag.obs 
+                                           0.006 
+          happy.lag.obs~~other.communion.lag.obs 
+                                           0.007 
+                        happy.lag.obs~~happy.obs 
+                                           0.004 
+                          happy.lag.obs~~sad.obs 
+                                           0.003 
+              happy.lag.obs~~other.communion.obs 
+                                           0.001 
+                        sad.lag.obs~~sad.lag.obs 
+                                           0.022 
+            sad.lag.obs~~other.communion.lag.obs 
+                                           0.002 
+                          sad.lag.obs~~happy.obs 
+                                          -0.002 
+                            sad.lag.obs~~sad.obs 
+                                           0.008 
+                sad.lag.obs~~other.communion.obs 
+                                          -0.004 
+other.communion.lag.obs~~other.communion.lag.obs 
+                                           0.012 
+              other.communion.lag.obs~~happy.obs 
+                                           0.002 
+                other.communion.lag.obs~~sad.obs 
+                                           0.001 
+    other.communion.lag.obs~~other.communion.obs 
+                                           0.004 
+                            happy.obs~~happy.obs 
+                                           0.014 
+                              happy.obs~~sad.obs 
+                                           0.000 
+                  happy.obs~~other.communion.obs 
+                                           0.006 
+                                sad.obs~~sad.obs 
+                                           0.013 
+                    sad.obs~~other.communion.obs 
+                                           0.000 
+        other.communion.obs~~other.communion.obs 
+                                           0.011 
+> lavInspect(fit, what="wls.v")
+                                                  hp..~1  sd..~1  o...~1
+happy.lag.obs~1                                   90.608 -19.415 -41.609
+sad.lag.obs~1                                    -19.415  66.183  -4.249
+other.communion.lag.obs~1                        -41.609  -4.249 120.163
+happy.obs~1                                      -26.491   0.000   0.000
+sad.obs~1                                          0.000 -33.675   0.000
+other.communion.obs~1                             11.906  20.771 -40.044
+happy.lag.obs~~happy.lag.obs                       0.000   0.000   0.000
+happy.lag.obs~~sad.lag.obs                         0.000   0.000   0.000
+happy.lag.obs~~other.communion.lag.obs             0.000   0.000   0.000
+happy.lag.obs~~happy.obs                           0.000   0.000   0.000
+happy.lag.obs~~sad.obs                             0.000   0.000   0.000
+happy.lag.obs~~other.communion.obs                 0.000   0.000   0.000
+sad.lag.obs~~sad.lag.obs                           0.000   0.000   0.000
+sad.lag.obs~~other.communion.lag.obs               0.000   0.000   0.000
+sad.lag.obs~~happy.obs                             0.000   0.000   0.000
+sad.lag.obs~~sad.obs                               0.000   0.000   0.000
+sad.lag.obs~~other.communion.obs                   0.000   0.000   0.000
+other.communion.lag.obs~~other.communion.lag.obs   0.000   0.000   0.000
+other.communion.lag.obs~~happy.obs                 0.000   0.000   0.000
+other.communion.lag.obs~~sad.obs                   0.000   0.000   0.000
+other.communion.lag.obs~~other.communion.obs       0.000   0.000   0.000
+happy.obs~~happy.obs                               0.000   0.000   0.000
+happy.obs~~sad.obs                                 0.000   0.000   0.000
+happy.obs~~other.communion.obs                     0.000   0.000   0.000
+sad.obs~~sad.obs                                   0.000   0.000   0.000
+sad.obs~~other.communion.obs                       0.000   0.000   0.000
+other.communion.obs~~other.communion.obs           0.000   0.000   0.000
+                                                  hpp.~1  sd.b~1  ot..~1
+happy.lag.obs~1                                  -26.491   0.000  11.906
+sad.lag.obs~1                                      0.000 -33.675  20.771
+other.communion.lag.obs~1                          0.000   0.000 -40.044
+happy.obs~1                                       99.178   0.000 -44.575
+sad.obs~1                                          0.000  94.487   0.000
+other.communion.obs~1                            -44.575   0.000 126.790
+happy.lag.obs~~happy.lag.obs                       0.000   0.000   0.000
+happy.lag.obs~~sad.lag.obs                         0.000   0.000   0.000
+happy.lag.obs~~other.communion.lag.obs             0.000   0.000   0.000
+happy.lag.obs~~happy.obs                           0.000   0.000   0.000
+happy.lag.obs~~sad.obs                             0.000   0.000   0.000
+happy.lag.obs~~other.communion.obs                 0.000   0.000   0.000
+sad.lag.obs~~sad.lag.obs                           0.000   0.000   0.000
+sad.lag.obs~~other.communion.lag.obs               0.000   0.000   0.000
+sad.lag.obs~~happy.obs                             0.000   0.000   0.000
+sad.lag.obs~~sad.obs                               0.000   0.000   0.000
+sad.lag.obs~~other.communion.obs                   0.000   0.000   0.000
+other.communion.lag.obs~~other.communion.lag.obs   0.000   0.000   0.000
+other.communion.lag.obs~~happy.obs                 0.000   0.000   0.000
+other.communion.lag.obs~~sad.obs                   0.000   0.000   0.000
+other.communion.lag.obs~~other.communion.obs       0.000   0.000   0.000
+happy.obs~~happy.obs                               0.000   0.000   0.000
+happy.obs~~sad.obs                                 0.000   0.000   0.000
+happy.obs~~other.communion.obs                     0.000   0.000   0.000
+sad.obs~~sad.obs                                   0.000   0.000   0.000
+sad.obs~~other.communion.obs                       0.000   0.000   0.000
+other.communion.obs~~other.communion.obs           0.000   0.000   0.000
+                                                 hppy.lg.bs~~h..
+happy.lag.obs~1                                            0.000
+sad.lag.obs~1                                              0.000
+other.communion.lag.obs~1                                  0.000
+happy.obs~1                                                0.000
+sad.obs~1                                                  0.000
+other.communion.obs~1                                      0.000
+happy.lag.obs~~happy.lag.obs                            4104.870
+happy.lag.obs~~sad.lag.obs                             -1759.104
+happy.lag.obs~~other.communion.lag.obs                 -3770.068
+happy.lag.obs~~happy.obs                               -2400.259
+happy.lag.obs~~sad.obs                                     0.000
+happy.lag.obs~~other.communion.obs                      1078.795
+sad.lag.obs~~sad.lag.obs                                 188.462
+sad.lag.obs~~other.communion.lag.obs                     807.814
+sad.lag.obs~~happy.obs                                   514.304
+sad.lag.obs~~sad.obs                                       0.000
+sad.lag.obs~~other.communion.obs                        -231.154
+other.communion.lag.obs~~other.communion.lag.obs         865.643
+other.communion.lag.obs~~happy.obs                      1102.244
+other.communion.lag.obs~~sad.obs                           0.000
+other.communion.lag.obs~~other.communion.obs            -495.403
+happy.obs~~happy.obs                                     350.878
+happy.obs~~sad.obs                                         0.000
+happy.obs~~other.communion.obs                          -315.404
+sad.obs~~sad.obs                                           0.000
+sad.obs~~other.communion.obs                               0.000
+other.communion.obs~~other.communion.obs                  70.879
+                                                 hppy.lg.bs~~s..  h..~~...
+happy.lag.obs~1                                            0.000     0.000
+sad.lag.obs~1                                              0.000     0.000
+other.communion.lag.obs~1                                  0.000     0.000
+happy.obs~1                                                0.000     0.000
+sad.obs~1                                                  0.000     0.000
+other.communion.obs~1                                      0.000     0.000
+happy.lag.obs~~happy.lag.obs                           -1759.104 -3770.068
+happy.lag.obs~~sad.lag.obs                              6373.576   422.789
+happy.lag.obs~~other.communion.lag.obs                   422.789 12619.009
+happy.lag.obs~~happy.obs                                 514.304  1102.244
+happy.lag.obs~~sad.obs                                 -3051.252     0.000
+happy.lag.obs~~other.communion.obs                      1650.864 -4123.737
+sad.lag.obs~~sad.lag.obs                               -1284.904    82.499
+sad.lag.obs~~other.communion.lag.obs                   -2671.277 -2156.105
+sad.lag.obs~~happy.obs                                 -1753.224   112.569
+sad.lag.obs~~sad.obs                                     653.793     0.000
+sad.lag.obs~~other.communion.obs                         384.725   726.850
+other.communion.lag.obs~~other.communion.lag.obs         176.811 -4999.849
+other.communion.lag.obs~~happy.obs                       112.569 -3183.213
+other.communion.lag.obs~~sad.obs                        1401.193     0.000
+other.communion.lag.obs~~other.communion.obs            -914.852  3096.894
+happy.obs~~happy.obs                                       0.000     0.000
+happy.obs~~sad.obs                                       892.086     0.000
+happy.obs~~other.communion.obs                          -550.240  1060.806
+sad.obs~~sad.obs                                           0.000     0.000
+sad.obs~~other.communion.obs                            -400.948     0.000
+other.communion.obs~~other.communion.obs                 247.305  -476.779
+                                                 hppy.lg.bs~~h. hppy.lg.bs~~s.
+happy.lag.obs~1                                           0.000          0.000
+sad.lag.obs~1                                             0.000          0.000
+other.communion.lag.obs~1                                 0.000          0.000
+happy.obs~1                                               0.000          0.000
+sad.obs~1                                                 0.000          0.000
+other.communion.obs~1                                     0.000          0.000
+happy.lag.obs~~happy.lag.obs                          -2400.259          0.000
+happy.lag.obs~~sad.lag.obs                              514.304      -3051.252
+happy.lag.obs~~other.communion.lag.obs                 1102.244          0.000
+happy.lag.obs~~happy.obs                               9687.999          0.000
+happy.lag.obs~~sad.obs                                    0.000       8561.202
+happy.lag.obs~~other.communion.obs                    -4354.267          0.000
+sad.lag.obs~~sad.lag.obs                                  0.000        653.793
+sad.lag.obs~~other.communion.lag.obs                      0.000       1401.193
+sad.lag.obs~~happy.obs                                -1925.485        892.086
+sad.lag.obs~~sad.obs                                      0.000      -1834.411
+sad.lag.obs~~other.communion.obs                        865.408       -400.948
+other.communion.lag.obs~~other.communion.lag.obs          0.000          0.000
+other.communion.lag.obs~~happy.obs                    -4126.653          0.000
+other.communion.lag.obs~~sad.obs                          0.000      -3931.466
+other.communion.lag.obs~~other.communion.obs           1854.723          0.000
+happy.obs~~happy.obs                                  -2627.283          0.000
+happy.obs~~sad.obs                                        0.000      -2503.015
+happy.obs~~other.communion.obs                         2361.662          0.000
+sad.obs~~sad.obs                                          0.000          0.000
+sad.obs~~other.communion.obs                              0.000       1124.979
+other.communion.obs~~other.communion.obs               -530.724          0.000
+                                                 hppy.lg.bs~~t.. sd.lg.bs~~s..
+happy.lag.obs~1                                            0.000         0.000
+sad.lag.obs~1                                              0.000         0.000
+other.communion.lag.obs~1                                  0.000         0.000
+happy.obs~1                                                0.000         0.000
+sad.obs~1                                                  0.000         0.000
+other.communion.obs~1                                      0.000         0.000
+happy.lag.obs~~happy.lag.obs                            1078.795       188.462
+happy.lag.obs~~sad.lag.obs                              1650.864     -1284.904
+happy.lag.obs~~other.communion.lag.obs                 -4123.737        82.499
+happy.lag.obs~~happy.obs                               -4354.267         0.000
+happy.lag.obs~~sad.obs                                     0.000       653.793
+happy.lag.obs~~other.communion.obs                     11629.907      -403.261
+sad.lag.obs~~sad.lag.obs                                -403.261      2190.071
+sad.lag.obs~~other.communion.lag.obs                     -86.814      -281.234
+sad.lag.obs~~happy.obs                                   315.168         0.000
+sad.lag.obs~~sad.obs                                       0.000     -2228.731
+sad.lag.obs~~other.communion.obs                       -2214.264      1374.685
+other.communion.lag.obs~~other.communion.lag.obs        1666.200         9.029
+other.communion.lag.obs~~happy.obs                      2915.528         0.000
+other.communion.lag.obs~~sad.obs                           0.000       143.099
+other.communion.lag.obs~~other.communion.obs           -5752.355       -88.264
+happy.obs~~happy.obs                                    1180.831         0.000
+happy.obs~~sad.obs                                         0.000         0.000
+happy.obs~~other.communion.obs                         -3889.482         0.000
+sad.obs~~sad.obs                                           0.000       567.018
+sad.obs~~other.communion.obs                               0.000      -699.475
+other.communion.obs~~other.communion.obs                1509.592       215.719
+                                                  s..~~... sd.lg.bs~~h.
+happy.lag.obs~1                                      0.000        0.000
+sad.lag.obs~1                                        0.000        0.000
+other.communion.lag.obs~1                            0.000        0.000
+happy.obs~1                                          0.000        0.000
+sad.obs~1                                            0.000        0.000
+other.communion.obs~1                                0.000        0.000
+happy.lag.obs~~happy.lag.obs                       807.814      514.304
+happy.lag.obs~~sad.lag.obs                       -2671.277    -1753.224
+happy.lag.obs~~other.communion.lag.obs           -2156.105      112.569
+happy.lag.obs~~happy.obs                             0.000    -1925.485
+happy.lag.obs~~sad.obs                            1401.193      892.086
+happy.lag.obs~~other.communion.obs                 -86.814      315.168
+sad.lag.obs~~sad.lag.obs                          -281.234        0.000
+sad.lag.obs~~other.communion.lag.obs              7970.792        0.000
+sad.lag.obs~~happy.obs                               0.000     6563.834
+sad.lag.obs~~sad.obs                               143.099        0.000
+sad.lag.obs~~other.communion.obs                 -2738.513    -2950.112
+other.communion.lag.obs~~other.communion.lag.obs  -510.619        0.000
+other.communion.lag.obs~~happy.obs                   0.000     -421.442
+other.communion.lag.obs~~sad.obs                 -4046.558        0.000
+other.communion.lag.obs~~other.communion.obs      2666.088      189.417
+happy.obs~~happy.obs                                 0.000        0.000
+happy.obs~~sad.obs                                   0.000    -3339.849
+happy.obs~~other.communion.obs                       0.000     2060.025
+sad.obs~~sad.obs                                     0.000        0.000
+sad.obs~~other.communion.obs                      1348.516     1501.094
+other.communion.obs~~other.communion.obs          -831.767     -925.877
+                                                 sd.lg.bs~~s. sd.lg.bs~~t..
+happy.lag.obs~1                                         0.000         0.000
+sad.lag.obs~1                                           0.000         0.000
+other.communion.lag.obs~1                               0.000         0.000
+happy.obs~1                                             0.000         0.000
+sad.obs~1                                               0.000         0.000
+other.communion.obs~1                                   0.000         0.000
+happy.lag.obs~~happy.lag.obs                            0.000      -231.154
+happy.lag.obs~~sad.lag.obs                            653.793       384.725
+happy.lag.obs~~other.communion.lag.obs                  0.000       726.850
+happy.lag.obs~~happy.obs                                0.000       865.408
+happy.lag.obs~~sad.obs                              -1834.411      -400.948
+happy.lag.obs~~other.communion.obs                      0.000     -2214.264
+sad.lag.obs~~sad.lag.obs                            -2228.731      1374.685
+sad.lag.obs~~other.communion.lag.obs                  143.099     -2738.513
+sad.lag.obs~~happy.obs                                  0.000     -2950.112
+sad.lag.obs~~sad.obs                                 7387.407      -699.475
+sad.lag.obs~~other.communion.obs                     -699.475      8822.742
+other.communion.lag.obs~~other.communion.lag.obs        0.000       170.164
+other.communion.lag.obs~~happy.obs                      0.000       189.417
+other.communion.lag.obs~~sad.obs                     -401.508      1348.516
+other.communion.lag.obs~~other.communion.obs            0.000     -1370.544
+happy.obs~~happy.obs                                    0.000         0.000
+happy.obs~~sad.obs                                      0.000      1501.094
+happy.obs~~other.communion.obs                          0.000      -925.877
+sad.obs~~sad.obs                                    -3181.878         0.000
+sad.obs~~other.communion.obs                         1962.587     -4269.714
+other.communion.obs~~other.communion.obs                0.000      2633.567
+                                                 o...~~... othr.cmmnn.lg.bs~~h.
+happy.lag.obs~1                                      0.000                0.000
+sad.lag.obs~1                                        0.000                0.000
+other.communion.lag.obs~1                            0.000                0.000
+happy.obs~1                                          0.000                0.000
+sad.obs~1                                            0.000                0.000
+other.communion.obs~1                                0.000                0.000
+happy.lag.obs~~happy.lag.obs                       865.643             1102.244
+happy.lag.obs~~sad.lag.obs                         176.811              112.569
+happy.lag.obs~~other.communion.lag.obs           -4999.849            -3183.213
+happy.lag.obs~~happy.obs                             0.000            -4126.653
+happy.lag.obs~~sad.obs                               0.000                0.000
+happy.lag.obs~~other.communion.obs                1666.200             2915.528
+sad.lag.obs~~sad.lag.obs                             9.029                0.000
+sad.lag.obs~~other.communion.lag.obs              -510.619                0.000
+sad.lag.obs~~happy.obs                               0.000             -421.442
+sad.lag.obs~~sad.obs                                 0.000                0.000
+sad.lag.obs~~other.communion.obs                   170.164              189.417
+other.communion.lag.obs~~other.communion.lag.obs  7219.626                0.000
+other.communion.lag.obs~~happy.obs                   0.000            11917.517
+other.communion.lag.obs~~sad.obs                     0.000                0.000
+other.communion.lag.obs~~other.communion.obs     -4811.881            -5356.323
+happy.obs~~happy.obs                                 0.000                0.000
+happy.obs~~sad.obs                                   0.000                0.000
+happy.obs~~other.communion.obs                       0.000            -3971.513
+sad.obs~~sad.obs                                     0.000                0.000
+sad.obs~~other.communion.obs                         0.000                0.000
+other.communion.obs~~other.communion.obs           801.780             1784.995
+                                                 othr.cmmnn.lg.bs~~s. ot...~~..
+happy.lag.obs~1                                                 0.000     0.000
+sad.lag.obs~1                                                   0.000     0.000
+other.communion.lag.obs~1                                       0.000     0.000
+happy.obs~1                                                     0.000     0.000
+sad.obs~1                                                       0.000     0.000
+other.communion.obs~1                                           0.000     0.000
+happy.lag.obs~~happy.lag.obs                                    0.000  -495.403
+happy.lag.obs~~sad.lag.obs                                   1401.193  -914.852
+happy.lag.obs~~other.communion.lag.obs                          0.000  3096.894
+happy.lag.obs~~happy.obs                                        0.000  1854.723
+happy.lag.obs~~sad.obs                                      -3931.466     0.000
+happy.lag.obs~~other.communion.obs                              0.000 -5752.355
+sad.lag.obs~~sad.lag.obs                                      143.099   -88.264
+sad.lag.obs~~other.communion.lag.obs                        -4046.558  2666.088
+sad.lag.obs~~happy.obs                                          0.000   189.417
+sad.lag.obs~~sad.obs                                         -401.508     0.000
+sad.lag.obs~~other.communion.obs                             1348.516 -1370.544
+other.communion.lag.obs~~other.communion.lag.obs                0.000 -4811.881
+other.communion.lag.obs~~happy.obs                              0.000 -5356.323
+other.communion.lag.obs~~sad.obs                            11353.830     0.000
+other.communion.lag.obs~~other.communion.obs                    0.000 16839.094
+happy.obs~~happy.obs                                            0.000     0.000
+happy.obs~~sad.obs                                              0.000     0.000
+happy.obs~~other.communion.obs                                  0.000  1784.995
+sad.obs~~sad.obs                                                0.000     0.000
+sad.obs~~other.communion.obs                                -3783.664     0.000
+other.communion.obs~~other.communion.obs                        0.000 -5077.242
+                                                 hppy.bs~~h. hppy.bs~~s.
+happy.lag.obs~1                                        0.000       0.000
+sad.lag.obs~1                                          0.000       0.000
+other.communion.lag.obs~1                              0.000       0.000
+happy.obs~1                                            0.000       0.000
+sad.obs~1                                              0.000       0.000
+other.communion.obs~1                                  0.000       0.000
+happy.lag.obs~~happy.lag.obs                         350.878       0.000
+happy.lag.obs~~sad.lag.obs                             0.000     892.086
+happy.lag.obs~~other.communion.lag.obs                 0.000       0.000
+happy.lag.obs~~happy.obs                           -2627.283       0.000
+happy.lag.obs~~sad.obs                                 0.000   -2503.015
+happy.lag.obs~~other.communion.obs                  1180.831       0.000
+sad.lag.obs~~sad.lag.obs                               0.000       0.000
+sad.lag.obs~~other.communion.lag.obs                   0.000       0.000
+sad.lag.obs~~happy.obs                                 0.000   -3339.849
+sad.lag.obs~~sad.obs                                   0.000       0.000
+sad.lag.obs~~other.communion.obs                       0.000    1501.094
+other.communion.lag.obs~~other.communion.lag.obs       0.000       0.000
+other.communion.lag.obs~~happy.obs                     0.000       0.000
+other.communion.lag.obs~~sad.obs                       0.000       0.000
+other.communion.lag.obs~~other.communion.obs           0.000       0.000
+happy.obs~~happy.obs                                4918.095       0.000
+happy.obs~~sad.obs                                     0.000    9370.947
+happy.obs~~other.communion.obs                     -4420.871       0.000
+sad.obs~~sad.obs                                       0.000       0.000
+sad.obs~~other.communion.obs                           0.000   -4211.768
+other.communion.obs~~other.communion.obs             993.479       0.000
+                                                    h.~~..    sd.~~.    s.~~..
+happy.lag.obs~1                                      0.000     0.000     0.000
+sad.lag.obs~1                                        0.000     0.000     0.000
+other.communion.lag.obs~1                            0.000     0.000     0.000
+happy.obs~1                                          0.000     0.000     0.000
+sad.obs~1                                            0.000     0.000     0.000
+other.communion.obs~1                                0.000     0.000     0.000
+happy.lag.obs~~happy.lag.obs                      -315.404     0.000     0.000
+happy.lag.obs~~sad.lag.obs                        -550.240     0.000  -400.948
+happy.lag.obs~~other.communion.lag.obs            1060.806     0.000     0.000
+happy.lag.obs~~happy.obs                          2361.662     0.000     0.000
+happy.lag.obs~~sad.obs                               0.000     0.000  1124.979
+happy.lag.obs~~other.communion.obs               -3889.482     0.000     0.000
+sad.lag.obs~~sad.lag.obs                             0.000   567.018  -699.475
+sad.lag.obs~~other.communion.lag.obs                 0.000     0.000  1348.516
+sad.lag.obs~~happy.obs                            2060.025     0.000  1501.094
+sad.lag.obs~~sad.obs                                 0.000 -3181.878  1962.587
+sad.lag.obs~~other.communion.obs                  -925.877     0.000 -4269.714
+other.communion.lag.obs~~other.communion.lag.obs     0.000     0.000     0.000
+other.communion.lag.obs~~happy.obs               -3971.513     0.000     0.000
+other.communion.lag.obs~~sad.obs                     0.000     0.000 -3783.664
+other.communion.lag.obs~~other.communion.obs      1784.995     0.000     0.000
+happy.obs~~happy.obs                             -4420.871     0.000     0.000
+happy.obs~~sad.obs                                   0.000     0.000 -4211.768
+happy.obs~~other.communion.obs                   14561.692     0.000     0.000
+sad.obs~~sad.obs                                     0.000  4463.855     0.000
+sad.obs~~other.communion.obs                         0.000     0.000 11979.960
+other.communion.obs~~other.communion.obs         -5651.709     0.000     0.000
+                                                    o..~~.
+happy.lag.obs~1                                      0.000
+sad.lag.obs~1                                        0.000
+other.communion.lag.obs~1                            0.000
+happy.obs~1                                          0.000
+sad.obs~1                                            0.000
+other.communion.obs~1                                0.000
+happy.lag.obs~~happy.lag.obs                        70.879
+happy.lag.obs~~sad.lag.obs                         247.305
+happy.lag.obs~~other.communion.lag.obs            -476.779
+happy.lag.obs~~happy.obs                          -530.724
+happy.lag.obs~~sad.obs                               0.000
+happy.lag.obs~~other.communion.obs                1509.592
+sad.lag.obs~~sad.lag.obs                           215.719
+sad.lag.obs~~other.communion.lag.obs              -831.767
+sad.lag.obs~~happy.obs                            -925.877
+sad.lag.obs~~sad.obs                                 0.000
+sad.lag.obs~~other.communion.obs                  2633.567
+other.communion.lag.obs~~other.communion.lag.obs   801.780
+other.communion.lag.obs~~happy.obs                1784.995
+other.communion.lag.obs~~sad.obs                     0.000
+other.communion.lag.obs~~other.communion.obs     -5077.242
+happy.obs~~happy.obs                               993.479
+happy.obs~~sad.obs                                   0.000
+happy.obs~~other.communion.obs                   -5651.709
+sad.obs~~sad.obs                                     0.000
+sad.obs~~other.communion.obs                         0.000
+other.communion.obs~~other.communion.obs          8037.865
+> lavInspect(fit, what="gamma")
+                                                 hp..~1 sd..~1 o...~1 hpp.~1
+happy.lag.obs~1                                   0.017                     
+sad.lag.obs~1                                     0.006  0.022              
+other.communion.lag.obs~1                         0.006  0.002  0.012       
+happy.obs~1                                       0.005 -0.002  0.002  0.014
+sad.obs~1                                         0.003  0.008  0.001  0.000
+other.communion.obs~1                             0.001 -0.004  0.004  0.005
+happy.lag.obs~~happy.lag.obs                     -0.002 -0.003 -0.001  0.000
+happy.lag.obs~~sad.lag.obs                       -0.003 -0.005 -0.001  0.000
+happy.lag.obs~~other.communion.lag.obs           -0.001 -0.001  0.000  0.000
+happy.lag.obs~~happy.obs                          0.000  0.000  0.000  0.000
+happy.lag.obs~~sad.obs                           -0.001 -0.002 -0.001  0.000
+happy.lag.obs~~other.communion.obs                0.001  0.001  0.000  0.000
+sad.lag.obs~~sad.lag.obs                         -0.005 -0.009 -0.001  0.000
+sad.lag.obs~~other.communion.lag.obs             -0.001 -0.001  0.000  0.000
+sad.lag.obs~~happy.obs                            0.000  0.000  0.000  0.000
+sad.lag.obs~~sad.obs                             -0.002 -0.003  0.000  0.000
+sad.lag.obs~~other.communion.obs                  0.001  0.002  0.000  0.000
+other.communion.lag.obs~~other.communion.lag.obs  0.000  0.000  0.000  0.000
+other.communion.lag.obs~~happy.obs                0.000  0.000  0.000  0.000
+other.communion.lag.obs~~sad.obs                 -0.001  0.000  0.000  0.000
+other.communion.lag.obs~~other.communion.obs      0.000  0.000  0.000  0.000
+happy.obs~~happy.obs                              0.000  0.000  0.000  0.000
+happy.obs~~sad.obs                                0.000  0.000  0.000  0.000
+happy.obs~~other.communion.obs                    0.000  0.000  0.000  0.000
+sad.obs~~sad.obs                                  0.000 -0.001  0.000  0.000
+sad.obs~~other.communion.obs                      0.000  0.001  0.000  0.000
+other.communion.obs~~other.communion.obs          0.000 -0.001  0.000  0.000
+                                                 sd.b~1 ot..~1 hppy.lg.bs~~h..
+happy.lag.obs~1                                                               
+sad.lag.obs~1                                                                 
+other.communion.lag.obs~1                                                     
+happy.obs~1                                                                   
+sad.obs~1                                         0.013                       
+other.communion.obs~1                             0.000  0.012                
+happy.lag.obs~~happy.lag.obs                     -0.002  0.000           0.002
+happy.lag.obs~~sad.lag.obs                       -0.002  0.001           0.002
+happy.lag.obs~~other.communion.lag.obs           -0.001  0.000           0.001
+happy.lag.obs~~happy.obs                          0.000  0.000           0.000
+happy.lag.obs~~sad.obs                           -0.001  0.000           0.001
+happy.lag.obs~~other.communion.obs                0.000  0.000           0.000
+sad.lag.obs~~sad.lag.obs                         -0.003  0.002           0.003
+sad.lag.obs~~other.communion.lag.obs              0.000  0.000           0.001
+sad.lag.obs~~happy.obs                            0.000  0.000           0.000
+sad.lag.obs~~sad.obs                             -0.001  0.000           0.001
+sad.lag.obs~~other.communion.obs                  0.001 -0.001          -0.001
+other.communion.lag.obs~~other.communion.lag.obs  0.000  0.000           0.000
+other.communion.lag.obs~~happy.obs                0.000  0.000           0.000
+other.communion.lag.obs~~sad.obs                  0.000  0.000           0.000
+other.communion.lag.obs~~other.communion.obs      0.000  0.000           0.000
+happy.obs~~happy.obs                              0.000  0.000           0.000
+happy.obs~~sad.obs                                0.000  0.000           0.000
+happy.obs~~other.communion.obs                    0.000  0.000           0.000
+sad.obs~~sad.obs                                  0.000  0.000           0.000
+sad.obs~~other.communion.obs                      0.001  0.000           0.000
+other.communion.obs~~other.communion.obs          0.000  0.000           0.000
+                                                 hppy.lg.bs~~s.. h..~~...
+happy.lag.obs~1                                                          
+sad.lag.obs~1                                                            
+other.communion.lag.obs~1                                                
+happy.obs~1                                                              
+sad.obs~1                                                                
+other.communion.obs~1                                                    
+happy.lag.obs~~happy.lag.obs                                             
+happy.lag.obs~~sad.lag.obs                                 0.003         
+happy.lag.obs~~other.communion.lag.obs                     0.001    0.000
+happy.lag.obs~~happy.obs                                   0.000    0.000
+happy.lag.obs~~sad.obs                                     0.001    0.000
+happy.lag.obs~~other.communion.obs                        -0.001    0.000
+sad.lag.obs~~sad.lag.obs                                   0.005    0.001
+sad.lag.obs~~other.communion.lag.obs                       0.001    0.000
+sad.lag.obs~~happy.obs                                     0.000    0.000
+sad.lag.obs~~sad.obs                                       0.002    0.000
+sad.lag.obs~~other.communion.obs                          -0.001    0.000
+other.communion.lag.obs~~other.communion.lag.obs           0.000    0.000
+other.communion.lag.obs~~happy.obs                         0.000    0.000
+other.communion.lag.obs~~sad.obs                           0.000    0.000
+other.communion.lag.obs~~other.communion.obs               0.000    0.000
+happy.obs~~happy.obs                                       0.000    0.000
+happy.obs~~sad.obs                                         0.000    0.000
+happy.obs~~other.communion.obs                             0.000    0.000
+sad.obs~~sad.obs                                           0.001    0.000
+sad.obs~~other.communion.obs                               0.000    0.000
+other.communion.obs~~other.communion.obs                   0.000    0.000
+                                                 hppy.lg.bs~~h. hppy.lg.bs~~s.
+happy.lag.obs~1                                                               
+sad.lag.obs~1                                                                 
+other.communion.lag.obs~1                                                     
+happy.obs~1                                                                   
+sad.obs~1                                                                     
+other.communion.obs~1                                                         
+happy.lag.obs~~happy.lag.obs                                                  
+happy.lag.obs~~sad.lag.obs                                                    
+happy.lag.obs~~other.communion.lag.obs                                        
+happy.lag.obs~~happy.obs                                  0.000               
+happy.lag.obs~~sad.obs                                    0.000          0.001
+happy.lag.obs~~other.communion.obs                        0.000          0.000
+sad.lag.obs~~sad.lag.obs                                  0.000          0.002
+sad.lag.obs~~other.communion.lag.obs                      0.000          0.000
+sad.lag.obs~~happy.obs                                    0.000          0.000
+sad.lag.obs~~sad.obs                                      0.000          0.001
+sad.lag.obs~~other.communion.obs                          0.000          0.000
+other.communion.lag.obs~~other.communion.lag.obs          0.000          0.000
+other.communion.lag.obs~~happy.obs                        0.000          0.000
+other.communion.lag.obs~~sad.obs                          0.000          0.000
+other.communion.lag.obs~~other.communion.obs              0.000          0.000
+happy.obs~~happy.obs                                      0.000          0.000
+happy.obs~~sad.obs                                        0.000          0.000
+happy.obs~~other.communion.obs                            0.000          0.000
+sad.obs~~sad.obs                                          0.000          0.000
+sad.obs~~other.communion.obs                              0.000          0.000
+other.communion.obs~~other.communion.obs                  0.000          0.000
+                                                 hppy.lg.bs~~t.. sd.lg.bs~~s..
+happy.lag.obs~1                                                               
+sad.lag.obs~1                                                                 
+other.communion.lag.obs~1                                                     
+happy.obs~1                                                                   
+sad.obs~1                                                                     
+other.communion.obs~1                                                         
+happy.lag.obs~~happy.lag.obs                                                  
+happy.lag.obs~~sad.lag.obs                                                    
+happy.lag.obs~~other.communion.lag.obs                                        
+happy.lag.obs~~happy.obs                                                      
+happy.lag.obs~~sad.obs                                                        
+happy.lag.obs~~other.communion.obs                         0.000              
+sad.lag.obs~~sad.lag.obs                                  -0.001         0.008
+sad.lag.obs~~other.communion.lag.obs                       0.000         0.002
+sad.lag.obs~~happy.obs                                     0.000         0.000
+sad.lag.obs~~sad.obs                                       0.000         0.003
+sad.lag.obs~~other.communion.obs                           0.000        -0.002
+other.communion.lag.obs~~other.communion.lag.obs           0.000         0.000
+other.communion.lag.obs~~happy.obs                         0.000         0.000
+other.communion.lag.obs~~sad.obs                           0.000         0.001
+other.communion.lag.obs~~other.communion.obs               0.000         0.000
+happy.obs~~happy.obs                                       0.000         0.000
+happy.obs~~sad.obs                                         0.000         0.000
+happy.obs~~other.communion.obs                             0.000         0.000
+sad.obs~~sad.obs                                           0.000         0.001
+sad.obs~~other.communion.obs                               0.000        -0.001
+other.communion.obs~~other.communion.obs                   0.000         0.000
+                                                 s..~~... sd.lg.bs~~h.
+happy.lag.obs~1                                                       
+sad.lag.obs~1                                                         
+other.communion.lag.obs~1                                             
+happy.obs~1                                                           
+sad.obs~1                                                             
+other.communion.obs~1                                                 
+happy.lag.obs~~happy.lag.obs                                          
+happy.lag.obs~~sad.lag.obs                                            
+happy.lag.obs~~other.communion.lag.obs                                
+happy.lag.obs~~happy.obs                                              
+happy.lag.obs~~sad.obs                                                
+happy.lag.obs~~other.communion.obs                                    
+sad.lag.obs~~sad.lag.obs                                              
+sad.lag.obs~~other.communion.lag.obs                0.000             
+sad.lag.obs~~happy.obs                              0.000        0.000
+sad.lag.obs~~sad.obs                                0.001        0.000
+sad.lag.obs~~other.communion.obs                    0.000        0.000
+other.communion.lag.obs~~other.communion.lag.obs    0.000        0.000
+other.communion.lag.obs~~happy.obs                  0.000        0.000
+other.communion.lag.obs~~sad.obs                    0.000        0.000
+other.communion.lag.obs~~other.communion.obs        0.000        0.000
+happy.obs~~happy.obs                                0.000        0.000
+happy.obs~~sad.obs                                  0.000        0.000
+happy.obs~~other.communion.obs                      0.000        0.000
+sad.obs~~sad.obs                                    0.000        0.000
+sad.obs~~other.communion.obs                        0.000        0.000
+other.communion.obs~~other.communion.obs            0.000        0.000
+                                                 sd.lg.bs~~s. sd.lg.bs~~t..
+happy.lag.obs~1                                                            
+sad.lag.obs~1                                                              
+other.communion.lag.obs~1                                                  
+happy.obs~1                                                                
+sad.obs~1                                                                  
+other.communion.obs~1                                                      
+happy.lag.obs~~happy.lag.obs                                               
+happy.lag.obs~~sad.lag.obs                                                 
+happy.lag.obs~~other.communion.lag.obs                                     
+happy.lag.obs~~happy.obs                                                   
+happy.lag.obs~~sad.obs                                                     
+happy.lag.obs~~other.communion.obs                                         
+sad.lag.obs~~sad.lag.obs                                                   
+sad.lag.obs~~other.communion.lag.obs                                       
+sad.lag.obs~~happy.obs                                                     
+sad.lag.obs~~sad.obs                                    0.001              
+sad.lag.obs~~other.communion.obs                       -0.001         0.001
+other.communion.lag.obs~~other.communion.lag.obs        0.000         0.000
+other.communion.lag.obs~~happy.obs                      0.000         0.000
+other.communion.lag.obs~~sad.obs                        0.000         0.000
+other.communion.lag.obs~~other.communion.obs            0.000         0.000
+happy.obs~~happy.obs                                    0.000         0.000
+happy.obs~~sad.obs                                      0.000         0.000
+happy.obs~~other.communion.obs                          0.000         0.000
+sad.obs~~sad.obs                                        0.000         0.000
+sad.obs~~other.communion.obs                            0.000         0.000
+other.communion.obs~~other.communion.obs                0.000         0.000
+                                                 o...~~... othr.cmmnn.lg.bs~~h.
+happy.lag.obs~1                                                                
+sad.lag.obs~1                                                                  
+other.communion.lag.obs~1                                                      
+happy.obs~1                                                                    
+sad.obs~1                                                                      
+other.communion.obs~1                                                          
+happy.lag.obs~~happy.lag.obs                                                   
+happy.lag.obs~~sad.lag.obs                                                     
+happy.lag.obs~~other.communion.lag.obs                                         
+happy.lag.obs~~happy.obs                                                       
+happy.lag.obs~~sad.obs                                                         
+happy.lag.obs~~other.communion.obs                                             
+sad.lag.obs~~sad.lag.obs                                                       
+sad.lag.obs~~other.communion.lag.obs                                           
+sad.lag.obs~~happy.obs                                                         
+sad.lag.obs~~sad.obs                                                           
+sad.lag.obs~~other.communion.obs                                               
+other.communion.lag.obs~~other.communion.lag.obs     0.000                     
+other.communion.lag.obs~~happy.obs                   0.000                0.000
+other.communion.lag.obs~~sad.obs                     0.000                0.000
+other.communion.lag.obs~~other.communion.obs         0.000                0.000
+happy.obs~~happy.obs                                 0.000                0.000
+happy.obs~~sad.obs                                   0.000                0.000
+happy.obs~~other.communion.obs                       0.000                0.000
+sad.obs~~sad.obs                                     0.000                0.000
+sad.obs~~other.communion.obs                         0.000                0.000
+other.communion.obs~~other.communion.obs             0.000                0.000
+                                                 othr.cmmnn.lg.bs~~s. ot...~~..
+happy.lag.obs~1                                                                
+sad.lag.obs~1                                                                  
+other.communion.lag.obs~1                                                      
+happy.obs~1                                                                    
+sad.obs~1                                                                      
+other.communion.obs~1                                                          
+happy.lag.obs~~happy.lag.obs                                                   
+happy.lag.obs~~sad.lag.obs                                                     
+happy.lag.obs~~other.communion.lag.obs                                         
+happy.lag.obs~~happy.obs                                                       
+happy.lag.obs~~sad.obs                                                         
+happy.lag.obs~~other.communion.obs                                             
+sad.lag.obs~~sad.lag.obs                                                       
+sad.lag.obs~~other.communion.lag.obs                                           
+sad.lag.obs~~happy.obs                                                         
+sad.lag.obs~~sad.obs                                                           
+sad.lag.obs~~other.communion.obs                                               
+other.communion.lag.obs~~other.communion.lag.obs                               
+other.communion.lag.obs~~happy.obs                                             
+other.communion.lag.obs~~sad.obs                                0.000          
+other.communion.lag.obs~~other.communion.obs                    0.000     0.000
+happy.obs~~happy.obs                                            0.000     0.000
+happy.obs~~sad.obs                                              0.000     0.000
+happy.obs~~other.communion.obs                                  0.000     0.000
+sad.obs~~sad.obs                                                0.000     0.000
+sad.obs~~other.communion.obs                                    0.000     0.000
+other.communion.obs~~other.communion.obs                        0.000     0.000
+                                                 hppy.bs~~h. hppy.bs~~s. h.~~..
+happy.lag.obs~1                                                                
+sad.lag.obs~1                                                                  
+other.communion.lag.obs~1                                                      
+happy.obs~1                                                                    
+sad.obs~1                                                                      
+other.communion.obs~1                                                          
+happy.lag.obs~~happy.lag.obs                                                   
+happy.lag.obs~~sad.lag.obs                                                     
+happy.lag.obs~~other.communion.lag.obs                                         
+happy.lag.obs~~happy.obs                                                       
+happy.lag.obs~~sad.obs                                                         
+happy.lag.obs~~other.communion.obs                                             
+sad.lag.obs~~sad.lag.obs                                                       
+sad.lag.obs~~other.communion.lag.obs                                           
+sad.lag.obs~~happy.obs                                                         
+sad.lag.obs~~sad.obs                                                           
+sad.lag.obs~~other.communion.obs                                               
+other.communion.lag.obs~~other.communion.lag.obs                               
+other.communion.lag.obs~~happy.obs                                             
+other.communion.lag.obs~~sad.obs                                               
+other.communion.lag.obs~~other.communion.obs                                   
+happy.obs~~happy.obs                                   0.001                   
+happy.obs~~sad.obs                                     0.000       0.000       
+happy.obs~~other.communion.obs                         0.000       0.000  0.000
+sad.obs~~sad.obs                                       0.000       0.000  0.000
+sad.obs~~other.communion.obs                           0.000       0.000  0.000
+other.communion.obs~~other.communion.obs               0.000       0.000  0.000
+                                                 sd.~~. s.~~.. o..~~.
+happy.lag.obs~1                                                      
+sad.lag.obs~1                                                        
+other.communion.lag.obs~1                                            
+happy.obs~1                                                          
+sad.obs~1                                                            
+other.communion.obs~1                                                
+happy.lag.obs~~happy.lag.obs                                         
+happy.lag.obs~~sad.lag.obs                                           
+happy.lag.obs~~other.communion.lag.obs                               
+happy.lag.obs~~happy.obs                                             
+happy.lag.obs~~sad.obs                                               
+happy.lag.obs~~other.communion.obs                                   
+sad.lag.obs~~sad.lag.obs                                             
+sad.lag.obs~~other.communion.lag.obs                                 
+sad.lag.obs~~happy.obs                                               
+sad.lag.obs~~sad.obs                                                 
+sad.lag.obs~~other.communion.obs                                     
+other.communion.lag.obs~~other.communion.lag.obs                     
+other.communion.lag.obs~~happy.obs                                   
+other.communion.lag.obs~~sad.obs                                     
+other.communion.lag.obs~~other.communion.obs                         
+happy.obs~~happy.obs                                                 
+happy.obs~~sad.obs                                                   
+happy.obs~~other.communion.obs                                       
+sad.obs~~sad.obs                                  0.000              
+sad.obs~~other.communion.obs                      0.000  0.000       
+other.communion.obs~~other.communion.obs          0.000  0.000  0.000
+> lavInspect(fit, what="hessian")
+              et1~~1    et1~~2    et1~~3    et2~~2    et2~~3    et3~~3
+eta1~~eta1  3488.786                                                  
+eta1~~eta2 -1621.733  4565.146                                        
+eta1~~eta3 -3475.655  1103.679 10514.044                              
+eta2~~eta2   188.462  -973.430   -68.765  1256.971                    
+eta2~~eta3   807.814 -2154.995 -2188.671   177.590  5284.313          
+eta3~~eta3   865.643  -147.376 -4374.851     6.273   372.408  5527.484
+eta4~~eta4     0.000     0.000     0.000     0.000     0.000     0.000
+eta5~~eta5     0.000     0.000     0.000     0.000     0.000     0.000
+eta6~~eta6     0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta1      0.000     0.000     0.000     0.000     0.000     0.000
+eta5~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     0.000
+eta4~eta6      0.000     0.000     0.000     0.000     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.000
+              et4~~4    et5~~5    et6~~6    et4~t1    et5~t2    et6~t3
+eta1~~eta1                                                            
+eta1~~eta2                                                            
+eta1~~eta3                                                            
+eta2~~eta2                                                            
+eta2~~eta3                                                            
+eta3~~eta3                                                            
+eta4~~eta4  4918.095                                                  
+eta5~~eta5     0.000  4463.856                                        
+eta6~~eta6     0.000     0.000  5698.395                              
+eta4~eta1      0.000     0.000     0.000     1.637                    
+eta5~eta2      0.000     0.000     0.000     0.000     2.091          
+eta6~eta3      0.000     0.000     0.000     0.000     0.000     1.277
+eta4~eta6      0.000     0.000     0.000     0.054     0.000     0.000
+eta6~eta2      0.000     0.000     0.000     0.000     0.000     0.172
+              et4~t6    et6~t2
+eta1~~eta1                    
+eta1~~eta2                    
+eta1~~eta3                    
+eta2~~eta2                    
+eta2~~eta3                    
+eta3~~eta3                    
+eta4~~eta4                    
+eta5~~eta5                    
+eta6~~eta6                    
+eta4~eta1                     
+eta5~eta2                     
+eta6~eta3                     
+eta4~eta6      1.156          
+eta6~eta2      0.000     2.363
+> #lavInspect(fit, what="first.order")
+> 
+> head(modindices(fit))
+    lhs op  rhs    mi    epc sepc.lv sepc.all sepc.nox
+4  eta1  ~ eta4 1.163  0.175   0.160    0.160    0.160
+5  eta1  ~ eta5 0.264  0.055   0.049    0.049    0.049
+6  eta1  ~ eta6 0.404 -0.072  -0.061   -0.061   -0.061
+10 eta2  ~ eta4 1.243 -0.162  -0.128   -0.128   -0.128
+11 eta2  ~ eta5 0.404 -0.279  -0.217   -0.217   -0.217
+12 eta2  ~ eta6 0.404  0.311   0.225    0.225    0.225
+> standardizedSolution(fit)
+                       lhs op                     rhs est.std    se      z
+1                     eta1  ~                    eta1   0.000 0.000     NA
+2                     eta1  ~                    eta2   0.000 0.000     NA
+3                     eta1  ~                    eta3   0.000 0.000     NA
+4                     eta1  ~                    eta4   0.000 0.000     NA
+5                     eta1  ~                    eta5   0.000 0.000     NA
+6                     eta1  ~                    eta6   0.000 0.000     NA
+7                     eta2  ~                    eta1   0.000 0.000     NA
+8                     eta2  ~                    eta2   0.000 0.000     NA
+9                     eta2  ~                    eta3   0.000 0.000     NA
+10                    eta2  ~                    eta4   0.000 0.000     NA
+11                    eta2  ~                    eta5   0.000 0.000     NA
+12                    eta2  ~                    eta6   0.000 0.000     NA
+13                    eta3  ~                    eta1   0.000 0.000     NA
+14                    eta3  ~                    eta2   0.000 0.000     NA
+15                    eta3  ~                    eta3   0.000 0.000     NA
+16                    eta3  ~                    eta4   0.000 0.000     NA
+17                    eta3  ~                    eta5   0.000 0.000     NA
+18                    eta3  ~                    eta6   0.000 0.000     NA
+19                    eta1 =~           happy.lag.obs   1.000 0.000     NA
+20                    eta2 =~             sad.lag.obs   1.000 0.000     NA
+21                    eta3 =~ other.communion.lag.obs   1.000 0.000     NA
+22                    eta4 =~               happy.obs   1.000 0.000     NA
+23                    eta5 =~                 sad.obs   1.000 0.000     NA
+24                    eta6 =~     other.communion.obs   1.000 0.000     NA
+25                    eta1 ~~                    eta1   1.000 0.000     NA
+26                    eta1 ~~                    eta2   0.311 0.091  3.426
+27                    eta1 ~~                    eta3   0.451 0.080  5.626
+28                    eta2 ~~                    eta2   1.000 0.000     NA
+29                    eta2 ~~                    eta3   0.099 0.100  0.992
+30                    eta3 ~~                    eta3   1.000 0.000     NA
+31                    eta4 ~~                    eta4   0.725 0.076  9.478
+32                    eta5 ~~                    eta5   0.790 0.073 10.859
+33                    eta6 ~~                    eta6   0.804 0.072 11.231
+34                    eta4  ~                    eta1   0.291 0.082  3.535
+35                    eta5  ~                    eta2   0.458 0.079  5.769
+36                    eta6  ~                    eta3   0.380 0.084  4.501
+37                    eta4  ~                    eta6   0.411 0.078  5.243
+38                    eta6  ~                    eta2  -0.268 0.088 -3.052
+39           happy.lag.obs ~~           happy.lag.obs   0.000 0.000     NA
+40             sad.lag.obs ~~             sad.lag.obs   0.000 0.000     NA
+41 other.communion.lag.obs ~~ other.communion.lag.obs   0.000 0.000     NA
+42               happy.obs ~~               happy.obs   0.000 0.000     NA
+43                 sad.obs ~~                 sad.obs   0.000 0.000     NA
+44     other.communion.obs ~~     other.communion.obs   0.000 0.000     NA
+45           happy.lag.obs ~1                           0.000 0.000     NA
+46             sad.lag.obs ~1                           0.000 0.000     NA
+47 other.communion.lag.obs ~1                           0.000 0.000     NA
+48               happy.obs ~1                           0.000 0.000     NA
+49                 sad.obs ~1                           0.000 0.000     NA
+50     other.communion.obs ~1                           0.000 0.000     NA
+51                    eta1 ~1                           0.000 0.000     NA
+52                    eta2 ~1                           0.000 0.000     NA
+53                    eta3 ~1                           0.000 0.000     NA
+54                    eta4 ~1                           0.000 0.000     NA
+55                    eta5 ~1                           0.000 0.000     NA
+56                    eta6 ~1                           0.000 0.000     NA
+   pvalue ci.lower ci.upper
+1      NA    0.000    0.000
+2      NA    0.000    0.000
+3      NA    0.000    0.000
+4      NA    0.000    0.000
+5      NA    0.000    0.000
+6      NA    0.000    0.000
+7      NA    0.000    0.000
+8      NA    0.000    0.000
+9      NA    0.000    0.000
+10     NA    0.000    0.000
+11     NA    0.000    0.000
+12     NA    0.000    0.000
+13     NA    0.000    0.000
+14     NA    0.000    0.000
+15     NA    0.000    0.000
+16     NA    0.000    0.000
+17     NA    0.000    0.000
+18     NA    0.000    0.000
+19     NA    1.000    1.000
+20     NA    1.000    1.000
+21     NA    1.000    1.000
+22     NA    1.000    1.000
+23     NA    1.000    1.000
+24     NA    1.000    1.000
+25     NA    1.000    1.000
+26  0.001    0.133    0.489
+27  0.000    0.294    0.608
+28     NA    1.000    1.000
+29  0.321   -0.096    0.294
+30     NA    1.000    1.000
+31  0.000    0.575    0.875
+32  0.000    0.648    0.933
+33  0.000    0.664    0.944
+34  0.000    0.130    0.452
+35  0.000    0.302    0.614
+36  0.000    0.215    0.546
+37  0.000    0.258    0.565
+38  0.002   -0.440   -0.096
+39     NA    0.000    0.000
+40     NA    0.000    0.000
+41     NA    0.000    0.000
+42     NA    0.000    0.000
+43     NA    0.000    0.000
+44     NA    0.000    0.000
+45     NA    0.000    0.000
+46     NA    0.000    0.000
+47     NA    0.000    0.000
+48     NA    0.000    0.000
+49     NA    0.000    0.000
+50     NA    0.000    0.000
+51     NA    0.000    0.000
+52     NA    0.000    0.000
+53     NA    0.000    0.000
+54     NA    0.000    0.000
+55     NA    0.000    0.000
+56     NA    0.000    0.000
+> parameterEstimates(fit)
+                       lhs op                     rhs    est    se      z
+1                     eta1  ~                    eta1  0.000 0.000     NA
+2                     eta1  ~                    eta2  0.000 0.000     NA
+3                     eta1  ~                    eta3  0.000 0.000     NA
+4                     eta1  ~                    eta4  0.000 0.000     NA
+5                     eta1  ~                    eta5  0.000 0.000     NA
+6                     eta1  ~                    eta6  0.000 0.000     NA
+7                     eta2  ~                    eta1  0.000 0.000     NA
+8                     eta2  ~                    eta2  0.000 0.000     NA
+9                     eta2  ~                    eta3  0.000 0.000     NA
+10                    eta2  ~                    eta4  0.000 0.000     NA
+11                    eta2  ~                    eta5  0.000 0.000     NA
+12                    eta2  ~                    eta6  0.000 0.000     NA
+13                    eta3  ~                    eta1  0.000 0.000     NA
+14                    eta3  ~                    eta2  0.000 0.000     NA
+15                    eta3  ~                    eta3  0.000 0.000     NA
+16                    eta3  ~                    eta4  0.000 0.000     NA
+17                    eta3  ~                    eta5  0.000 0.000     NA
+18                    eta3  ~                    eta6  0.000 0.000     NA
+19                    eta1 =~           happy.lag.obs  1.000 0.000     NA
+20                    eta2 =~             sad.lag.obs  1.000 0.000     NA
+21                    eta3 =~ other.communion.lag.obs  1.000 0.000     NA
+22                    eta4 =~               happy.obs  1.000 0.000     NA
+23                    eta5 =~                 sad.obs  1.000 0.000     NA
+24                    eta6 =~     other.communion.obs  1.000 0.000     NA
+25                    eta1 ~~                    eta1  0.017 0.002  7.036
+26                    eta1 ~~                    eta2  0.006 0.002  2.955
+27                    eta1 ~~                    eta3  0.006 0.002  4.088
+28                    eta2 ~~                    eta2  0.022 0.003  7.036
+29                    eta2 ~~                    eta3  0.002 0.002  0.978
+30                    eta3 ~~                    eta3  0.012 0.002  7.036
+31                    eta4 ~~                    eta4  0.010 0.001  7.036
+32                    eta5 ~~                    eta5  0.011 0.002  7.036
+33                    eta6 ~~                    eta6  0.009 0.001  7.036
+34                    eta4  ~                    eta1  0.267 0.079  3.398
+35                    eta5  ~                    eta2  0.356 0.069  5.128
+36                    eta6  ~                    eta3  0.375 0.089  4.197
+37                    eta4  ~                    eta6  0.449 0.094  4.804
+38                    eta6  ~                    eta2 -0.195 0.066 -2.961
+39           happy.lag.obs ~~           happy.lag.obs  0.000 0.000     NA
+40             sad.lag.obs ~~             sad.lag.obs  0.000 0.000     NA
+41 other.communion.lag.obs ~~ other.communion.lag.obs  0.000 0.000     NA
+42               happy.obs ~~               happy.obs  0.000 0.000     NA
+43                 sad.obs ~~                 sad.obs  0.000 0.000     NA
+44     other.communion.obs ~~     other.communion.obs  0.000 0.000     NA
+45           happy.lag.obs ~1                          0.000 0.000     NA
+46             sad.lag.obs ~1                          0.000 0.000     NA
+47 other.communion.lag.obs ~1                          0.000 0.000     NA
+48               happy.obs ~1                          0.000 0.000     NA
+49                 sad.obs ~1                          0.000 0.000     NA
+50     other.communion.obs ~1                          0.000 0.000     NA
+51                    eta1 ~1                          0.000 0.000     NA
+52                    eta2 ~1                          0.000 0.000     NA
+53                    eta3 ~1                          0.000 0.000     NA
+54                    eta4 ~1                          0.000 0.000     NA
+55                    eta5 ~1                          0.000 0.000     NA
+56                    eta6 ~1                          0.000 0.000     NA
+   pvalue ci.lower ci.upper
+1      NA    0.000    0.000
+2      NA    0.000    0.000
+3      NA    0.000    0.000
+4      NA    0.000    0.000
+5      NA    0.000    0.000
+6      NA    0.000    0.000
+7      NA    0.000    0.000
+8      NA    0.000    0.000
+9      NA    0.000    0.000
+10     NA    0.000    0.000
+11     NA    0.000    0.000
+12     NA    0.000    0.000
+13     NA    0.000    0.000
+14     NA    0.000    0.000
+15     NA    0.000    0.000
+16     NA    0.000    0.000
+17     NA    0.000    0.000
+18     NA    0.000    0.000
+19     NA    1.000    1.000
+20     NA    1.000    1.000
+21     NA    1.000    1.000
+22     NA    1.000    1.000
+23     NA    1.000    1.000
+24     NA    1.000    1.000
+25  0.000    0.012    0.021
+26  0.003    0.002    0.010
+27  0.000    0.003    0.009
+28  0.000    0.016    0.028
+29  0.328   -0.002    0.005
+30  0.000    0.009    0.015
+31  0.000    0.007    0.013
+32  0.000    0.008    0.014
+33  0.000    0.007    0.012
+34  0.001    0.113    0.421
+35  0.000    0.220    0.493
+36  0.000    0.200    0.550
+37  0.000    0.266    0.633
+38  0.003   -0.323   -0.066
+39     NA    0.000    0.000
+40     NA    0.000    0.000
+41     NA    0.000    0.000
+42     NA    0.000    0.000
+43     NA    0.000    0.000
+44     NA    0.000    0.000
+45     NA    0.000    0.000
+46     NA    0.000    0.000
+47     NA    0.000    0.000
+48     NA    0.000    0.000
+49     NA    0.000    0.000
+50     NA    0.000    0.000
+51     NA    0.000    0.000
+52     NA    0.000    0.000
+53     NA    0.000    0.000
+54     NA    0.000    0.000
+55     NA    0.000    0.000
+56     NA    0.000    0.000
+> parameterTable(fit)
+   id                     lhs op                     rhs user block group free
+1   1                    eta1  ~                    eta1    1     1     1    0
+2   2                    eta1  ~                    eta2    1     1     1    0
+3   3                    eta1  ~                    eta3    1     1     1    0
+4   4                    eta1  ~                    eta4    1     1     1    0
+5   5                    eta1  ~                    eta5    1     1     1    0
+6   6                    eta1  ~                    eta6    1     1     1    0
+7   7                    eta2  ~                    eta1    1     1     1    0
+8   8                    eta2  ~                    eta2    1     1     1    0
+9   9                    eta2  ~                    eta3    1     1     1    0
+10 10                    eta2  ~                    eta4    1     1     1    0
+11 11                    eta2  ~                    eta5    1     1     1    0
+12 12                    eta2  ~                    eta6    1     1     1    0
+13 13                    eta3  ~                    eta1    1     1     1    0
+14 14                    eta3  ~                    eta2    1     1     1    0
+15 15                    eta3  ~                    eta3    1     1     1    0
+16 16                    eta3  ~                    eta4    1     1     1    0
+17 17                    eta3  ~                    eta5    1     1     1    0
+18 18                    eta3  ~                    eta6    1     1     1    0
+19 19                    eta1 =~           happy.lag.obs    1     1     1    0
+20 20                    eta2 =~             sad.lag.obs    1     1     1    0
+21 21                    eta3 =~ other.communion.lag.obs    1     1     1    0
+22 22                    eta4 =~               happy.obs    1     1     1    0
+23 23                    eta5 =~                 sad.obs    1     1     1    0
+24 24                    eta6 =~     other.communion.obs    1     1     1    0
+25 25                    eta1 ~~                    eta1    1     1     1    1
+26 26                    eta1 ~~                    eta2    1     1     1    2
+27 27                    eta1 ~~                    eta3    1     1     1    3
+28 28                    eta2 ~~                    eta2    1     1     1    4
+29 29                    eta2 ~~                    eta3    1     1     1    5
+30 30                    eta3 ~~                    eta3    1     1     1    6
+31 31                    eta4 ~~                    eta4    1     1     1    7
+32 32                    eta5 ~~                    eta5    1     1     1    8
+33 33                    eta6 ~~                    eta6    1     1     1    9
+34 34                    eta4  ~                    eta1    1     1     1   10
+35 35                    eta5  ~                    eta2    1     1     1   11
+36 36                    eta6  ~                    eta3    1     1     1   12
+37 37                    eta4  ~                    eta6    1     1     1   13
+38 38                    eta6  ~                    eta2    1     1     1   14
+39 39           happy.lag.obs ~~           happy.lag.obs    0     1     1    0
+40 40             sad.lag.obs ~~             sad.lag.obs    0     1     1    0
+41 41 other.communion.lag.obs ~~ other.communion.lag.obs    0     1     1    0
+42 42               happy.obs ~~               happy.obs    0     1     1    0
+43 43                 sad.obs ~~                 sad.obs    0     1     1    0
+44 44     other.communion.obs ~~     other.communion.obs    0     1     1    0
+45 45           happy.lag.obs ~1                            0     1     1    0
+46 46             sad.lag.obs ~1                            0     1     1    0
+47 47 other.communion.lag.obs ~1                            0     1     1    0
+48 48               happy.obs ~1                            0     1     1    0
+49 49                 sad.obs ~1                            0     1     1    0
+50 50     other.communion.obs ~1                            0     1     1    0
+51 51                    eta1 ~1                            0     1     1    0
+52 52                    eta2 ~1                            0     1     1    0
+53 53                    eta3 ~1                            0     1     1    0
+54 54                    eta4 ~1                            0     1     1    0
+55 55                    eta5 ~1                            0     1     1    0
+56 56                    eta6 ~1                            0     1     1    0
+   ustart exo label plabel start    est    se
+1       0   0         .p1.  0.00  0.000 0.000
+2       0   0         .p2.  0.00  0.000 0.000
+3       0   0         .p3.  0.00  0.000 0.000
+4       0   0         .p4.  0.00  0.000 0.000
+5       0   0         .p5.  0.00  0.000 0.000
+6       0   0         .p6.  0.00  0.000 0.000
+7       0   0         .p7.  0.00  0.000 0.000
+8       0   0         .p8.  0.00  0.000 0.000
+9       0   0         .p9.  0.00  0.000 0.000
+10      0   0        .p10.  0.00  0.000 0.000
+11      0   0        .p11.  0.00  0.000 0.000
+12      0   0        .p12.  0.00  0.000 0.000
+13      0   0        .p13.  0.00  0.000 0.000
+14      0   0        .p14.  0.00  0.000 0.000
+15      0   0        .p15.  0.00  0.000 0.000
+16      0   0        .p16.  0.00  0.000 0.000
+17      0   0        .p17.  0.00  0.000 0.000
+18      0   0        .p18.  0.00  0.000 0.000
+19      1   0        .p19.  1.00  1.000 0.000
+20      1   0        .p20.  1.00  1.000 0.000
+21      1   0        .p21.  1.00  1.000 0.000
+22      1   0        .p22.  1.00  1.000 0.000
+23      1   0        .p23.  1.00  1.000 0.000
+24      1   0        .p24.  1.00  1.000 0.000
+25     NA   0        .p25.  0.05  0.017 0.002
+26     NA   0        .p26.  0.00  0.006 0.002
+27     NA   0        .p27.  0.00  0.006 0.002
+28     NA   0        .p28.  0.05  0.022 0.003
+29     NA   0        .p29.  0.00  0.002 0.002
+30     NA   0        .p30.  0.05  0.012 0.002
+31     NA   0        .p31.  0.05  0.010 0.001
+32     NA   0        .p32.  0.05  0.011 0.002
+33     NA   0        .p33.  0.05  0.009 0.001
+34     NA   0        .p34.  0.00  0.267 0.079
+35     NA   0        .p35.  0.00  0.356 0.069
+36     NA   0        .p36.  0.00  0.375 0.089
+37     NA   0        .p37.  0.00  0.449 0.094
+38     NA   0        .p38.  0.00 -0.195 0.066
+39      0   0        .p39.  0.00  0.000 0.000
+40      0   0        .p40.  0.00  0.000 0.000
+41      0   0        .p41.  0.00  0.000 0.000
+42      0   0        .p42.  0.00  0.000 0.000
+43      0   0        .p43.  0.00  0.000 0.000
+44      0   0        .p44.  0.00  0.000 0.000
+45      0   0        .p45.  0.00  0.000 0.000
+46      0   0        .p46.  0.00  0.000 0.000
+47      0   0        .p47.  0.00  0.000 0.000
+48      0   0        .p48.  0.00  0.000 0.000
+49      0   0        .p49.  0.00  0.000 0.000
+50      0   0        .p50.  0.00  0.000 0.000
+51      0   0        .p51.  0.00  0.000 0.000
+52      0   0        .p52.  0.00  0.000 0.000
+53      0   0        .p53.  0.00  0.000 0.000
+54      0   0        .p54.  0.00  0.000 0.000
+55      0   0        .p55.  0.00  0.000 0.000
+56      0   0        .p56.  0.00  0.000 0.000
+> varTable(fit)
+                     name idx nobs    type exo user   mean   var nlev lnam
+1           happy.lag.obs   1   99 numeric   0    0 -0.018 0.016    0     
+2             sad.lag.obs   2   99 numeric   0    0 -0.005 0.022    0     
+3 other.communion.lag.obs   3   99 numeric   0    0  0.020 0.012    0     
+4               happy.obs   4   99 numeric   0    0 -0.009 0.014    0     
+5                 sad.obs   5   99 numeric   0    0  0.002 0.014    0     
+6     other.communion.obs   6   99 numeric   0    0  0.022 0.011    0     
+> 
+> # all fit measures -- this will change all the time?
+> fitMeasures(fit)
+                        npar                         fmin 
+                      14.000                        0.094 
+                       chisq                           df 
+                      18.701                       13.000 
+                      pvalue               baseline.chisq 
+                       0.133                      116.785 
+                 baseline.df              baseline.pvalue 
+                      15.000                        0.000 
+                         cfi                          tli 
+                       0.944                        0.935 
+                  cfi.robust                   tli.robust 
+                       0.944                        0.935 
+                        nnfi                          rfi 
+                       0.935                        0.815 
+                         nfi                         pnfi 
+                       0.840                        0.728 
+                         ifi                          rni 
+                       0.945                        0.944 
+                 nnfi.robust                   rni.robust 
+                       0.935                        0.944 
+                        logl            unrestricted.logl 
+                     468.287                      477.637 
+                         aic                          bic 
+                    -908.573                     -872.242 
+                      ntotal                         bic2 
+                      99.000                     -916.455 
+                       rmsea               rmsea.ci.lower 
+                       0.067                        0.000 
+              rmsea.ci.upper               rmsea.ci.level 
+                       0.129                        0.900 
+                rmsea.pvalue               rmsea.close.h0 
+                       0.307                        0.050 
+       rmsea.notclose.pvalue            rmsea.notclose.h0 
+                       0.409                        0.080 
+                rmsea.robust        rmsea.ci.lower.robust 
+                       0.067                        0.000 
+       rmsea.ci.upper.robust          rmsea.pvalue.robust 
+                       0.129                        0.307 
+rmsea.notclose.pvalue.robust                          rmr 
+                       0.409                        0.007 
+                  rmr_nomean                         srmr 
+                       0.001                        0.074 
+                srmr_bentler          srmr_bentler_nomean 
+                       0.074                        0.044 
+                        crmr                  crmr_nomean 
+                       0.082                        0.048 
+                  srmr_mplus            srmr_mplus_nomean 
+                       0.073                        0.043 
+                       cn_05                        cn_01 
+                     119.382                      147.578 
+                         gfi                         agfi 
+                       0.939                        0.874 
+                        pgfi                          mfi 
+                       0.452                        0.972 
+                        ecvi 
+                       0.472 
+> 
+> # just one
+> fitMeasures(fit, "chisq")
+ chisq 
+18.701 
+> 
+> # a few
+> fitMeasures(fit, c("chisq","df","pvalue","rmsea","cfi"))
+ chisq     df pvalue  rmsea    cfi 
+18.701 13.000  0.133  0.067  0.944 
+> 
+> head(lavScores(fit))
+     eta1~~eta1 eta1~~eta2   eta1~~eta3 eta2~~eta2 eta2~~eta3 eta3~~eta3
+[1,] 210.721238 854.743012   -0.8453826 665.830555  -73.76954  -50.78671
+[2,] -38.411393  60.541852  -12.1797281 100.987998 -333.27133  163.04733
+[3,]   4.044143 -51.321983  120.3881610   2.236911  -64.36461  -18.70213
+[4,]  92.504770  28.878571 -283.8923278 -24.902835  -15.01339  144.69985
+[5,] -38.744426   4.805203   58.1885154  -7.410146  -43.62456  -29.82688
+[6,] -32.470411   8.860238   77.6169461 -22.073725  -23.98410  -17.69989
+     eta4~~eta4 eta5~~eta5 eta6~~eta6   eta4~eta1  eta5~eta2  eta6~eta3
+[1,] -33.917522  -47.06625  -8.915507 -3.24685380 -0.5672334 -1.6920100
+[2,]   1.122969  -44.36161 -53.243607 -0.05686906 -0.8005252  0.1070101
+[3,] 263.460728  -38.21302 -33.186313 -4.15845698  0.3970867  0.9353823
+[4,] -37.987948  -19.95652 -50.716583 -0.71367682  0.5782772  0.3066534
+[5,] -41.203475  -44.94664 -25.366956  0.19640364 -0.2273577  0.6489266
+[6,] -21.247959  -12.06500 121.275718 -0.82444487  0.1268762  2.3039395
+      eta4~eta6  eta6~eta2
+[1,]  1.1561003 -8.9894096
+[2,]  1.4823765 -0.1727962
+[3,] -3.3258933 -0.5937726
+[4,]  0.4176154 -0.1805951
+[5,]  0.5048261 -0.7940113
+[6,] -1.6883416 -0.2827039
+> lavTables(fit, dimension = 0L)
+Warning message:
+lavaan->lav_tables_pattern():  
+   no categorical variables are found 
+> lavTables(fit, dimension = 1L)
+Warning message:
+lavaan->lav_tables_oneway():  
+   no categorical variables are found 
+> lavTables(fit, dimension = 2L)
+Warning message:
+lavaan->lav_tables_pairwise_cells():  
+   no categorical variables are found 
+> lavTestLRT(fit)
+Chi-Squared Test Statistic (unscaled)
+
+          Df     AIC     BIC  Chisq Chisq diff Df diff Pr(>Chisq)
+Saturated  0                  0.000                              
+Model     13 -908.57 -872.24 18.701     18.701      13     0.1327
+> lavCor(fit)
+                        hppy.. sd.lg. oth... hppy.b sad.bs othr..
+happy.lag.obs            1.000                                   
+sad.lag.obs              0.309  1.000                            
+other.communion.lag.obs  0.489  0.107  1.000                     
+happy.obs                0.302 -0.097  0.179  1.000              
+sad.obs                  0.204  0.459  0.087 -0.011  1.000       
+other.communion.obs      0.069 -0.228  0.328  0.453 -0.021  1.000
+> 
+> 
+> 
+> 
+> 

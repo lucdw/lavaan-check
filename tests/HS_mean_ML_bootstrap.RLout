@@ -1,0 +1,53 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Test_id : HS_mean_ML_bootstrap
+> # ==============================
+> # bootstrap fitted parameters will allways differ !!!
+> 
+> library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> set.seed(1234)
+> 
+> Model <- c(
++ '
++   visual  =~ x1 + x2 + x3
++   textual =~ x4 + x5 + x6
++   speed   =~ x7 + x8 + x9
++ '
++ )
+> object <- try(sem(
++ estimator = 'ML', information = 'observed', se = 'bootstrap', bootstrap = 200, data = readRDS("HS.rds"), meanstructure = TRUE, model = Model, parser = 'new'
++ ), outFile = stdout())
+Warning message:
+lavaan->lav_model_nvcov_bootstrap():  
+   1 bootstrap runs resulted in nonadmissible solutions. 
+> if (!inherits(object, 'try-error')) {withAutoprint({
++ parameterEstimates(object)$se
++ })}
+> parameterEstimates(object)$se
+ [1] 0.00000000 0.15432073 0.16126811 0.00000000 0.07435685 0.06517544
+ [7] 0.00000000 0.14107143 0.42617113 0.16124827 0.11054161 0.10144911
+[13] 0.05189338 0.05986868 0.04524063 0.09800107 0.12107463 0.13671877
+[19] 0.18965314 0.12711390 0.10809269 0.09992311 0.06086344 0.05790339
+[25] 0.06668124 0.06732570 0.05866719 0.06558018 0.06769714 0.06176193
+[31] 0.06141123 0.05560196 0.05652125 0.00000000 0.00000000 0.00000000
+> 

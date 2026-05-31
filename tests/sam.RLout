@@ -1,0 +1,1458 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+>  library(lavaan)
+This is lavaan 0.6-22.2670
+lavaan is FREE software! Please report any bugs.
+> 
+> # pop.model <- '
+> #     # factor loadings
+> #
+> #     Y =~ 1*y1 + 0.8*y2 + 0.6*y3
+> #     Y ~~ 0.5*Y
+> #     X =~ 1*x1 + 0.8*x2 + 0.6*x3
+> #     X ~~ 0.9*X
+> #
+> #     # regression part
+> #     Y ~ 0.25*X
+> #
+> #     y1 ~ 1*1; y2 ~ 2*1; y3 ~ 3*1; x1 ~ 4*1; x2 ~ 5*1; x3 ~ 6*1
+> # '
+> 
+> # set.seed(1234)
+> dat01 <- read.csv("sam_dat01.csv")
+> 
+> model <- '
++     # factor loadings
++     Y =~ y1 + y2 + y3
++     X =~ x1 + x2 + x3
++ 
++     # regression part
++     Y ~ X
++ '
+> fit.sam <- sam(model, data = dat01,
++                         #mm.args = list(estimator = "ML", se="robust.sem"),
++                         mm.args = list(),
++                         struc.args = list(),
++                         #sam.method = "global",
++                         #se = "robust.sem",
++                         verbose = FALSE)
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1      X    3     0  0
+      2      Y    3     0  0
+
+  Model-based reliability latent variables:
+
+      Y     X
+  0.527 0.643
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X                 0.250    0.110    2.280    0.023
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 0.500    0.223    2.246    0.025
+    X                 0.900    0.264    3.414    0.001
+
+> 
+> 
+> # pop.model <- '
+> #     # factor loadings
+> #
+> #     Y =~ 1*y1 + 0.8*y2 + 0.6*y3
+> #     X =~ 1*x1 + 0.8*x2 + 0.6*x3
+> #
+> #     # regression part
+> #     Y ~ 0.25*X
+> # '
+> 
+> # set.seed(1234)
+> dat02 <- read.csv("sam_dat02.csv")
+> 
+> model <- '
++     # factor loadings
++     Y =~ y1 + y2 + y3
++     X =~ x1 + x2 + x3
++ 
++     # regression part
++     Y ~ X
++ '
+> fit.sam <- sam(model, data = dat02,
++                         #mm.args = list(estimator = "ML", se="robust.sem"),
++                         mm.args = list(),
++                         struc.args = list(),
++                         #sam.method = "global",
++                         #se = "robust.sem",
++                         verbose = FALSE)
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1      X    3     0  0
+      2      Y    3     0  0
+
+  Model-based reliability latent variables:
+
+     Y     X
+  0.68 0.667
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X                 0.250    0.115    2.178    0.029
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 1.000    0.264    3.781    0.000
+    X                 1.000    0.271    3.691    0.000
+
+> 
+> # GROWTH
+> model.syntax <- '
++ # intercept and slope with fixed coefficients
++   i =~ 1*t1 + 1*t2 + 1*t3 + 1*t4
++   s =~ 0*t1 + 1*t2 + 2*t3 + 3*t4
++ 
++ # random effects
++   t1 + t2 + t3 + t4 ~ 0*1
++   i + s ~ 1
++   i ~~ s
++ 
++ # regressions
++ #  i ~ x1 + x2
++ #  s ~ x1 + x2
++ 
++ # time-varying covariates
++ #  t1 ~ c1
++ #  t2 ~ c2
++ #  t3 ~ c3
++ #  t4 ~ c4
++ '
+> fit.sam <- sam(model.syntax, data = Demo.growth,
++                         mm.list = list(is = c("i", "s")))
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       1
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           400
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1    i,s    4 8.069  5
+
+  Model-based reliability latent variables:
+
+      i    s
+  0.819 0.84
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  i ~~                                                
+    s                 0.618    0.071    8.686    0.000
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    i                 0.615    0.077    8.007    0.000
+    s                 1.006    0.042   24.076    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    i                 1.932    0.173   11.194    0.000
+    s                 0.587    0.052   11.336    0.000
+
+> 
+> 
+> data_principals <- read.csv("data_principals.csv")
+> data_pup <- read.csv("data_pupils.csv")[,-1]
+> 
+> model.SAM <- '
++     Skill =~ skill_1 + skill_2 + skill_3 + skill_4 + skill_5 + skill_6
++     skill_1 ~~ skill_2
++     Use =~ use_1 + use_2 + use_3 + use_4 + use_5 + use_6
++ 
++     Skill ~ Use + male + l_dialect + l_dutch
++ '
+> fit.croon <- sam(model.SAM, data = data_pup, estimator = "ML",
++                           sam.method = "local")
+> summary(fit.croon)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                          2033
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind  Chisq Df
+      1  Skill    6 58.815  8
+      2    Use    6 97.354  9
+
+  Model-based reliability latent variables:
+
+  Skill   Use male l_dialect l_dutch
+  0.836 0.714    1         1       1
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Skill ~                                             
+    Use               0.392    0.032   12.117    0.000
+    male              0.131    0.041    3.166    0.002
+    l_dialect         0.168    0.071    2.362    0.018
+    l_dutch           0.068    0.059    1.162    0.245
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Skill             0.672    0.038   17.814    0.000
+    Use               0.714    0.052   13.747    0.000
+
+> 
+> 
+> model.sem2 <- '
++     # measurement model
++     Use =~ use_1 + use_2 + use_3 + use_4 + use_5 + use_6 + use_7 + use_8 + use_9
++     Competency =~ comp_1 + comp_2 + comp_3 + comp_4 + comp_5 + comp_6 + comp_7 + comp_8 +
++     comp_9 + comp_10 + comp_11 + comp_12 + comp_13 + comp_14 + comp_15 + comp_16 + comp_17 +
++     comp_18 + comp_19 +  comp_20  + comp_21 + comp_22 + comp_23 + comp_24 + comp_25 + comp_26
++     Policy =~ pol_1 + pol_2 + pol_3 + pol_4 + pol_5 + pol_6 + pol_7 + pol_8 + pol_9 + pol_10
++     Professional =~ prof_1 + prof_2 + prof_3 + prof_4
++ 
++     # structural model
++     Use ~ Competency + Policy + Professional
++ '
+> 
+> fit.croon2 <- sam(model.sem2, data = data_principals, mm.args = list())
+Warning message:
+lavaan->lav_data_full():  
+   small number of observations (nobs < nvar) : nobs = 29 nvar = 49 
+> summary(fit.croon2)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       4
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+                                                  Used       Total
+  Number of observations                            29          47
+
+Summary Information Measurement + Structural:
+
+  Block       Latent Nind   Chisq  Df
+      1   Competency   26 807.286 299
+      2       Policy   10  60.080  35
+      3 Professional    4   4.977   2
+      4          Use    9  35.184  27
+
+  Model-based reliability latent variables:
+
+    Use Competency Policy Professional
+  0.943      0.951  0.871        0.957
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Use ~                                               
+    Competency        1.018    0.559    1.823    0.068
+    Policy           -0.135    0.145   -0.929    0.353
+    Professional      0.557    0.253    2.198    0.028
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Competency ~~                                       
+    Policy            0.109    0.072    1.509    0.131
+    Professional      0.118    0.072    1.652    0.098
+  Policy ~~                                           
+    Professional      0.213    0.146    1.464    0.143
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Use               0.219    0.123    1.783    0.075
+    Competency        0.107    0.076    1.396    0.163
+    Policy            0.704    0.329    2.140    0.032
+    Professional      0.504    0.296    1.705    0.088
+
+> 
+> HS.model <- ' visual  =~ x1 + x2 + x3
++               textual =~ x4 + x5 + x6
++               speed   =~ x7 + x8 + x9 '
+> 
+> #fit.twostep <- lavaan:::twostep(HS.model, data = HolzingerSwineford1939)
+> #summary(fit.twostep)
+> 
+> fit.sam <- sam(HS.model, data = HolzingerSwineford1939)
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           301
+
+Summary Information Measurement + Structural:
+
+  Block  Latent Nind Chisq Df
+      1   speed    3     0  0
+      2 textual    3     0  0
+      3  visual    3     0  0
+
+  Model-based reliability latent variables:
+
+  visual textual speed
+    0.66   0.886 0.739
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.277    0.065    4.232    0.000
+    speed             0.188    0.051    3.696    0.000
+  textual ~~                                          
+    speed             0.162    0.051    3.180    0.001
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.524    0.130    4.021    0.000
+    textual           0.969    0.112    8.640    0.000
+    speed             0.437    0.097    4.520    0.000
+
+> 
+> sample.nobs <- N <- 200L
+> 
+> # pop.model <- '
+> #     # factor loadings
+> #     Y =~ 1*y1 + 1.2*y2 + 0.8*y3
+> #     Y ~~ 0.5*Y
+> #     y1 ~~ 1.2*y1; y2 ~~ 1.0*y2; y3 ~~ 1.4*y3
+> #
+> #     M =~ 1*m1 + 0.5*m2 + 0.5*m3
+> #     M ~~ 1.2*M
+> #     m1 ~~ 1.0*m1; m2 ~~ 1.2*m2; m3 ~~ 1.5*m3
+> #
+> #     X =~ 1*x1 + 0.7*x2 + 0.6*x3
+> #     X ~~ 0.8*X
+> #     x1 ~~ 1.3*x1; x2 ~~ 1.5*x2; x3 ~~ 1.2*x3
+> #
+> #     M ~~ 0.2*X
+> #
+> #     # regression part
+> #     Y ~ 0.25*X + 0.40*M + 0.7*V + 0.9*W
+> #     M ~ -0.30*X + 1.1*V
+> #
+> #     V ~~ 2.3*V
+> #     W ~~ 1.4*W
+> #     V ~~ 0.9*W
+> # '
+> 
+> # set.seed(1234)
+> dat03 <- read.csv("sam_dat03.csv")
+> 
+> model <- '
++     # factor loadings
++     Y =~ y1 + y2 + y3
++     M =~ m1 + m2 + m3
++     X =~ x1 + x2 + x3
++ 
++     # regression part
++     Y ~ X + M + V + W
++     M ~ X + V
++ '
+> 
+> # global
+> fit.gsam <- sam(model, data = dat03,
++                     mm.args = list(estimator = "ML"),
++                     sam.method = "global",
++                     struc.args = list(fixed.x = FALSE),
++                     #meanstructure = TRUE,
++                     #output = "list",
++                     verbose = FALSE)
+> summary(fit.gsam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                    GLOBAL
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+
+Summary Information Measurement Part:
+
+  Block Latent Nind Chisq Df
+      1      M    3     0  0
+      2      X    3     0  0
+      3      Y    3     0  0
+
+Model Test User Model:
+                                                      
+  Test statistic                                 0.000
+  Degrees of freedom                                39
+  P-value (Chi-square)                           1.000
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X                 0.250    0.127    1.962    0.050
+    M                 0.400    0.126    3.165    0.002
+    V                 0.700    0.142    4.919    0.000
+    W                 0.900    0.072   12.459    0.000
+  M ~                                                 
+    X                -0.050    0.150   -0.334    0.738
+    V                 1.100    0.074   14.940    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 0.500    0.118    4.251    0.000
+   .M                 1.150    0.348    3.304    0.001
+    X                 0.800    0.346    2.311    0.021
+
+> 
+> # local
+> fit.lsam <- sam(model, data = dat03,
++                     mm.args = list(estimator = "ML"),
++                     sam.method = "local",
++                     struc.args = list(fixed.x = FALSE),
++                     #meanstructure = TRUE,
++                     #output = "list",
++                     verbose = FALSE)
+> summary(fit.lsam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1      M    3     0  0
+      2      X    3     0  0
+      3      Y    3     0  0
+
+  Model-based reliability latent variables:
+
+      Y     M     X V W
+  0.948 0.844 0.528 1 1
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  1   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X                 0.250    0.127    1.962    0.050
+    M                 0.400    0.126    3.165    0.002
+    V                 0.700    0.142    4.919    0.000
+    W                 0.900    0.072   12.459    0.000
+  M ~                                                 
+    X                -0.050    0.150   -0.334    0.738
+    V                 1.100    0.074   14.940    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 0.500    0.118    4.251    0.000
+   .M                 1.150    0.348    3.304    0.001
+    X                 0.800    0.346    2.311    0.021
+
+> 
+> # test of Fuller (1987) way to avoid a non-positive definite VETA
+> fit.lsam10 <- sam(model, data = dat03[1:10,])
+Warning message:
+lavaan->lav_data_full():  
+   small number of observations (nobs < nvar) : nobs = 10 nvar = 11 
+> summary(fit.lsam10)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                            10
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1      M    3 0.033  0
+      2      X    3 0.331  0
+      3      Y    3 0.000  0
+
+  Model-based reliability latent variables:
+
+      Y M X V W
+  0.985 1 1 1 1
+
+  Summary Information Structural part:
+
+   chisq df   cfi rmsea  srmr
+  10.068  1 0.836 0.952 0.266
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X                -0.518    1.198   -0.433    0.665
+    M                -0.255    0.272   -0.938    0.348
+    V                 1.060    0.486    2.182    0.029
+    W                 1.407    0.491    2.866    0.004
+  M ~                                                 
+    X                -0.096    0.316   -0.305    0.760
+    V                 0.940    0.746    1.261    0.207
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 0.011    1.438    0.008    0.994
+   .M                 1.188    0.932    1.275    0.202
+    X                 2.373    5.422    0.438    0.662
+
+> 
+> # block 1: generating the data
+> # pop.model <- '
+> #     # factor loadings
+> #     Y  =~ 1*y1 + 1.2*y2  + 0.8*y3  + 0.5*y4
+> #     M  =~ 1*m1 + 0.5*m2  + 0.5*m3  + 0.7*m4
+> #     X1 =~ 1*x1 + 0.7*x2  + 0.6*x3  + 1.1*x4
+> #     X2 =~ 1*x5 + 0.7*x6  + 0.6*x7  + 0.9*x8
+> #     X3 =~ 1*x9 + 0.7*x10 + 0.6*x11 + 1.1*x12
+> #
+> #     # covariances among exogenous X1-X3
+> #     X1 ~~ 0.4*X2; X1 ~~ -0.2*X3; X2 ~~ 0.4*X3
+> #
+> #     # regression part
+> #     Y ~  0.25*X3 + 0.4*M + (-0.1)*Age
+> #     M ~ -0.30*X1 + 1.1*X2
+> # '
+> # set.seed(1234)
+> # Data <- simulateData(pop.model, sample.nobs = 200L, empirical = TRUE)
+> # tmp <- Data$Age
+> # # add missing data
+> # Data <- as.data.frame(lapply(Data, function(x) {
+> #                             x[ sample(1:length(x), 20) ] <- NA
+> #                             x }))
+> # # no missings in Age
+> # Data$Age <- tmp
+> dat04 <- read.csv("sam_dat04.csv")
+> 
+> 
+> 
+> # block 2: fitting traditional SEM
+> model <- '
++     # measurement part
++     Y  =~ y1 + y2  + y3  + y4
++     M  =~ m1 + m2  + m3  + m4
++     X1 =~ x1 + x2  + x3  + x4
++     X2 =~ x5 + x6  + x7  + x8
++     X3 =~ x9 + x10 + x11 + x12
++ 
++     # structural part
++     Y ~ X3 + M + Age
++     M ~ X1 + X2
++ '
+> fit.sam <- sam(model, data = dat04, estimator = "ML", missing = "fiml")
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       5
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+  Number of missing patterns                       138
+
+Summary Information Measurement + Structural:
+
+  Block Latent Nind Chisq Df
+      1      M    4 0.034  2
+      2     X1    4 0.346  2
+      3     X2    4 1.017  2
+      4     X3    4 0.179  2
+      5      Y    4 0.065  2
+
+  Model-based reliability latent variables:
+
+      Y     M    X1    X2    X3 Age
+  0.822 0.795 0.748 0.742 0.766   1
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+  1.088  4   1     0 0.01
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Observed
+  Observed information based on                Hessian
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Y ~                                                 
+    X3                0.221    0.117    1.898    0.058
+    M                 0.428    0.089    4.814    0.000
+    Age              -0.077    0.086   -0.890    0.373
+  M ~                                                 
+    X1               -0.261    0.136   -1.927    0.054
+    X2                0.987    0.173    5.692    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  X1 ~~                                               
+    X2                0.398    0.118    3.364    0.001
+    X3               -0.158    0.094   -1.685    0.092
+  X2 ~~                                               
+    X3                0.387    0.111    3.482    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Y                 1.027    0.203    5.056    0.000
+   .M                 0.943    0.237    3.978    0.000
+    X1                0.977    0.226    4.331    0.000
+    X2                1.160    0.257    4.505    0.000
+    X3                0.943    0.203    4.654    0.000
+
+> 
+> HS.model <- ' visual  =~ x1 + x2 + x3
++               textual =~ x4 + x5 + x6
++               speed   =~ x7 + x8 + x9 '
+> 
+> fit <- cfa(HS.model, data=HolzingerSwineford1939, group = "school")
+> 
+> #fit.twostep <- lavaan:::twostep(HS.model, data=HolzingerSwineford1939,
+> #                                group = "school")
+> #summary(fit.twostep)
+> 
+> 
+> fit.sam <- sam(HS.model, data=HolzingerSwineford1939,
++                                 group = "school")
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations per group:                   
+    Pasteur                                        156
+    Grant-White                                    145
+
+Summary Information Measurement + Structural:
+
+  Block  Latent Nind Chisq Df
+      1   speed    3     0  0
+      2 textual    3     0  0
+      3  visual    3     0  0
+
+  Model-based reliability latent variables (per group):
+
+  Group 1 [Pasteur]:
+
+  visual textual speed
+   0.673   0.883 0.662
+
+  Group 2 [Grant-White]:
+
+  visual textual speed
+   0.699    0.88 0.813
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+
+Group 1 [Pasteur]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.230    0.084    2.722    0.006
+    speed             0.118    0.061    1.937    0.053
+  textual ~~                                          
+    speed             0.163    0.068    2.384    0.017
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.523    0.186    2.813    0.005
+    textual           0.873    0.150    5.838    0.000
+    speed             0.347    0.134    2.584    0.010
+
+
+Group 2 [Grant-White]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.345    0.096    3.603    0.000
+    speed             0.210    0.070    2.995    0.003
+  textual ~~                                          
+    speed             0.194    0.073    2.646    0.008
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.462    0.157    2.941    0.003
+    textual           0.942    0.154    6.131    0.000
+    speed             0.494    0.126    3.908    0.000
+
+> 
+> fit.sam <- sam(HS.model, data=HolzingerSwineford1939,
++                         mm.list = list( a=c("visual", "textual"),
++                                         b=c("speed") ),
++                         group = "school")
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations per group:                   
+    Pasteur                                        156
+    Grant-White                                    145
+
+Summary Information Measurement + Structural:
+
+  Block         Latent Nind  Chisq Df
+      1 visual,textual    6 28.565 16
+      2          speed    3  0.000  0
+
+  Model-based reliability latent variables (per group):
+
+  Group 1 [Pasteur]:
+
+  visual textual speed
+   0.838   0.879 0.662
+
+  Group 2 [Grant-White]:
+
+  visual textual speed
+   0.689    0.88 0.813
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+
+Group 1 [Pasteur]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.485    0.106    4.568    0.000
+    speed             0.166    0.077    2.160    0.031
+  textual ~~                                          
+    speed             0.170    0.070    2.439    0.015
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            1.151    0.300    3.835    0.000
+    textual           0.896    0.150    5.967    0.000
+    speed             0.347    0.134    2.584    0.010
+
+
+Group 2 [Grant-White]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.377    0.096    3.941    0.000
+    speed             0.231    0.072    3.212    0.001
+  textual ~~                                          
+    speed             0.193    0.073    2.636    0.008
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.527    0.155    3.399    0.001
+    textual           0.947    0.153    6.196    0.000
+    speed             0.494    0.126    3.908    0.000
+
+> fit <- cfa(HS.model, data=HolzingerSwineford1939, group = "school",
++            group.equal = c("loadings", "intercepts"))
+> 
+> #fit.twostep <- lavaan:::twostep(HS.model, data=HolzingerSwineford1939,
+> #                                group = "school",
+> #                                group.equal = c("loadings", "intercepts"))
+> #summary(fit.twostep)
+> 
+> 
+> fit.sam <- sam(HS.model, data=HolzingerSwineford1939,
++                         group = "school",
++                         group.equal = c("loadings", "intercepts"))
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations per group:                   
+    Pasteur                                        156
+    Grant-White                                    145
+
+Summary Information Measurement + Structural:
+
+  Block  Latent Nind  Chisq Df
+      1   speed    3 16.266  4
+      2 textual    3  9.372  4
+      3  visual    3 21.289  4
+
+  Model-based reliability latent variables (per group):
+
+  Group 1 [Pasteur]:
+
+  visual textual speed
+   0.767   0.877 0.638
+
+  Group 2 [Grant-White]:
+
+  visual textual speed
+   0.842   0.877  0.79
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+
+Group 1 [Pasteur]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.137    0.062    2.221    0.026
+    speed             0.093    0.046    2.014    0.044
+  textual ~~                                          
+    speed             0.181    0.065    2.792    0.005
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.348    0.112    3.117    0.002
+    textual           0.885    0.133    6.681    0.000
+    speed             0.361    0.091    3.971    0.000
+
+
+Group 2 [Grant-White]:
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.226    0.072    3.134    0.002
+    speed             0.148    0.056    2.641    0.008
+  textual ~~                                          
+    speed             0.220    0.075    2.941    0.003
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual           -0.242    0.089   -2.713    0.007
+    textual           0.577    0.117    4.930    0.000
+    speed            -0.185    0.094   -1.971    0.049
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            0.311    0.102    3.047    0.002
+    textual           0.857    0.130    6.619    0.000
+    speed             0.562    0.126    4.461    0.000
+
+> 
+> 
+> model <- '
++     level: 1
++         fw1 =~ y1 + y2 + y3
++         fw2 =~ y4 + y5 + y6
++ 
++         fw2 ~ fw1
++ 
++     level: 2
++         fb1 =~ y1 + y2 + y3
++         fb2 =~ y4 + y5 + y6
++ 
++         fb2 ~ fb1
++ '
+> mm.list = list( f = list(c("fw1", "fw2"),
++                          c("fb1", "fb2")) )
+> 
+> fit.sam <- sam(model, data = Demo.twolevel,
++                         cluster = "cluster",
++                         #sam.method = "global",
++                         local.options = list(local.twolevel.method = "h1"),
++                         mm.list = mm.list)
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       1
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                          2500
+  Number of clusters [cluster]                     200
+
+Summary Information Measurement + Structural:
+
+  Block          Latent Nind  Chisq Df
+      1 fw1,fw2,fb1,fb2    6 12.628 16
+
+  Model-based reliability latent variables (per level):
+
+  Level 1 [within]:
+
+    fw1   fw2
+  0.686 0.334
+
+  Level 2 [cluster]:
+
+    fb1  fb2
+  0.956 0.95
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Observed
+  Observed information based on                Hessian
+
+
+Level 1 [within]:
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  fw2 ~                                               
+    fw1               0.320    0.027   11.771    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    fw1               1.056    0.072   14.619    0.000
+   .fw2               0.161    0.034    4.699    0.000
+
+
+Level 2 [cluster]:
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  fb2 ~                                               
+    fb1               0.059    0.088    0.679    0.497
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    fb1               0.889    0.121    7.321    0.000
+   .fb2               1.003    0.126    7.933    0.000
+
+> 
+> # pop.model <- '
+> #     FY =~ y1 + y2 + y3
+> #     FX1 =~ x1 + x2 + x3
+> #     FX2 =~ x4 + x5 + x6
+> #     FX3 =~ x7 + x8 + x9
+> #     FX4 =~ x10 + x11 + x12
+> #
+> #     # zero theta elements
+> #     x6 ~~ 0*x6
+> #     x12 ~~ 0*x12
+> #
+> #     # covariances
+> #     FX1 ~~ 0.2*FX2 + 0.3*FX3 + (-0.4)*FX4 + 0.2*Z1 + 0.3*Z2
+> #     FX2 ~~ 0.3*FX3 + (-0.4)*FX4 + 0.2*Z1 + 0.3*Z2
+> #     FX3 ~~ (-0.4)*FX4 + 0.2*Z1 + 0.3*Z2
+> #     FX4 ~~ 0.2*Z1 + 0.3*Z2
+> #     Z1  ~~ 0.3*Z2
+> #
+> #     FY ~ 1*FX1 + 1.4*FX2 + (-0.5)*FX3 + 2*FX4 + 0.3*Z1 + 0.7*Z2
+> #     Z1 ~~ 10*Z1; Z1 ~ 100*1
+> #     Z2 ~~ 20*Z2; Z2 ~  50*1
+> # '
+> 
+> dat05 <- read.csv("sam_dat05.csv")
+> 
+> model <- '
++     FY =~ y1 + y2 + y3
++     FX1 =~ x1 + x2 + x3
++     FX2 =~ x4 + x5 + x6
++     FX3 =~ x7 + x8 + x9
++     FX4 =~ x10 + x11 + x12
++ 
++     FY ~ FX1 + FX2 + FX3 + FX4 + Z1 + Z2
++ 
++     FX1 + FX2 + FX3 + FX4 ~~ Z1 + Z2
++     Z1 ~~ Z2
++ '
+> # using SAM
+> fit.sam <- sam(model, data = dat05, fixed.x = FALSE, meanstructure = TRUE,
++                #output = "list",
++                mm.list = list(block = c("FY", "FX1", "FX2", "FX3", "FX4")))
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       1
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           200
+
+Summary Information Measurement + Structural:
+
+  Block             Latent Nind Chisq Df
+      1 FY,FX1,FX2,FX3,FX4   15     0 80
+
+  Model-based reliability latent variables:
+
+     FY  FX1 FX2  FX3 FX4 Z1 Z2
+  0.982 0.75   1 0.75   1  1  1
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  FY ~                                                
+    FX1               1.000    0.155    6.440    0.000
+    FX2               1.400    0.150    9.338    0.000
+    FX3              -0.500    0.138   -3.633    0.000
+    FX4               2.000    0.192   10.409    0.000
+    Z1                0.300    0.011   26.911    0.000
+    Z2                0.700    0.022   31.280    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  FX1 ~~                                              
+    Z1                0.200    0.254    0.787    0.431
+    Z2                0.300    0.366    0.821    0.412
+  FX2 ~~                                              
+    Z1                0.200    0.225    0.890    0.373
+    Z2                0.300    0.318    0.943    0.345
+  FX3 ~~                                              
+    Z1                0.200    0.258    0.776    0.438
+    Z2                0.300    0.366    0.819    0.413
+  FX4 ~~                                              
+    Z1                0.200    0.225    0.890    0.373
+    Z2                0.300    0.318    0.944    0.345
+  Z1 ~~                                               
+    Z2                0.300    1.000    0.300    0.764
+  FX1 ~~                                              
+    FX2               0.200    0.086    2.325    0.020
+    FX3               0.300    0.102    2.942    0.003
+    FX4              -0.400    0.097   -4.111    0.000
+  FX2 ~~                                              
+    FX3               0.300    0.091    3.286    0.001
+    FX4              -0.400    0.090   -4.448    0.000
+  FX3 ~~                                              
+    FX4              -0.400    0.097   -4.103    0.000
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    Z1              100.000    0.224  447.213    0.000
+    Z2               50.000    0.316  158.114    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    Z1               10.000    1.000   10.000    0.000
+    Z2               20.000    2.000   10.000    0.000
+   .FY                1.000    0.264    3.783    0.000
+    FX1               1.000    0.203    4.918    0.000
+    FX2               1.000    0.180    5.542    0.000
+    FX3               1.000    0.206    4.860    0.000
+    FX4               1.000    0.178    5.613    0.000
+
+> 
+> ## The industrialization and Political Democracy Example
+> ## Bollen (1989), page 332
+> model <- '
++   # latent variable definitions
++      ind60 =~ x1 + x2 + x3
++      dem60 =~ y1 + d2*y2 + d3*y3 + d4*y4
++      dem65 =~ y5 + d2*y6 + d3*y7 + d4*y8
++ 
++   # regressions
++     dem60 ~ a*ind60
++     dem65 ~ c*ind60 + b*dem60
++ 
++   # residual correlations
++     y1 ~~ y5
++     y2 ~~ y4 + y6
++     y3 ~~ y7
++     y4 ~~ y8
++     y6 ~~ y8
++ 
++     indirect := a*b
++ '
+> #fit.twostep <- lavaan:::twostep(model, data = PoliticalDemocracy,
+> #                  mm.list = list(ind = "ind60", dem = c("dem60", "dem65")))
+> #summary(fit.twostep)
+> 
+> fit.sam <- sam(model, data = PoliticalDemocracy,
++                   #sam.method = "global",
++                   mm.list = list(ind = "ind60", dem = c("dem60", "dem65")))
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                            75
+
+Summary Information Measurement + Structural:
+
+  Block      Latent Nind Chisq Df
+      1       ind60    3  0.00  0
+      2 dem60,dem65    8 15.32 16
+
+  Model-based reliability latent variables:
+
+  ind60 dem60 dem65
+  0.966 0.868  0.87
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  dem60 ~                                             
+    ind60      (a)    1.454    0.389    3.741    0.000
+  dem65 ~                                             
+    ind60      (c)    0.558    0.225    2.480    0.013
+    dem60      (b)    0.871    0.076   11.497    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    ind60             0.446    0.087    5.135    0.000
+   .dem60             3.766    0.848    4.439    0.000
+   .dem65             0.189    0.224    0.843    0.399
+
+Defined Parameters:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    indirect          1.266    0.357    3.544    0.000
+
+lavaan NOTE:  
+   Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+   parameters are based on the first-order delta method; for strongly 
+   nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+   be more accurate.
+> 
+> PD10 <- PoliticalDemocracy[1:10,]
+> 
+> # this will fail (N<11)
+> #fit <- sem(model, data = PD10)
+> 
+> #fit.twostep <- lavaan:::twostep(model, data = PD10,
+> #                  mm.list = list(ind = "ind60", dem = c("dem60", "dem65")))
+> #summary(fit.twostep)
+> 
+> fit.sam <- sam(model, data = PD10,
++                   #sam.method = "global",
++                   mm.list = list(ind = "ind60", dem = c("dem60", "dem65")))
+Warning message:
+lavaan->lav_data_full():  
+   small number of observations (nobs < nvar) : nobs = 10 nvar = 11 
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       2
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                            10
+
+Summary Information Measurement + Structural:
+
+  Block      Latent Nind  Chisq Df
+      1       ind60    3  0.000  0
+      2 dem60,dem65    8 34.261 16
+
+  Model-based reliability latent variables:
+
+  ind60 dem60 dem65
+  0.972     1     1
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  dem60 ~                                             
+    ind60      (a)    4.608    1.107    4.164    0.000
+  dem65 ~                                             
+    ind60      (c)    0.066    0.775    0.085    0.932
+    dem60      (b)    0.750    0.139    5.390    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    ind60             0.210    0.101    2.089    0.037
+   .dem60             2.477    1.123    2.205    0.027
+   .dem65             0.492    0.528    0.932    0.351
+
+Defined Parameters:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    indirect          3.454    1.042    3.314    0.001
+
+lavaan NOTE:  
+   Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+   parameters are based on the first-order delta method; for strongly 
+   nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+   be more accurate.
+> 
+> 
+> # no structural part
+> model <- '
++     visual  =~ x1 + x2 + x3
++     textual =~ x4 + x5 + x6
++     speed   =~ x7 + x8 + x9
++ '
+> 
+> fit.sam <- sam(model, data = HolzingerSwineford1939, std.lv = TRUE)
+> summary(fit.sam)
+This is lavaan 0.6-22.2670 -- using the SAM approach to SEM
+
+  SAM method                                     LOCAL
+  Mapping matrix M method                           ML
+  Number of measurement blocks                       3
+  Estimator measurement part                        ML
+  Estimator  structural part                        ML
+
+  Number of observations                           301
+
+Summary Information Measurement + Structural:
+
+  Block  Latent Nind Chisq Df
+      1   speed    3     0  0
+      2 textual    3     0  0
+      3  visual    3     0  0
+
+  Model-based reliability latent variables:
+
+  visual textual speed
+    0.66   0.886 0.739
+
+  Summary Information Structural part:
+
+  chisq df cfi rmsea srmr
+      0  0   1     0    0
+
+Parameter Estimates:
+
+  Standard errors                              Twostep
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  visual ~~                                           
+    textual           0.388    0.068    5.744    0.000
+    speed             0.393    0.076    5.199    0.000
+  textual ~~                                          
+    speed             0.248    0.068    3.652    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+    visual            1.000                           
+    textual           1.000                           
+    speed             1.000                           
+
+> 
+> 
+> 
+> 
+> 
+> 
