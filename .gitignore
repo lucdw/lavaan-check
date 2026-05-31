@@ -4,6 +4,6 @@
 .Ruserdata
 .vscode
 _*
-tests/*.Rout
-tests/*.Rout.save
+tests/*.R?out
+tests/*.R?out.save
 tests/*.diff
