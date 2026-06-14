@@ -28,7 +28,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-data = readRDS("DF.rds"), ordered = c("'M11'", "'M12'", "'M13'", "'M14'"), missing = 'pairwise', control = list(iter.max = 500), model = Model, parser = 'new'
+data = readRDS("DF.rds"), ordered = c("'M11'", "'M12'", "'M13'", "'M14'"), missing = 'pairwise', control = list(iter.max = 500), model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

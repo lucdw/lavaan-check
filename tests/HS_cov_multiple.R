@@ -22,7 +22,7 @@ M.GrantWhite <- apply(D2, 2, mean)
 object <- try(cfa(
   sample.cov = list(Pasteur=S.Pasteur, `Grant-White`=S.GrantWhite),
   sample.mean = list(M.Pasteur, M.GrantWhite),
-  sample.nobs = c(156, 145), meanstructure = TRUE, ov.order = 'data', model = Model, parser = 'new'
+  sample.nobs = c(156, 145), meanstructure = TRUE, ov.order = 'data', model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

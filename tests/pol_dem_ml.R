@@ -26,7 +26,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-data = PoliticalDemocracy, model = Model, parser = 'new'
+data = PoliticalDemocracy, model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

@@ -150,7 +150,7 @@ for (test.i in seq_along(testfiles)) {
         cat(paste(readLines(filediff, warn = FALSE), collapse = "\n"))
         cat("\n")
       } else {
-        cat("Too many diff lines to show here. See", filediff, "\n")
+        cat("+++++ Too many diff lines to show here. See", filediff, "+++++\n")
       }
     } else {
       cat("identical.\n")

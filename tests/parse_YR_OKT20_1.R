@@ -19,7 +19,7 @@ level =~ 1* X1 +1* X2 +1* X3 +1* X4 +1* X5 +1* X6
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))

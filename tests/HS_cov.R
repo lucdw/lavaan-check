@@ -14,7 +14,7 @@ Model <- c(
 '
 )
 object <- try(cfa(
-sample.cov = cov(HolzingerSwineford1939[,7:15]), sample.nobs = 301, model = Model, parser = 'new'
+sample.cov = cov(HolzingerSwineford1939[,7:15]), sample.nobs = 301, model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

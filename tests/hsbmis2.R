@@ -10,7 +10,7 @@ Model <- c(
 'write ~ female + read + math'
 )
 object <- try(sem(
-data = readRDS("hsbmis2.rds"), missing = 'ml', model = Model, parser = 'new'
+data = readRDS("hsbmis2.rds"), missing = 'ml', model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

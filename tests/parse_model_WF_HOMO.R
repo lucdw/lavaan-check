@@ -12,7 +12,7 @@ CREATAS.1~~c(CREATAS_both, CREATAS_both)*CREATAS.1; CREATAS.2~~c(CREATAS_both, C
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'new'
+as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))

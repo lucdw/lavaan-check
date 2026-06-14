@@ -18,7 +18,7 @@ ind := f4f3 * f3f1
 '
 )
 object <- try(sem(
-data = readRDS("mplus_ex5_12.RDS"), estimator = 'ML', information = 'observed', meanstructure = TRUE, model = Model, parser = 'new'
+data = readRDS("mplus_ex5_12.RDS"), estimator = 'ML', information = 'observed', meanstructure = TRUE, model = Model, parser = 'open'
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)
