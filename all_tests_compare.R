@@ -133,7 +133,7 @@ for (test.i in seq_along(testfiles)) {
   file1 <- paste0(testfile, extra, "out.save")
   file2 <- paste0(testfile, extra, "out")
   filediff <- gsub(".R$", ".diff", testfile)
-  cat("Processing", sprintf("%-50s", testfile), ":" )
+  cat("Checking", sprintf("%-50s", testfile), ":" )
   if (!file.exists(file2)) {
     cat("no R", extra, "out file!\n", sep = "")
   } else if (!file.exists(file1)) {

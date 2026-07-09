@@ -1,0 +1,282 @@
+
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> if (file.exists("README.md")) setwd("tests")
+> source("../select_tests.R")
+> testfiles <- select_tests()
+> extra <- substr(Sys.info()[["sysname"]], 1, 1) # because results depend on OS
+> for (test.i in seq_along(testfiles)) {
++   testfile <- testfiles[test.i]
++   cat("Processing", testfile, "\n")
++   system2(paste(R.home(), "bin", "R", sep= "/"), 
++     stdin=testfile, 
++     stdout=paste0(testfile, extra, "out"),
++     stderr=paste0(testfile, extra, "out"),
++     args = "--no-save")
++ }
+Processing analyse_categorical.R 
+Processing badscale.R 
+Processing esem.R 
+Processing HS_cov_multiple.R 
+Processing HS_cov.R 
+Processing HS_mean_GLS.R 
+Processing HS_mean_ML_bootstrap.R 
+Processing HS_ML_nodata1.R 
+Processing HS_ML_nodata2.R 
+Processing hsbmis2.R 
+Processing hsbmis21.R 
+Processing hsbmis22.R 
+Processing mplus_4_1a.R 
+Processing mplus_5_12.R 
+Processing parse_a_a.R 
+Processing parse_a_testefaandcolon.R 
+Processing parse_a_YR_OKT12_5.R 
+Processing parse_b_a.R 
+Processing parse_c_a.R 
+Processing parse_d_a.R 
+Processing parse_e_a.R 
+Processing parse_f_a.R 
+Processing parse_g_a.R 
+Processing parse_h_a.R 
+Processing parse_i_a.R 
+Processing parse_j_a.R 
+Processing parse_k_a.R 
+Processing parse_l_a.R 
+Processing parse_m_a.R 
+Processing parse_mediatie.R 
+Processing parse_model_WF_HOMO.R 
+Processing parse_multimod.R 
+Processing parse_multimod2.R 
+Processing parse_multimod3.R 
+Processing parse_n_a.R 
+Processing parse_noncollapsed_nc.R 
+Processing parse_testancat.R 
+Processing parse_testbadscale.R 
+Processing parse_testblock.R 
+Processing parse_testblock2.R 
+Processing parse_testefacfaccc.R 
+Processing parse_testrv.R 
+Processing parse_testrvwitherror.R 
+Processing parse_testtwolevellabels.R 
+Processing parse_testWISCVPE.R 
+Processing parse_testyr.R 
+Processing parse_vector_expr.R 
+Processing parse_YR_2024SEP23.R 
+Processing parse_YR_20260317.R 
+Processing parse_YR_FEB26_1.R 
+Processing parse_YR_OKT11_1.R 
+Processing parse_YR_OKT11_2.R 
+Processing parse_YR_OKT11_3.R 
+Processing parse_YR_OKT11_4.R 
+Processing parse_YR_OKT11_5.R 
+Processing parse_YR_OKT11_6.R 
+Processing parse_YR_OKT12_1.R 
+Processing parse_YR_OKT12_2.R 
+Processing parse_YR_OKT12_3.R 
+Processing parse_YR_OKT12_4.R 
+Processing parse_YR_OKT18_1.R 
+Processing parse_YR_OKT18_2.R 
+Processing parse_YR_OKT18_3.R 
+Processing parse_YR_OKT18_4.R 
+Processing parse_YR_OKT18_5.R 
+Processing parse_YR_OKT18_6.R 
+Processing parse_YR_OKT18_7.R 
+Processing parse_YR_OKT18_8.R 
+Processing parse_YR_OKT18_9.R 
+Processing parse_YR_OKT18_A.R 
+Processing parse_YR_OKT18_B.R 
+Processing parse_YR_OKT18_C.R 
+Processing parse_YR_OKT18_D.R 
+Processing parse_YR_OKT18_E.R 
+Processing parse_YR_OKT20_1.R 
+Processing parse_YR_OKT20_2.R 
+Processing parse_YR_OKT20_3_nc.R 
+Processing parse_YR_OKT20_4.R 
+Processing parse_YR_OKT20_5.R 
+Processing parse_YR_OKT20_6.R 
+Processing parse_YR_OKT20_7.R 
+Processing parse_YR_OKT20_8.R 
+Processing parse_YR_OKT20_9.R 
+Processing parse_YR_OKT21_1.R 
+Processing pol_dem_gls.R 
+Processing pol_dem_ml.R 
+Processing pol_dem_wls.R 
+Processing sam.R 
+Processing sem_on_cov.R 
+Processing sem_on_cov2.R 
+Processing social_base.R 
+Processing social_constraints.R 
+Processing social_missml.R 
+Processing stochastic_group_sizes.R 
+Processing test_difftest.R 
+Processing test_HS.R 
+Processing test_object_v05.R 
+Processing test_PD.R 
+Processing testfitlv1.R 
+Processing testfitlv1x.R 
+Processing testfitlv2.R 
+Processing testfitlv2x.R 
+Processing testfitmultilevel.R 
+Processing testfitov1.R 
+Processing testfitov2.R 
+Processing testfitov3.R 
+Processing TwoLevel_labels.R 
+Processing VIKA_SE.R 
+Processing VIKA_TABLE10_COL1.R 
+Processing VIKA_TABLE10_COL2.R 
+Processing VIKA_TABLE10_COL3.R 
+Processing VIKA_TABLE10_COL4.R 
+Processing VIKA_TEST.R 
+Processing whalen_cov.R 
+Processing WISCVPE.R 
+> testfiles_cache <- testfiles
+> source("../all_tests_compare.R", echo = FALSE)
+Checking analyse_categorical.R                              :identical.
+Checking badscale.R                                         :identical.
+Checking esem.R                                             :identical.
+Checking HS_cov_multiple.R                                  :identical.
+Checking HS_cov.R                                           :identical.
+Checking HS_mean_GLS.R                                      :identical.
+Checking HS_mean_ML_bootstrap.R                             :identical.
+Checking HS_ML_nodata1.R                                    :identical.
+Checking HS_ML_nodata2.R                                    :identical.
+Checking hsbmis2.R                                          :identical.
+Checking hsbmis21.R                                         :identical.
+Checking hsbmis22.R                                         :identical.
+Checking mplus_4_1a.R                                       :identical.
+Checking mplus_5_12.R                                       :identical.
+Checking parse_a_a.R                                        :identical.
+Checking parse_a_testefaandcolon.R                          :identical.
+Checking parse_a_YR_OKT12_5.R                               :identical.
+Checking parse_b_a.R                                        :identical.
+Checking parse_c_a.R                                        :identical.
+Checking parse_d_a.R                                        :identical.
+Checking parse_e_a.R                                        :identical.
+Checking parse_f_a.R                                        :identical.
+Checking parse_g_a.R                                        :identical.
+Checking parse_h_a.R                                        :identical.
+Checking parse_i_a.R                                        :identical.
+Checking parse_j_a.R                                        :identical.
+Checking parse_k_a.R                                        :identical.
+Checking parse_l_a.R                                        :identical.
+Checking parse_m_a.R                                        :identical.
+Checking parse_mediatie.R                                   :identical.
+Checking parse_model_WF_HOMO.R                              :identical.
+Checking parse_multimod.R                                   :identical.
+Checking parse_multimod2.R                                  :identical.
+Checking parse_multimod3.R                                  :identical.
+Checking parse_n_a.R                                        :identical.
+Checking parse_noncollapsed_nc.R                            :identical.
+Checking parse_testancat.R                                  :identical.
+Checking parse_testbadscale.R                               :identical.
+Checking parse_testblock.R                                  :identical.
+Checking parse_testblock2.R                                 :identical.
+Checking parse_testefacfaccc.R                              :identical.
+Checking parse_testrv.R                                     :identical.
+Checking parse_testrvwitherror.R                            :identical.
+Checking parse_testtwolevellabels.R                         :identical.
+Checking parse_testWISCVPE.R                                :identical.
+Checking parse_testyr.R                                     :identical.
+Checking parse_vector_expr.R                                :identical.
+Checking parse_YR_2024SEP23.R                               :identical.
+Checking parse_YR_20260317.R                                :identical.
+Checking parse_YR_FEB26_1.R                                 :identical.
+Checking parse_YR_OKT11_1.R                                 :identical.
+Checking parse_YR_OKT11_2.R                                 :identical.
+Checking parse_YR_OKT11_3.R                                 :identical.
+Checking parse_YR_OKT11_4.R                                 :identical.
+Checking parse_YR_OKT11_5.R                                 :identical.
+Checking parse_YR_OKT11_6.R                                 :identical.
+Checking parse_YR_OKT12_1.R                                 :identical.
+Checking parse_YR_OKT12_2.R                                 :identical.
+Checking parse_YR_OKT12_3.R                                 :identical.
+Checking parse_YR_OKT12_4.R                                 :identical.
+Checking parse_YR_OKT18_1.R                                 :identical.
+Checking parse_YR_OKT18_2.R                                 :identical.
+Checking parse_YR_OKT18_3.R                                 :identical.
+Checking parse_YR_OKT18_4.R                                 :identical.
+Checking parse_YR_OKT18_5.R                                 :identical.
+Checking parse_YR_OKT18_6.R                                 :identical.
+Checking parse_YR_OKT18_7.R                                 :identical.
+Checking parse_YR_OKT18_8.R                                 :identical.
+Checking parse_YR_OKT18_9.R                                 :identical.
+Checking parse_YR_OKT18_A.R                                 :identical.
+Checking parse_YR_OKT18_B.R                                 :identical.
+Checking parse_YR_OKT18_C.R                                 :identical.
+Checking parse_YR_OKT18_D.R                                 :identical.
+Checking parse_YR_OKT18_E.R                                 :identical.
+Checking parse_YR_OKT20_1.R                                 :identical.
+Checking parse_YR_OKT20_2.R                                 :identical.
+Checking parse_YR_OKT20_3_nc.R                              :identical.
+Checking parse_YR_OKT20_4.R                                 :identical.
+Checking parse_YR_OKT20_5.R                                 :identical.
+Checking parse_YR_OKT20_6.R                                 :identical.
+Checking parse_YR_OKT20_7.R                                 :identical.
+Checking parse_YR_OKT20_8.R                                 :identical.
+Checking parse_YR_OKT20_9.R                                 :identical.
+Checking parse_YR_OKT21_1.R                                 :identical.
+Checking pol_dem_gls.R                                      :identical.
+Checking pol_dem_ml.R                                       :identical.
+Checking pol_dem_wls.R                                      :identical.
+Checking sam.R                                              :identical.
+Checking sem_on_cov.R                                       :identical.
+Checking sem_on_cov2.R                                      :identical.
+Checking social_base.R                                      :identical.
+Checking social_constraints.R                               :identical.
+Checking social_missml.R                                    :identical.
+Checking stochastic_group_sizes.R                           :identical.
+Checking test_difftest.R                                    :identical.
+Checking test_HS.R                                          :identical.
+Checking test_object_v05.R                                  :identical.
+Checking test_PD.R                                          :identical.
+Checking testfitlv1.R                                       :8 differences!
++++++ Too many diff lines to show here. See testfitlv1.diff +++++
+Checking testfitlv1x.R                                      :identical.
+Checking testfitlv2.R                                       :4 differences!
+6393c6393
+<                         0.888                         0.061
+---
+>                         0.888                         0.060
+10210c10210
+<                         0.980                         1.000
+---
+>                         0.981                         1.000
+13982c13982
+<                         0.888                         0.061
+---
+>                         0.888                         0.060
+17787c17787
+<                         0.980                         1.000
+---
+>                         0.981                         1.000
+Checking testfitlv2x.R                                      :identical.
+Checking testfitmultilevel.R                                :identical.
+Checking testfitov1.R                                       :identical.
+Checking testfitov2.R                                       :identical.
+Checking testfitov3.R                                       :identical.
+Checking TwoLevel_labels.R                                  :identical.
+Checking VIKA_SE.R                                          :identical.
+Checking VIKA_TABLE10_COL1.R                                :identical.
+Checking VIKA_TABLE10_COL2.R                                :identical.
+Checking VIKA_TABLE10_COL3.R                                :identical.
+Checking VIKA_TABLE10_COL4.R                                :identical.
+Checking VIKA_TEST.R                                        :identical.
+Checking whalen_cov.R                                       :identical.
+Checking WISCVPE.R                                          :identical.
+> 
