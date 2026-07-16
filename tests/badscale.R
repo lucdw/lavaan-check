@@ -66,7 +66,7 @@ SI~PB
 '
 )
 object <- try(sem(
-data = readRDS("stanse.rds"), missing = 'fiml', estimator = 'ml', int.ov.free = FALSE, int.lv.free = TRUE, auto.fix.first = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = FALSE, auto.fix.single = TRUE, warn = FALSE, model = Model, parser = 'open'
+data = readRDS("stanse.rds"), missing = 'fiml', estimator = 'ml', int.ov.free = FALSE, int.lv.free = TRUE, auto.fix.first = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = FALSE, auto.fix.single = TRUE, warn = FALSE, model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

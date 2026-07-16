@@ -26,7 +26,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-data = PoliticalDemocracy, estimator = 'WLS', model = Model, parser = 'open'
+data = PoliticalDemocracy, estimator = 'WLS', model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

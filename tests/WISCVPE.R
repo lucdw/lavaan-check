@@ -54,7 +54,7 @@ V6~~U_v2*V6; V7~~U_v2*V7; V9~~U_v2*V9; V11~~U_v2*V11;
 '
 )
 object <- try(sem(
-data = readRDS("wisc.rds"), model = Model, parser = 'open'
+data = readRDS("wisc.rds"), model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

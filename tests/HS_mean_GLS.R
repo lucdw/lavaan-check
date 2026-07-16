@@ -14,7 +14,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-estimator = 'GLS', data = readRDS("HS.rds"), meanstructure = TRUE, model = Model, parser = 'open'
+estimator = 'GLS', data = readRDS("HS.rds"), meanstructure = TRUE, model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

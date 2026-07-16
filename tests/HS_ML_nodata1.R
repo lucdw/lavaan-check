@@ -14,7 +14,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-model = Model, parser = 'open'
+model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 fitted(object)

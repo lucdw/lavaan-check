@@ -2,8 +2,8 @@ if (file.exists("README.md")) setwd("tests")
 source("../select_tests.R")
 testfiles <- select_tests()
 extra <- substr(Sys.info()[["sysname"]], 1, 1) # because results depend on OS
-mccores <- if(extra == "W") 3L else 3L
-test1 <- function(testfile, extra) {
+mccores <- if(extra == "W") 1L else 3L
+test1 <- function(testfile) {
   starttime <- format(Sys.time(), "%X")
   system2(paste(R.home(), "bin", "R", sep= "/"), 
     stdin=testfile, 
@@ -12,10 +12,8 @@ test1 <- function(testfile, extra) {
     args = "--no-save")
   paste(starttime, "=>", format(Sys.time(), "%X"), testfile)
 }
-cl <- parallel::makeCluster(mccores)
-resultaat <- parallel::parSapplyLB(cl, testfiles, test1, extra = extra, chunk.size = 1L)
+resultaat <- parallel::mclapply(testfiles, test1, mc.cores = mccores)
 cat(paste(resultaat, collapse = "\n"))
 cat("\n\n")
-parallel::stopCluster(cl)
 testfiles_cache <- testfiles
 source("../all_tests_compare.R", echo = FALSE)

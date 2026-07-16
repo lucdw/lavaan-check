@@ -122,6 +122,8 @@ compare_files <- function(infile1, infile2, outfile,
     }
   }
   close(oc)
+  attr(aantal, "error") <- FALSE
+  if (any(grepl("Error :", lines2, fixed = TRUE))) attr(aantal, "error") <- TRUE
   return(aantal)
 }
 if (file.exists("README.md")) setwd("tests")
@@ -144,8 +146,10 @@ for (test.i in seq_along(testfiles)) {
       infile2 = file2,
       outfile = filediff
     )
+    eind <- "\n"
+    if (attr(aantal, "error")) eind <- "*** error ***\n"
     if (aantal[1L] > 0L) {
-      cat(aantal[1L], "differences!\n")
+      cat(aantal[1L], "differences!", eind)
       if (aantal[2L] < 30L) {
         cat(paste(readLines(filediff, warn = FALSE), collapse = "\n"))
         cat("\n")
@@ -153,7 +157,7 @@ for (test.i in seq_along(testfiles)) {
         cat("+++++ Too many diff lines to show here. See", filediff, "+++++\n")
       }
     } else {
-      cat("identical.\n")
+      cat("identical.", eind)
       unlink(filediff)
     }
   }

@@ -14,7 +14,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-sample.nobs = c(100, 200), model = Model, parser = 'open'
+sample.nobs = c(100, 200), model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 fitted(object)

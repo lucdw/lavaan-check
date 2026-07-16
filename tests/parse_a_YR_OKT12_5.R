@@ -12,7 +12,7 @@ f =~ x1 + x2 + paste0("aaa", rep("b", 3))*x3 + x4
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
+as.data.frame. = TRUE, model.syntax = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))

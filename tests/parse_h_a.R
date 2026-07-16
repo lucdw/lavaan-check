@@ -22,7 +22,7 @@ f1=~ c(.8,.8)*x1+ start(c(.8,.8))*x2 +start(c(.8,.8))*x3
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
+as.data.frame. = TRUE, model.syntax = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))

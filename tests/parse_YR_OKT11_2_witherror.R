@@ -1,4 +1,4 @@
-# Test_id : parse_YR_OKT12_3
+# Test_id : parse_YR_OKT11_2
 # ==========================
 # 
 
@@ -8,11 +8,11 @@ set.seed(1234)
 
 Model <- c(
 '
-f =~ x1 + x2 + sqrt(3+AAA)*x3 + x4
+f =~ in*bar
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
+as.data.frame. = TRUE, model.syntax = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))

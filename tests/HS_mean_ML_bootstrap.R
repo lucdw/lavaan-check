@@ -14,7 +14,7 @@ Model <- c(
 '
 )
 object <- try(sem(
-estimator = 'ML', information = 'observed', se = 'bootstrap', bootstrap = 200, data = readRDS("HS.rds"), meanstructure = TRUE, model = Model, parser = 'open'
+estimator = 'ML', information = 'observed', se = 'bootstrap', bootstrap = 200, data = readRDS("HS.rds"), meanstructure = TRUE, model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 parameterEstimates(object)$se

@@ -10,7 +10,7 @@ Model <- c(
 'anti ~ b1*pos + b2*neg + b3*dis'
 )
 object <- try(sem(
-data = readRDS("social.rds"), constraints = ' b1 < b3; b2 < b3', model = Model, parser = 'open'
+data = readRDS("social.rds"), constraints = ' b1 < b3; b2 < b3', model = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 AIC(object)

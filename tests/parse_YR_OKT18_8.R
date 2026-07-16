@@ -13,7 +13,7 @@ est ~ age + c(m1, f1)*tvlo + hadsum + start(-0.1, 0.1)*tvlo
 '
 )
 object <- try(lavParseModelString(
-as.data.frame. = TRUE, model.syntax = Model, parser = 'open'
+as.data.frame. = TRUE, model.syntax = Model
 ), outFile = stdout())
 if (!inherits(object, 'try-error')) {withAutoprint({
 print(as.data.frame(object))
